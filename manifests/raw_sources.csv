@@ -1,0 +1,3 @@
+filename,kind,registered_at,notes
+docs/raw/requirements-original.txt,requirements,2026-05-03,Original AAU Club management requirements covering 10 functional modules + Finder/persona backlog
+docs/raw/initial-prompts-and-notes.txt,context,2026-05-03,User's initial prompts and clarifications during agent-team setup; useful context for why design decisions were made

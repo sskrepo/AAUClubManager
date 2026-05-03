@@ -1,0 +1,130 @@
+
+
+Need to develop entire Basketball AAU club management software with attached requirements. 
+We need to achieve this using a team of agents in Claude code.
+
+Can you please first understand the requirement, suggest me which agent team members we need for example:
+1. Product requirement/Definition agent
+2. Architect/Design agent
+3. Development manager/Planning agent
+4. Coding agents
+5. UX design agent
+6. UI developer agent
+7. UAT testing agent
+
+This is just an example, you suggest which agents I need in the team.
+
+Important thing is I need visibility into the development process,meaning:
+ - at any given time, I need to be able to look into a dashboard and figure out what requirements are in what phase
+ - what phase we are in and what is the scope of that phases
+ - Any key decisions need to come to my review with clear options to choose from
+ - At the same time, I dont want to be bugged because agents didnt do their job correctly. Imagine, a core team if I hire  humans, they are expected to do their part of the work and come to be for decisions with options
+ 
+ Given that, I need to generate all the prompts for these agents and configure them for them to be ready to go
+ and also show me how you are going to give me visibility that I asked for
+ 
+ 
+ 
+ 
+ 
+ Second prompt:
+ 
+ I renamed the director to /Users/sravansunkaranam/github/AAUClubManager, use this one plan both whatsapp and email, I want a proper API layer and UI is just another wrapper on API, so that we can provide different ways for clients to access, PostgreSQL is fine, but dont bind everything to it, we should be able to change the RDBMS layer any time we want later.. UI stack you decide .. Also will dev manager role, track all the work from architect/Product manager during requirement phase or Marker research tracks ? or do we need to have a TPM(Program manager doing that ?)
+ 
+ 
+ Third Prompt:
+ 
+ few more things, where are the agents prompts themselves going to live, I would like visibility on that and also with my input we are going to fine tune them, so that I can use this development team structure for future projects without having to do it all over again, so pls make sure when I mention a change of behaviour for the agent, you have prompts to take note of it, ask me if I want that behaviour to be permanantly updated, so create a directory strcture for the development agent teams itself, so we can have those prompts/config in there , and evolve it
+ 
+ Fourth Prompt:
+ 
+ Sounds good, I also want you to evaluate LLM wiki listed in https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f#file-llm-wiki-md.. and see if our markdown files can use that format ?
+------------------------------------------------------------
+AAU Club management:
+
+
+1. Head Coach organizes Tryouts
+	Player onboarding
+	Parents onboarding
+2. Tryout management:
+	- Coach decides how many team names, coach for each team(11U select, 12U elite etc, should be decided by Head coach)
+	- Coach selects players based on tryouts to different teams
+	- Sends notification to parents(emails, whatsapp group etc)
+	- Parents acceptance
+3. Payment management:
+	 - Parents get option to Pay
+	 - Coach tracks payment from all players ,per team
+	 - Followups
+5. Head Coach/Coach decides practice schedule for each team( 2 hours a session, 2 times a week etc and specific days)
+6. GYM management:
+7. Jersey Management:
+8. Practice management:
+	Practice communications:
+		- Parents say my kid is not going to be in for practice, as he has other school conflict etc
+		- Coach says today's session got moved to a different gym, or todays schedule is changed to xyz etc
+		- Coach calls for extra practice, asks for a poll for availability
+		- Coach need visibility into attendance and possible absentees
+		
+9. Tournament management:
+  	- Head Coach decides tournaments list(School months, during weekends, Holiday months, weekdays if required)
+	- Publish Tournament Schedule
+	- Parents confirmation for attendance
+	Local Tournament Communication
+		- Tournament schedule will be out by X day
+		- Tournament schedule is out, your team is on these timings on Saturday etc
+		- Parents say we cant make it to one of the days of the games
+		- Coach communicates Jersey colors for the games
+	Travel tournaments
+		- Work with Hotels near to the tournament location and negotiate a rate
+		- Send communications to parents
+		- Help Parents find right hotels based on their requirements
+
+	
+10. Coaching and Player Skill Management
+		Coach assistants:
+			- Practice assistant
+				During practice listen to coach and keep taking notes on actions/directions he is giving
+					Ask him to "Start practice" for a given team on a given day
+					Take notes during the session by listening to him
+					Figure out whom he is giving what feedback
+					Curate the list, and save it and ask him if the notes are right at end of practice/day
+					Find possible videos that coach can simply assign
+					Take confirmation from coach, assign to players and send notifications
+					Setup followup reminders for coach to discuss with players during next followup practice
+					Find patterns over a period and give feedback to coach and give him an option to share
+			- Game analysis/Film study assistant
+				Give complete Film Study infra to Coach/players
+					Upload a video to the portal
+					Provide annotation tools during film analysis
+					Take a note of all voice notes from coach along with video annotations and figure out which players he is talking about
+					Capture video clips
+					Keep them in team space as well as assign it to Players for review
+					Analyse the feedback and find improvement/patterns next time
+			
+			- Provide third party intergrations for game analytics
+				There are good third party companies offering video/game analysis and analytics
+				Provide integration to access analytics from those platforms and sync that data and analyse and merge that into Coach/Player feedback
+					
+		
+
+
+
+-------
+
+Parents/Players
+	AAU Clubs Finder
+	Shooting Practice Finder
+	Strength Training/Conditioning Finder
+	Coach Finder
+Coaches:
+	GYM Finder
+	Tournament Finder
+	Players Finder
+	
+Tournament director:
+	Refereee Finder
+	Scorer Finder
+	AAU Clubs Finder
+	GYM Finder
+	
+

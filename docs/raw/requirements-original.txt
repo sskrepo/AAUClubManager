@@ -1,0 +1,65 @@
+AAU Club management:
+
+
+1. Head Coach organizes Tryouts
+	Player onboarding
+	Parents onboarding
+2. Tryout management:
+	- Coach decides how many team names, coach for each team(11U select, 12U elite etc, should be decided by Head coach)
+	- Coach selects players based on tryouts to different teams
+	- Sends notification to parents(emails, whatsapp group etc)
+	- Parents acceptance
+3. Payment management:
+	 - Parents get option to Pay
+	 - Coach tracks payment from all players ,per team
+	 - Followups
+5. Head Coach/Coach decides practice schedule for each team( 2 hours a session, 2 times a week etc and specific days)
+6. GYM management:
+7. Jersey Management:
+8. Practice management:
+	Practice communications:
+		- Parents say my kid is not going to be in for practice, as he has other school conflict etc
+		- Coach says today's session got moved to a different gym, or todays schedule is changed to xyz etc
+		- Coach calls for extra practice, asks for a poll for availability
+		- Coach need visibility into attendance and possible absentees
+		
+9. Tournament management:
+  	- Head Coach decides tournaments list(School months, during weekends, Holiday months, weekdays if required)
+	- Publish Tournament Schedule
+	- Parents confirmation for attendance
+	Local Tournament Communication
+		- Tournament schedule will be out by X day
+		- Tournament schedule is out, your team is on these timings on Saturday etc
+		- Parents say we cant make it to one of the days of the games
+		- Coach communicates Jersey colors for the games
+	Travel tournaments
+		- Work with Hotels near to the tournament location and negotiate a rate
+		- Send communications to parents
+		- Help Parents find right hotels based on their requirements
+
+	
+10. Coaching and Player Skill Management
+		Coach assistants:
+			- Practice assistant
+				During practice listen to coach and keep taking notes on actions/directions he is giving
+					Ask him to "Start practice" for a given team on a given day
+					Take notes during the session by listening to him
+					Figure out whom he is giving what feedback
+					Curate the list, and save it and ask him if the notes are right at end of practice/day
+					Find possible videos that coach can simply assign
+					Take confirmation from coach, assign to players and send notifications
+					Setup followup reminders for coach to discuss with players during next followup practice
+					Find patterns over a period and give feedback to coach and give him an option to share
+			- Game analysis/Film study assistant
+				Give complete Film Study infra to Coach/players
+					Upload a video to the portal
+					Provide annotation tools during film analysis
+					Take a note of all voice notes from coach along with video annotations and figure out which players he is talking about
+					Capture video clips
+					Keep them in team space as well as assign it to Players for review
+					Analyse the feedback and find improvement/patterns next time
+			
+			- Provide third party intergrations for game analytics
+				There are good third party companies offering video/game analysis and analytics
+				Provide integration to access analytics from those platforms and sync that data and analyse and merge that into Coach/Player feedback
+					
