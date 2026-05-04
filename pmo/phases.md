@@ -58,7 +58,7 @@ See [`pmo/phase-briefs/PHASE-0-kickoff.md`](phase-briefs/PHASE-0-kickoff.md). Tw
 - Test email sends via Resend; test WhatsApp message sends via Twilio (sandbox or prod)
 - Initial commit to GitHub with passing CI
 
-**Note: No PDD/UI mocks/Gate workflow for Phase 0** — there are no user flows. Phase 0 is foundation only. Gate workflow kicks in starting Phase 1.
+**Note on Phase 0 gate workflow:** Phase 0 PDD covers infrastructure deliverables (no user flows); UX files an explicit no-mocks stub confirming nothing to mock. Gate 1 still applies — user must approve PDD + mocks stub before Architect finalizes the Phase 0 OpenAPI spec (health endpoint only) for Gate 2. Gate workflow is universal from Phase 0 onward per v0.1.3 protocol.
 
 ## Phase 1 — Core (Tryouts + Teams)
 

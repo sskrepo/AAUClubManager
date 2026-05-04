@@ -31,21 +31,27 @@
 
 ### Per-phase deliverables (Gate 1 + Gate 2)
 - [pdd/](pdd/) — Product Definition Documents (PM-owned, Gate 1)
+  - [PDD-PHASE-0](pdd/PDD-PHASE-0.md) — Foundation — status: approved (Gate 1 passed)
 - [ux/mocks/](ux/mocks/) — UI mocks per phase (UX-owned, Gate 1)
 - [api-changes/](api-changes/) — Per-phase OpenAPI spec change summaries (Architect-owned, Gate 2)
+  - [api-changes/phase-0](api-changes/phase-0.md) — Foundation baseline — status: in-review (Gate 2 pending)
 
 ## Compiled by Architect
 - [architecture-options](architecture-options.md) — technical analysis of DECISION-001 options A/B/C (effort, integrations, risk, reusability). ★ agent-pace re-baseline at top.
 - (future — after DECISION-001 decided) [architecture](architecture.md)
 - (future) [data-model](data-model.md)
 - (future) [api-design](api-design.md)
-- (future) [adr/](adr/)
+- [adr/ADR-005-api-design-conventions](adr/ADR-005-api-design-conventions.md) — status: proposed (Gate 2 pending)
 - (future) [integrations/](integrations/)
 
+### Source of truth
+- [`api/openapi.yaml`](../../api/openapi.yaml) — OpenAPI 3.0.3 spec baseline (Phase 0). Run `npm run api:generate` after changes.
+
 ## Compiled by UX
-(empty — UX activates after MVP scope is decided)
-- (future) [ux/design-system](ux/design-system.md)
+- [ux/design-system](ux/design-system.md) — v0.1 Phase 0 seed: palette, typography, spacing, shadcn/ui components catalog, accessibility baseline
+- [ux/mocks/phase-0/index](ux/mocks/phase-0/index.md) — Phase 0 mocks stub (no flow mocks — foundation phase; Gate 1 pending)
 - (future) [ux/information-architecture](ux/information-architecture.md)
+- (future) [ux/mocks/phase-1/](ux/mocks/phase-1/) — Phase 1 flow mocks (tryout registration, evaluation, selection, roster screens)
 - (future) [ux/flows/](ux/flows/)
 - (future) [ux/screens/](ux/screens/)
 - (future) [ux/components/](ux/components/)

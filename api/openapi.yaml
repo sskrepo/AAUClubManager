@@ -1,16 +1,462 @@
+# Source of truth for all AAUClubManager API definitions.
+# Edit here, run `npm run api:generate`, never hand-edit generated SDK.
+# Spec version follows SemVer: breaking changes require a new ADR.
+
 openapi: 3.0.3
+
 info:
   title: AAUClubManager API
   version: 0.1.0
-  description: API for AAUClubManager. Source of truth for all API definitions.
+  description: |
+    AAUClubManager backend API. This file is the single source of truth for all
+    HTTP contracts between server and clients. The TypeScript SDK at
+    `web/src/api/generated/` is auto-generated from this file — do not edit it
+    directly.
+
+    Auth: All protected endpoints require a Clerk-issued JWT passed as a Bearer
+    token in the `Authorization` header. The server validates the JWT signature
+    against Clerk's JWKS endpoint (configured via `CLERK_JWKS_URL` env var).
+
+    Versioning: All domain endpoints are prefixed `/api/v1/`. The `/health`
+    endpoint is unversioned — it is infrastructure, not API surface.
+  contact:
+    name: AAUClubManager (Architect)
+    email: sravans.hice@gmail.com
+  license:
+    name: Proprietary
+
 servers:
-  - url: http://localhost:3000
-    description: Local dev
-paths: {}
+  - url: "{baseUrl}"
+    description: Active server (env-driven)
+    variables:
+      baseUrl:
+        description: >
+          Set via NEXT_PUBLIC_API_BASE_URL (frontend) and API_BASE_URL (server).
+          Local dev default: http://localhost:3001
+        default: http://localhost:3001
+
+tags:
+  # Phase 0 — infrastructure only
+  - name: health
+    description: Liveness and readiness probes. Not versioned.
+  - name: auth
+    description: Auth identity probes. Exercises Clerk JWT end-to-end.
+
+  # Phase 1+ — domain tags declared now so the SDK tag namespace is stable.
+  # Endpoints are added in the phase that ships those modules.
+  - name: clubs
+    description: Club management (Phase 1)
+  - name: seasons
+    description: Season management (Phase 1)
+  - name: tryouts
+    description: Tryout creation and registration (Phase 1)
+  - name: teams
+    description: Team formation and roster management (Phase 1)
+  - name: players
+    description: Player profiles and parent-child links (Phase 1)
+  - name: practices
+    description: Practice scheduling and gym management (Phase 2)
+  - name: gyms
+    description: Gym registry and booking (Phase 2)
+  - name: jerseys
+    description: Jersey assignment and orders (Phase 2)
+  - name: comms
+    description: Practice communications and attendance (Phase 3)
+  - name: tournaments
+    description: Tournament and game management (Phase 4)
+  - name: payments
+    description: Fee tracking and payment recording (Phase 5)
+
+# ---------------------------------------------------------------------------
+# Security schemes
+# ---------------------------------------------------------------------------
 components:
-  schemas: {}
   securitySchemes:
-    bearerAuth:
+    clerkJWT:
       type: http
       scheme: bearer
       bearerFormat: JWT
+      description: >
+        Clerk-issued JWT. Obtain via the Clerk frontend SDK (`useAuth().getToken()`).
+        The server validates using Clerk's JWKS endpoint (`CLERK_JWKS_URL` env var).
+        On 401, the client should call `clerk.session.refresh()` and retry once.
+
+  # ---------------------------------------------------------------------------
+  # Reusable parameters
+  # ---------------------------------------------------------------------------
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      description: >
+        Opaque cursor for cursor-based pagination. Returned in
+        `meta.nextCursor` from the previous page response. Omit to fetch
+        the first page.
+      schema:
+        type: string
+
+    pageSize:
+      name: pageSize
+      in: query
+      required: false
+      description: Number of items per page. Default 20, max 100.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+    sortBy:
+      name: sortBy
+      in: query
+      required: false
+      description: >
+        Field name to sort by. Valid values are resource-specific and documented
+        per endpoint. Defaults to `createdAt`.
+      schema:
+        type: string
+
+    sortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort direction.
+      schema:
+        type: string
+        enum: [asc, desc]
+        default: asc
+
+    filterQ:
+      name: q
+      in: query
+      required: false
+      description: >
+        Free-text search filter. Searches resource-specific fields (documented
+        per endpoint). URL-encoded.
+      schema:
+        type: string
+
+  # ---------------------------------------------------------------------------
+  # Reusable response schemas
+  # ---------------------------------------------------------------------------
+  schemas:
+
+    # -- Error envelope (RFC 7807 problem details subset) --------------------
+    Error:
+      type: object
+      description: >
+        Standard error response. Follows RFC 7807 problem-details subset.
+        All 4xx and 5xx responses use this shape.
+      required:
+        - type
+        - title
+        - status
+      properties:
+        type:
+          type: string
+          format: uri
+          description: >
+            URI identifying the error type. Use `about:blank` for generic HTTP
+            errors. Domain-specific errors use
+            `https://aauclubmanager.app/errors/{code}`.
+          example: about:blank
+        title:
+          type: string
+          description: Short human-readable summary of the error type.
+          example: Unauthorized
+        status:
+          type: integer
+          description: HTTP status code.
+          example: 401
+        detail:
+          type: string
+          description: Human-readable explanation of this specific instance.
+          example: Bearer token is expired. Refresh and retry.
+        instance:
+          type: string
+          format: uri
+          description: >
+            URI identifying this specific occurrence. Typically the request path
+            + a trace/request ID injected by the server.
+          example: /api/v1/me?reqId=abc123
+
+    # -- Validation error (extends Error) ------------------------------------
+    ValidationError:
+      allOf:
+        - $ref: "#/components/schemas/Error"
+        - type: object
+          required:
+            - errors
+          properties:
+            errors:
+              type: array
+              description: Field-level validation failures.
+              items:
+                type: object
+                required:
+                  - field
+                  - message
+                properties:
+                  field:
+                    type: string
+                    description: JSON path to the invalid field (dot notation).
+                    example: email
+                  message:
+                    type: string
+                    description: Why this field is invalid.
+                    example: must be a valid email address
+                  value:
+                    description: The value that was rejected (omit for sensitive fields).
+                    example: not-an-email
+
+    # -- Pagination metadata -------------------------------------------------
+    PaginationMeta:
+      type: object
+      description: Pagination metadata returned alongside list responses.
+      required:
+        - total
+        - pageSize
+        - hasMore
+      properties:
+        total:
+          type: integer
+          description: >
+            Total number of items matching the query (across all pages).
+            May be omitted for expensive counts — check `hasMore` instead.
+          example: 47
+        pageSize:
+          type: integer
+          description: Number of items in this page.
+          example: 20
+        hasMore:
+          type: boolean
+          description: Whether a next page exists.
+          example: true
+        nextCursor:
+          type: string
+          description: >
+            Opaque cursor to pass as `?cursor=` to fetch the next page.
+            Absent when `hasMore` is false.
+          example: eyJpZCI6NDJ9
+
+    # -- Authenticated user identity -----------------------------------------
+    AuthUser:
+      type: object
+      description: >
+        Clerk identity for the currently authenticated user. This is the
+        server-side projection of the Clerk session token — not a stored
+        application entity.
+      required:
+        - clerkUserId
+        - email
+      properties:
+        clerkUserId:
+          type: string
+          description: Clerk user ID (prefixed `user_`).
+          example: user_2abc123XYZ
+        email:
+          type: string
+          format: email
+          description: Primary email address from Clerk.
+          example: coach@example.com
+        firstName:
+          type: string
+          example: Jordan
+        lastName:
+          type: string
+          example: Smith
+        imageUrl:
+          type: string
+          format: uri
+          description: Clerk-hosted avatar URL.
+          example: https://img.clerk.com/abc.jpg
+
+    # -- Health check --------------------------------------------------------
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          enum: [ok, degraded]
+          description: >
+            `ok` — all subsystems healthy.
+            `degraded` — one or more subsystems unhealthy (DB or Redis unreachable)
+            but server is still serving traffic.
+          example: ok
+        timestamp:
+          type: string
+          format: date-time
+          description: Server time at response generation (ISO 8601).
+          example: "2026-05-03T12:00:00.000Z"
+        version:
+          type: string
+          description: Server build version (from package.json or GIT_SHA env).
+          example: 0.1.0
+        subsystems:
+          type: object
+          description: Per-subsystem health. Omitted if all healthy and status is ok.
+          properties:
+            db:
+              type: string
+              enum: [ok, error]
+              example: ok
+            redis:
+              type: string
+              enum: [ok, error]
+              example: ok
+
+  # ---------------------------------------------------------------------------
+  # Reusable responses
+  # ---------------------------------------------------------------------------
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            type: about:blank
+            title: Unauthorized
+            status: 401
+            detail: Bearer token is missing or has expired.
+
+    Forbidden:
+      description: Authenticated but insufficient role/scope for this resource.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            type: about:blank
+            title: Forbidden
+            status: 403
+            detail: Your role does not permit this action.
+
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            type: about:blank
+            title: Not Found
+            status: 404
+            detail: The requested resource does not exist.
+
+    UnprocessableEntity:
+      description: Request body failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ValidationError"
+
+    InternalServerError:
+      description: Unexpected server error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            type: about:blank
+            title: Internal Server Error
+            status: 500
+            detail: An unexpected error occurred. Check server logs for the request ID.
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+paths:
+
+  # -- Health probe (no auth) ------------------------------------------------
+  /health:
+    get:
+      operationId: getHealth
+      summary: Liveness and readiness probe
+      description: >
+        Returns server liveness status. Does NOT require authentication.
+        CI and load balancers call this endpoint. The response body includes
+        subsystem health (DB, Redis) when status is degraded.
+
+        Note: this endpoint is intentionally unversioned (not under `/api/v1/`).
+        It is infrastructure, not API surface, and must be stable regardless of
+        API version changes.
+      tags:
+        - health
+      security: []
+      responses:
+        "200":
+          description: Server is healthy (or degraded but serving).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+              examples:
+                healthy:
+                  summary: All subsystems OK
+                  value:
+                    status: ok
+                    timestamp: "2026-05-03T12:00:00.000Z"
+                    version: "0.1.0"
+                degraded:
+                  summary: Redis unreachable but server alive
+                  value:
+                    status: degraded
+                    timestamp: "2026-05-03T12:00:00.000Z"
+                    version: "0.1.0"
+                    subsystems:
+                      db: ok
+                      redis: error
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  # -- Auth identity probe (requires auth) -----------------------------------
+  /api/v1/me:
+    get:
+      operationId: getMe
+      summary: Return the authenticated Clerk user identity
+      description: >
+        Returns the Clerk user identity extracted from the validated JWT.
+        No application data is returned — this endpoint solely proves that
+        the auth pipeline (Clerk JWT → server middleware → response) works
+        end-to-end.
+
+        Use cases:
+        1. Phase 0 exit criterion: `curl -H "Authorization: Bearer {token}" .../api/v1/me` returns 200.
+        2. Frontend bootstrap: call on app load to confirm token is valid before making domain API calls.
+        3. Token refresh detection: a 401 here signals the client to refresh via Clerk and retry.
+
+        Phase 1 will add club membership and role claims to this response once
+        the Club/ClubMembership data model is in place.
+      tags:
+        - auth
+      security:
+        - clerkJWT: []
+      responses:
+        "200":
+          description: Token is valid; returns Clerk user identity.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: "#/components/schemas/AuthUser"
+              example:
+                data:
+                  clerkUserId: user_2abc123XYZ
+                  email: coach@example.com
+                  firstName: Jordan
+                  lastName: Smith
+                  imageUrl: https://img.clerk.com/abc.jpg
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
