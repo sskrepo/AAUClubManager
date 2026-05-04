@@ -42,12 +42,15 @@ Agent work still blocked on Gate 2:
 
 ## Awaiting user decision
 
-**Gate 2 — Phase 0 (pending Architect delivery):** Architect is drafting the Phase 0 OpenAPI spec now. Once filed, it will surface in the dashboard for your approval. Approval unblocks all Phase 0 implementation work.
+**Gate 2 — Phase 0 (drafted, awaiting approval):** Architect filed `api/openapi.yaml` (OpenAPI 3.0.3 baseline, validates clean), `docs/wiki/api-changes/phase-0.md`, and `docs/wiki/adr/ADR-005-api-design-conventions.md`. Approve with `OPENAPI-PHASE-0: approved` to unblock implementation.
+
+**DECISION-002 — Cost optimization priorities (filed 2026-05-03):** Architect produced a cost-at-scale analysis ([`docs/wiki/cost-analysis.md`](cost-analysis.md)) modeling current stack vs alternatives at MVP / 10-club / 100-club / 1000-club tiers. Surfaces 4 calls (auth provider, WhatsApp provider, file storage, observability) — see [`pmo/decisions/DECISION-002-cost-optimization-priorities.md`](../../pmo/decisions/DECISION-002-cost-optimization-priorities.md). Time-sensitive: auth swap closes after Phase 1 starts.
 
 **Open product questions (answer asynchronously — non-blocking):** Brand color, logo, app name, domain, hosting platform, WhatsApp sender strategy. Tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Open product questions."
 
 ## Recent decisions
 
+- **DECISION-002 filed (2026-05-03)** — cost optimization priorities awaiting user input (auth, WhatsApp, file storage, observability).
 - **GATE-1-PHASE-0 approved (2026-05-03)** — PDD + mocks stub + design system seed locked.
 - DECISION-001 (2026-05-03) — Option B chosen.
 

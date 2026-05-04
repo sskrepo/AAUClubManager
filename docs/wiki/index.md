@@ -38,6 +38,7 @@
 
 ## Compiled by Architect
 - [architecture-options](architecture-options.md) — technical analysis of DECISION-001 options A/B/C (effort, integrations, risk, reusability). ★ agent-pace re-baseline at top.
+- [cost-analysis](cost-analysis.md) — cost-at-scale analysis across 10 stack decisions at 4 scale tiers; top levers, alternatives, tradeoffs, horizon-based recommendations. Status: draft.
 - (future — after DECISION-001 decided) [architecture](architecture.md)
 - (future) [data-model](data-model.md)
 - (future) [api-design](api-design.md)

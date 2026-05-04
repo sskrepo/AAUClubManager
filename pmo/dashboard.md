@@ -110,6 +110,12 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 - `docs/wiki/ux/mocks/phase-0/index.md` (stub) quoted the now-corrected phases.md text ("No PDD/UI mocks/Gate workflow for Phase 0"). The quote is stale but low-severity — the stub is informational only and approval has now passed.
 - Design system open questions (brand color, logo, app name) are parked in "Open product questions" above and do not require resolution before Gate 2.
 
+## Decisions awaiting your review
+
+| # | Decision | One-liner | Filed |
+|---|---|---|---|
+| 🔴 DECISION-002 | [Cost optimization priorities](decisions/DECISION-002-cost-optimization-priorities.md) | Auth (Clerk vs Auth.js), WhatsApp provider (Twilio vs 360dialog), file storage (R2 vs S3), observability stack — 4 choices, 2 must be made before Phase 1 implementation | 2026-05-03 |
+
 ## Recent decisions
 
 - **GATE-1-PHASE-0 approved (2026-05-03)** — PDD, mocks stub, and design system seed locked. Gate 2 now active.
