@@ -10,8 +10,8 @@ tags: [pending, user, phase:0]
 # Phase 0 — Pending User Items
 
 **Phase status:** 🟡 In execution. Gate 1 + Gate 2 approved. DECISION-002 closed. Implementation underway.
-**Open count:** 🚨 3 blocking · 🟡 4 mid-phase · 📝 3 open product questions · ✅ 5 done
-**What's gated:** Auth thread (4 tasks), notification delivery test, deploy.
+**Open count:** 🚨 2 blocking · 🟡 4 mid-phase · 📝 3 open product questions · ✅ 6 done
+**What's gated:** Notification delivery test, deploy. (Auth thread now unblocked — Clerk keys delivered.)
 
 Canonical setup checklist with full how-to instructions: [PHASE-0-kickoff.md](../phase-briefs/PHASE-0-kickoff.md).
 
@@ -21,9 +21,8 @@ Canonical setup checklist with full how-to instructions: [PHASE-0-kickoff.md](..
 
 | # | Item | Why it matters | Where to get it | Env vars / inputs |
 |---|------|----------------|-----------------|-------------------|
-| 1 | **Clerk account + API keys** | Biggest unlock — gates 4 tasks (TASK-006, 008, 009, 010 — entire auth thread). | [clerk.com](https://clerk.com) → create app → API Keys | `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` |
-| 2 | **360dialog account + API key** | WhatsApp delivery; long-pole external dep. Meta Business verification 1–7 days. **Start ASAP.** | [hub.360dialog.com](https://hub.360dialog.com) → register → Meta Business verify → API key | `DIALOG360_API_KEY`, `DIALOG360_WHATSAPP_FROM` (E.164 format), WhatsApp Business display name |
-| 3 | **Resend account + verified sender domain** | Email delivery test. DNS verification a few hours. | [resend.com](https://resend.com) → add domain → set DNS records | `RESEND_API_KEY`, `RESEND_FROM_EMAIL` |
+| 1 | **360dialog account + API key** | WhatsApp delivery; long-pole external dep. Meta Business verification 1–7 days. **Start ASAP.** | [hub.360dialog.com](https://hub.360dialog.com) → register → Meta Business verify → API key | `DIALOG360_API_KEY`, `DIALOG360_WHATSAPP_FROM` (E.164 format), WhatsApp Business display name |
+| 2 | **Resend account + verified sender domain** | Email delivery test. DNS verification a few hours. | [resend.com](https://resend.com) → add domain → set DNS records | `RESEND_API_KEY`, `RESEND_FROM_EMAIL` |
 
 ---
 
@@ -73,6 +72,7 @@ These will surface in their respective phase files when those phases activate.
 | 2026-05-03 | **GATE-1-PHASE-0** — PDD + mocks stub + design system seed | Approved |
 | 2026-05-03 | **GATE-2-PHASE-0** — OpenAPI baseline + ADR-005 + api-changes | Approved |
 | 2026-05-03 | **GitHub repo URL** | https://github.com/sskrepo/AAUClubManager — both branches pushed |
+| 2026-05-03 | **Clerk account + API keys** | Test keys delivered; stashed in `.env.local` (gitignored). Unblocks TASK-006, 008, 009, 010 — entire auth thread. |
 
 ---
 

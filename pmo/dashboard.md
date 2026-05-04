@@ -15,7 +15,7 @@ status: current
 
 ## 👤 What's waiting on you
 
-**Single user-facing view:** [`pmo/pending-decisions/PHASE-0.md`](pending-decisions/PHASE-0.md) — 3 blocking · 4 mid-phase · 3 open product questions · 5 done.
+**Single user-facing view:** [`pmo/pending-decisions/PHASE-0.md`](pending-decisions/PHASE-0.md) — 2 blocking · 4 mid-phase · 3 open product questions · 6 done.
 
 All-phases index: [`pmo/pending-decisions/index.md`](pending-decisions/index.md)
 
@@ -78,9 +78,9 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 | OpenAPI codegen pipeline scripts | backend-dev | ready to start — TASK-002, TASK-003 | No blockers |
 | BullMQ hello-world job | backend-dev | ready to start — TASK-014 | Local Docker Redis sufficient |
 | Notification service abstraction (360dialog) | backend-dev | ready to start — TASK-011 | Abstraction has no blockers; test delivery (TASK-013) needs 360dialog + Resend creds |
-| Auth middleware (server) | backend-dev | blocked — TASK-006 | Needs CLERK_SECRET_KEY from user |
-| Clerk provider + sign-in (web) | frontend-dev | blocked — TASK-008 | Needs CLERK_PUBLISHABLE_KEY from user |
-| CI (GitHub Actions) | backend-dev | blocked — TASK-017 | Needs GitHub repo URL from user |
+| Auth middleware (server) | backend-dev | ready to start — TASK-006 | Clerk keys delivered 2026-05-03; stashed in `.env.local` |
+| Clerk provider + sign-in (web) | frontend-dev | ready to start — TASK-008 | Clerk keys delivered 2026-05-03; stashed in `.env.local` |
+| CI (GitHub Actions) | backend-dev | ready to start — TASK-017 | GitHub repo URL delivered 2026-05-03 |
 
 ## In-flight handoffs
 
@@ -103,14 +103,15 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 - PDD-PHASE-0 filed and approved (Gate 1 passed 2026-05-03)
 - UX mocks stub + design system seed filed and approved (Gate 1 passed 2026-05-03)
 - **GATE-1-PHASE-0 approved by user (2026-05-03)**
+- **GATE-2-PHASE-0 approved by user (2026-05-03)**
+- **GitHub repo URL delivered (2026-05-03)** — https://github.com/sskrepo/AAUClubManager
+- **Clerk test API keys delivered (2026-05-03)** — stashed in `.env.local`; unblocks TASK-006, 008, 009, 010
 
 ## Blocked
 
 | Item | Blocked by | Action needed |
 |------|-----------|---------------|
-| Auth scaffolding (server + web) | Clerk publishable + secret keys | User completes #2 in PHASE-0-kickoff.md |
-| Notification service test | Resend + 360dialog credentials | User completes kickoff items — Architect updating PHASE-0-kickoff.md |
-| GitHub Actions CI | GitHub repo URL | User completes #8 in PHASE-0-kickoff.md |
+| Notification service test | Resend + 360dialog credentials | User completes kickoff items — Architect updated PHASE-0-kickoff.md |
 | Production deploy | Postgres + Redis hosting + hosting platform | User completes #5, #6, #7 in PHASE-0-kickoff.md |
 
 ## Risks / contradictions (from lint)

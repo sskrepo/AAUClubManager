@@ -41,6 +41,10 @@ Active implementation work:
 
 No open decisions. Gate 2 approved 2026-05-03.
 
+**Clerk test API keys delivered 2026-05-03** — stashed in `.env.local` (gitignored). Unblocks the entire auth thread: TASK-006 (server middleware), TASK-008 (web Clerk provider), TASK-009 (client.ts wrapper), TASK-010 (e2e auth smoke). Wave 2 implementation can now wire auth end-to-end.
+
+**Still owed by user (per [pending-decisions/PHASE-0.md](../../pmo/pending-decisions/PHASE-0.md)):** 360dialog account (long pole) + Resend account/domain + 4 mid-phase items (Postgres/Redis/hosting/domain).
+
 **Open product questions (answer asynchronously — non-blocking):** Brand color, logo, app name, domain, hosting platform, WhatsApp sender strategy. Tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Open product questions." Needed before Phase 1 mocks, not before Phase 0 exits.
 
 Note: DECISION-002 is now closed, with a same-day amendment (DECISION-002-B, 2026-05-03) adopting 360dialog from MVP. The WhatsApp provider swap is no longer a future-phase commitment — 360dialog is the MVP provider. Remaining future-phase commitments (2 items: OCI storage, observability revisit) are tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Future-phase commitments."
