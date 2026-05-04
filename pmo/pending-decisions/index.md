@@ -11,7 +11,7 @@ Quick counts. Click into a phase file for details.
 
 | Phase | Status | 🚨 Blocking | 🟡 Mid-phase | 📝 Open Qs | ✅ Done | Link |
 |-------|--------|-------------|--------------|-----------|---------|------|
-| **0 — Foundation** | 🟡 Active | 2 | 4 | 3 | 6 | [PHASE-0.md](PHASE-0.md) |
+| **0 — Foundation** | 🟡 Active | 2 | 3 | 3 | 7 | [PHASE-0.md](PHASE-0.md) |
 | **1 — Core** | 🔮 Preview | 0 | 0 | 0 | 0 | [PHASE-1.md](PHASE-1.md) |
 | **2 — Operations** | 🔮 Placeholder | — | — | — | — | [PHASE-2.md](PHASE-2.md) |
 | **3 — Communications** | 🔮 Preview | 0 | 0 | 0 | 0 | [PHASE-3.md](PHASE-3.md) |

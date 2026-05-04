@@ -10,7 +10,7 @@ tags: [pending, user, phase:0]
 # Phase 0 — Pending User Items
 
 **Phase status:** 🟡 In execution. Gate 1 + Gate 2 approved. DECISION-002 closed. Implementation underway.
-**Open count:** 🚨 2 blocking · 🟡 4 mid-phase · 📝 3 open product questions · ✅ 6 done
+**Open count:** 🚨 2 blocking · 🟡 3 mid-phase · 📝 3 open product questions · ✅ 7 done
 **What's gated:** Notification delivery test, deploy. (Auth thread now unblocked — Clerk keys delivered.)
 
 Canonical setup checklist with full how-to instructions: [PHASE-0-kickoff.md](../phase-briefs/PHASE-0-kickoff.md).
@@ -33,7 +33,7 @@ Canonical setup checklist with full how-to instructions: [PHASE-0-kickoff.md](..
 | 4 | **Postgres hosting** | Production DB for `server/`. Local Docker Postgres fine until Phase 0 deploy. | Recommend: Neon, Supabase, RDS, Railway, Render, or self-hosted Hetzner. See [cost-analysis.md](../../docs/wiki/cost-analysis.md) Decision 3. |
 | 5 | **Redis hosting** | BullMQ + cache. Local Docker Redis fine for dev. | Recommend: Upstash (serverless billing) for MVP. See [ADR-004](../../docs/wiki/adr/ADR-004-background-jobs-bullmq-redis.md). |
 | 6 | **Hosting platform decision** | Where `server/` and `web/` deploy. | Recommend: Vercel (web) + Railway/Render (server) for MVP. Open product question #5 below. |
-| 7 | **Domain name** | Needed for Resend `FROM` address, Clerk redirects, deploy URLs. | Placeholder `aauclubmanager.app` until confirmed. Open product question #4 below. |
+| ~~7~~ | ~~Domain name~~ | ~~Resolved 2026-05-03 (dev/UAT only)~~ | Moved to ✅ Done. **Prod brand domain still TBD** — Phase 1 exit task. |
 
 ---
 
@@ -73,6 +73,7 @@ These will surface in their respective phase files when those phases activate.
 | 2026-05-03 | **GATE-2-PHASE-0** — OpenAPI baseline + ADR-005 + api-changes | Approved |
 | 2026-05-03 | **GitHub repo URL** | https://github.com/sskrepo/AAUClubManager — both branches pushed |
 | 2026-05-03 | **Clerk account + API keys** | Test keys delivered; stashed in `.env.local` (gitignored). Unblocks TASK-006, 008, 009, 010 — entire auth thread. |
+| 2026-05-03 | **Dev/UAT domain + email forwarding** | `myhoopclub.com` registered; Cloudflare Email Routing forwards `admin@myhoopclub.com` → personal Gmail. Confirmed working. **Prod brand domain still open** — Phase 1 exit task to revisit (HoopCourt and RosterWise still in running per PM research). |
 
 ---
 
