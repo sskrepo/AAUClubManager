@@ -24,3 +24,5 @@ Append-only. Format: `## [YYYY-MM-DD] agent | what changed`
 ## [2026-05-03] tpm | Reconciled trackers post-Gate-1 approval; Gate 2 now active with Architect. Updated PDD-PHASE-0, mocks/phase-0/index.md, design-system.md frontmatter to status: approved / gate: 1-approved. Dashboard: Gate 1 moved to Done, Gate 2 surfaced as active, 6 open product questions split into non-blocking section. current-status.md updated.
 ## [2026-05-03] architect | Drafted Gate 2 deliverable: api/openapi.yaml baseline + api-changes/phase-0.md + ADR-005 (API conventions). Awaiting Gate 2 approval.
 ## [2026-05-03] architect | Filed cost-analysis.md across 10 stack decisions at 4 scale tiers; flagged DECISION-002 for user input on cost-optimization priorities (auth provider, WhatsApp provider, file storage, observability). Updated wiki index and dashboard.
+## [2026-05-03] user | DECISION-002 decided: keep Clerk; swap to 360dialog before Phase 3; OCI Object Storage for files; defer observability to Phase 1 exit.
+## [2026-05-03] tpm | Closed DECISION-002; filed Phase 1 kickoff skeleton with pre-known prerequisites; added Future-phase commitments section to dashboard.

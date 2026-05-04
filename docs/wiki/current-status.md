@@ -44,13 +44,13 @@ Agent work still blocked on Gate 2:
 
 **Gate 2 — Phase 0 (drafted, awaiting approval):** Architect filed `api/openapi.yaml` (OpenAPI 3.0.3 baseline, validates clean), `docs/wiki/api-changes/phase-0.md`, and `docs/wiki/adr/ADR-005-api-design-conventions.md`. Approve with `OPENAPI-PHASE-0: approved` to unblock implementation.
 
-**DECISION-002 — Cost optimization priorities (filed 2026-05-03):** Architect produced a cost-at-scale analysis ([`docs/wiki/cost-analysis.md`](cost-analysis.md)) modeling current stack vs alternatives at MVP / 10-club / 100-club / 1000-club tiers. Surfaces 4 calls (auth provider, WhatsApp provider, file storage, observability) — see [`pmo/decisions/DECISION-002-cost-optimization-priorities.md`](../../pmo/decisions/DECISION-002-cost-optimization-priorities.md). Time-sensitive: auth swap closes after Phase 1 starts.
-
 **Open product questions (answer asynchronously — non-blocking):** Brand color, logo, app name, domain, hosting platform, WhatsApp sender strategy. Tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Open product questions."
+
+Note: DECISION-002 is now closed. Future-phase commitments from that decision (360dialog swap, OCI storage, observability revisit) are tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Future-phase commitments."
 
 ## Recent decisions
 
-- **DECISION-002 filed (2026-05-03)** — cost optimization priorities awaiting user input (auth, WhatsApp, file storage, observability).
+- **DECISION-002 (decided 2026-05-03)** — Keep Clerk; swap WhatsApp to 360dialog before Phase 3 production; OCI Object Storage for files (curveball — not in original analysis, Architect validates SDK/S3-compat in Phase 1 prep); defer observability decision to Phase 1 exit. Future-phase commitments tracked in dashboard.
 - **GATE-1-PHASE-0 approved (2026-05-03)** — PDD + mocks stub + design system seed locked.
 - DECISION-001 (2026-05-03) — Option B chosen.
 

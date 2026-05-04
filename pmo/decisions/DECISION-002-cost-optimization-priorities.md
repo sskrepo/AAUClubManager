@@ -1,13 +1,32 @@
 ---
 title: DECISION-002 — Cost Optimization Priorities
-status: awaiting-user-input
+status: decided
 created: 2026-05-03
+decided: 2026-05-03
 owner: architect
 deciders: user
 tags: [cost, tech-stack, scaling]
+related:
+  - pmo/dashboard.md#future-phase-commitments
+  - pmo/phase-briefs/PHASE-1-kickoff.md
 ---
 
 # DECISION-002 — Cost Optimization Priorities
+
+## Decision (2026-05-03)
+
+User chose the following on 2026-05-03:
+
+| Item | Choice | Rationale |
+|---|---|---|
+| A — Auth provider | Keep Clerk | Eng-time to swap not worth it pre-PMF; revisit at SaaS scale (trigger: 8K MAU). |
+| B — WhatsApp provider | Swap to 360dialog before Phase 3 production | ~40-50% savings on the biggest cost line item; notification abstraction makes this ~2-3 days backend work; low switching risk. |
+| C — File storage | OCI Object Storage | User's existing OCI tenancy. NOTE: this was not in the original analysis matrix (Architect analyzed R2 vs S3). OCI requires a short technical validation by Architect during Phase 1 prep — Node.js SDK choice (official `oci-sdk` vs S3-compatible AWS SDK pointed at OCI endpoint) and S3-compatibility surface gotchas. Tracked in `pmo/dashboard.md` Future-phase commitments and `pmo/phase-briefs/PHASE-1-kickoff.md`. |
+| D — Observability | Defer to Phase 1 exit | DECISION-NNN to be filed by Architect at Phase 1 exit comparing Sentry + Axiom/BetterStack vs Datadog vs self-hosted Loki/Grafana. |
+
+Follow-up tracking: see [pmo/dashboard.md — Future-phase commitments](../dashboard.md#future-phase-commitments) and [PHASE-1-kickoff.md](../phase-briefs/PHASE-1-kickoff.md).
+
+---
 
 ## Why this decision exists
 

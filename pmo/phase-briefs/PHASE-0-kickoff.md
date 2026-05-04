@@ -239,6 +239,16 @@ Items you should also start preparing during Phase 0 because Phase 1 needs them 
 
 ---
 
+## Related future-phase commitments
+
+DECISION-002 (decided 2026-05-03) produced three follow-up items that are NOT Phase 0 concerns but are tracked here for continuity. Full details in [pmo/dashboard.md — Future-phase commitments](../dashboard.md#future-phase-commitments):
+
+- **WhatsApp provider swap (Twilio to 360dialog)** — before Phase 3 production go-live. Low switching cost (~2-3 days) but user needs a 360dialog account set up.
+- **OCI Object Storage credentials + Architect SDK validation** — Phase 1 prerequisite. OCI was not in the original Architect analysis (which covered R2 vs S3); Architect will validate Node.js SDK choice and S3-compatibility surface during Phase 1 prep.
+- **Observability stack decision** — deferred to Phase 1 exit. Architect will file a new decision at that point.
+
+---
+
 ## How to update this brief
 
 - As you complete an external dependency, change `[ ]` to `[x]` in this file

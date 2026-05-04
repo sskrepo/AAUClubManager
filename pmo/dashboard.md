@@ -17,6 +17,8 @@ status: current
 
 [PHASE-0-kickoff.md](phase-briefs/PHASE-0-kickoff.md) — continue the critical-path external setup items (Twilio WhatsApp approval is the long pole, ~1-3 weeks lead time)
 
+[PHASE-1-kickoff.md (skeleton)](phase-briefs/PHASE-1-kickoff.md) — pre-known Phase 1 prerequisites filed; will be expanded when Phase 0 exits
+
 ---
 
 ## Approval gates — Phase 0
@@ -112,12 +114,21 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 
 ## Decisions awaiting your review
 
-| # | Decision | One-liner | Filed |
-|---|---|---|---|
-| 🔴 DECISION-002 | [Cost optimization priorities](decisions/DECISION-002-cost-optimization-priorities.md) | Auth (Clerk vs Auth.js), WhatsApp provider (Twilio vs 360dialog), file storage (R2 vs S3), observability stack — 4 choices, 2 must be made before Phase 1 implementation | 2026-05-03 |
+(none — DECISION-002 closed 2026-05-03. Gate 2 — OPENAPI-PHASE-0 — is the next approval pending.)
+
+## Future-phase commitments
+
+Decisions made now but executed in a later phase. Tracked here so nothing falls through the cracks.
+
+| Item | When | Action required |
+|---|---|---|
+| WhatsApp provider swap: Twilio to 360dialog | Before Phase 3 production go-live | Architect designs the swap; notification abstraction makes it ~2-3 days backend work. User needs to set up 360dialog account before Phase 3 provisioning. |
+| OCI Object Storage setup | Phase 1 prerequisite | User delivers: OCI tenancy OCID, compartment OCID, bucket name, API key/credentials. Architect validates Node.js SDK approach (official `oci-sdk` vs S3-compatible AWS SDK pointed at OCI endpoint) and S3-compatibility surface during Phase 1 prep. Tracked in PHASE-1-kickoff.md. |
+| Revisit observability stack | Phase 1 exit | Architect to file DECISION-NNN at Phase 1 exit comparing Sentry + Axiom/BetterStack vs Datadog vs self-hosted Loki/Grafana. |
 
 ## Recent decisions
 
+- **DECISION-002 (decided 2026-05-03)** — Keep Clerk; swap WhatsApp to 360dialog before Phase 3 production; OCI Object Storage for files (Architect to validate SDK/S3-compat in Phase 1 prep); defer observability decision to Phase 1 exit.
 - **GATE-1-PHASE-0 approved (2026-05-03)** — PDD, mocks stub, and design system seed locked. Gate 2 now active.
 - **DECISION-001 (decided 2026-05-03)** — MVP scope: **Option B — Full Season Operations** (Phases 1-5: Tryouts, Teams, Practice Scheduling, Gym, Jersey, Practice Comms, Tournaments, Payments). Agent-pace ETA: 6-12 weeks. AI features deferred to Phase 6 / v1.5+.
 
