@@ -20,12 +20,15 @@ Every agent reads (in order):
 4. `docs/wiki/current-status.md` — where we are
 5. `docs/wiki/log.md` — recent session history
 6. `pmo/dashboard.md` — current phase, blockers, decisions
-7. Topic-specific wiki pages relevant to the current task (don't read everything)
+7. `pmo/pending-decisions/PHASE-N.md` — what's waiting on the user for the active phase
+8. Topic-specific wiki pages relevant to the current task (don't read everything)
 
 ### During Work
 - New decision → update relevant wiki page + file `pmo/decisions/DECISION-NNN-*.md` if user input needed
 - New raw doc → register in `manifests/raw_sources.csv`
 - Code changes → if they diverge from wiki, update wiki in same session
+- **User delivers a pending item** (creds, accounts, decisions, product answers) → move the row from 🚨/🟡/📝 → ✅ Done in `pmo/pending-decisions/PHASE-N.md` with the date; reconcile `pmo/dashboard.md` and `docs/wiki/current-status.md` to match. If the delivery unblocks queued work, surface that in the next response.
+- **New pending item identified** (a credential we didn't realize we'd need, a product question that surfaces during design) → add a row to the appropriate phase file in `pmo/pending-decisions/` and to the dashboard's awaiting-user surface in the same change.
 
 ### Session End
 - Append to `docs/wiki/log.md`: `## [YYYY-MM-DD] {agent} | {what changed}`

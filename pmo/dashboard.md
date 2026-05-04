@@ -13,6 +13,12 @@ status: current
 **Current phase:** Phase 0 — Foundation — IN EXECUTION (Gate 2 approved 2026-05-03)
 **Updated:** 2026-05-03 by tpm
 
+## 👤 What's waiting on you
+
+**Single user-facing view:** [`pmo/pending-decisions/PHASE-0.md`](pending-decisions/PHASE-0.md) — 3 blocking · 4 mid-phase · 3 open product questions · 5 done.
+
+All-phases index: [`pmo/pending-decisions/index.md`](pending-decisions/index.md)
+
 ## Current Phase Kickoff
 
 [PHASE-0-kickoff.md](phase-briefs/PHASE-0-kickoff.md) — continue the critical-path external setup items (360dialog account setup is now the WhatsApp long pole — Architect is updating this brief)
