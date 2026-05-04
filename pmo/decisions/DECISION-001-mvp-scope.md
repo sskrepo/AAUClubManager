@@ -1,7 +1,8 @@
 ---
 title: DECISION-001 — MVP scope and phasing
-status: open
+status: decided
 created: 2026-05-03
+decided: 2026-05-03
 owner: pm
 deciders: user
 tags: [phase:0, kind:scope]
@@ -74,24 +75,68 @@ Reasoning:
 - AAU coaches' biggest stated pain points are communication, payment tracking, and tournament logistics — Option A leaves out two of three
 - Tournaments are seasonal; missing the season window means waiting a year for adoption
 - AI features (Option C) are differentiation, but only matter if the basics are solid first — coaches won't trust a half-baked AI assistant if their roster page is broken
-- 5-6 months is acceptable runway for the value delivered
 
-If timeline pressure is severe, fall back to Option A with explicit "Phase 4 + 5 in v1.5".
+## Updated timeline (agent-pace, added 2026-05-03)
+
+The original phases-comparison.md and architecture-options.md were calibrated for 1 human
+backend + 1 human frontend engineer. With agent-driven development, the realistic total is:
+
+- **Option A: ~4-8 weeks** (down from ~14 wks original estimate)
+- **Option B: ~6-12 weeks** (down from ~23 wks) ← still recommended
+- **Option C: ~5-10 weeks for ops + 4-12 weeks for AI** (down from ~23 wks, but with widest variance)
+
+**The Twilio WhatsApp Business API approval (1-3 weeks of Meta business verification) is the
+single longest external lead time for any option.** Start it on day 1 — see
+[`pmo/phase-briefs/PHASE-0-kickoff.md`](../phase-briefs/PHASE-0-kickoff.md).
+
+The recommendation is unchanged: Option B remains the best balance of value and risk. The
+shorter timeline strengthens the argument — committing to a 6-12 week project is easier than
+to a 5-6 month one, and the Phase 4 (Tournaments) + Phase 5 (Payments) modules become
+materially more affordable to include.
+
+If timeline pressure is severe (target a specific season window with tight runway), fall back
+to Option A with explicit "Phase 4 + 5 in v1.5" — but at agent pace, even Option B fits
+inside most reasonable seasonal launch windows.
 
 ## Your call
 
 Reply with:
-- `DECISION-001: A` — Coach's Daily Tool (Phases 1-3)
-- `DECISION-001: B` — Full Season Operations (Phases 1-5) ← recommended
-- `DECISION-001: C` — Differentiated with AI (Phases 1-3 + 6-partial)
+- `DECISION-001: A` — Coach's Daily Tool (Phases 1-3, ~4-8 wks agent-pace)
+- `DECISION-001: B` — Full Season Operations (Phases 1-5, ~6-12 wks agent-pace) ← recommended
+- `DECISION-001: C` — Differentiated with AI (Phases 1-3 + 6-partial, ~5-10 wks ops + 4-12 wks AI variance)
+- `DECISION-001: A then B` — Ship A as v1, then sequence B-4 + B-5 immediately after as v1.5
 - `DECISION-001: tell me more about X` — for follow-up questions
 
 ---
 
-## Decision
+## Decision (2026-05-03)
 
-(awaiting user)
+**User chose Option B — Full Season Operations.**
+
+Recorded as the source of truth for project scope. Locks in MVP as Phases 1-5: Tryouts, Teams, Practice Scheduling, Gym Management, Jersey Management, Practice Communications, Tournaments, Payment Tracking.
 
 ## Consequences
 
-(filled after user decides)
+### What this enables
+- Coach can run an entire AAU season end-to-end from one platform
+- Tournament management (local + travel hotel coordination) ships in v1
+- Payment tracking + automated reminders ship in v1
+- Realistic agent-pace timeline: ~6-12 weeks from Phase 0 start (depending on Twilio approval lead time and real-world friction)
+
+### What this rules out for v1
+- AI Practice Assistant (deferred to Phase 6 / v1.5)
+- Film Study Assistant (deferred to Phase 6 / v1.5)
+- Third-party analytics integrations (deferred to Phase 7)
+- Online payment processing via Stripe (deferred to Phase 5 expansion / v1.5)
+- All Finder marketplace features and Tournament Director persona (in `docs/wiki/backlog-future.md`)
+
+### What now changes
+- `pmo/phases.md` — phases 1-5 are locked in; PM and Architect fill in concrete scope/dependencies per phase
+- Phase 0 (Foundation) is **unblocked** — Architect can file ADRs (Clerk, Knex+Postgres, Resend+Twilio, BullMQ+Redis), backend/frontend scaffolding can begin, in parallel with user's external dependency setup from `pmo/phase-briefs/PHASE-0-kickoff.md`
+- For Phase 1+: the new v0.1.3 gate workflow applies (PDD + UI mocks → Gate 1 → OpenAPI spec → Gate 2 → engineering)
+- DECISION-001 closes as `decided`. Future scope changes for Phases 4 or 5 require a new DECISION file (don't silently mutate this one).
+
+### Cross-references
+- [`pmo/phases-comparison.md`](../phases-comparison.md) — full Option B scope analysis
+- [`docs/wiki/architecture-options.md`](../../docs/wiki/architecture-options.md) — Option B technical analysis
+- [`pmo/phase-briefs/PHASE-0-kickoff.md`](../phase-briefs/PHASE-0-kickoff.md) — external dependencies user must handle in Phase 0

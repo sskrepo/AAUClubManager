@@ -108,6 +108,40 @@ AAUClubManager/
 - Migrations use Knex schema builder (DB-agnostic)
 - Goal: swap Postgres → MySQL → SQLite without rewriting queries
 
+## Phase Workflow (mandatory — from dev-agent-team v0.1.3)
+
+Every phase follows this gated sequence:
+
+```
+Phase start
+  ↓
+[1] TPM files Phase Kickoff Brief (pmo/phase-briefs/PHASE-N-kickoff.md)
+    → lists external dependencies user must handle (Twilio, Clerk, etc.)
+  ↓
+[2] PM writes PDD (docs/wiki/pdd/PDD-PHASE-N.md) — covers all user flows
+[3] UX generates UI mocks (docs/wiki/ux/mocks/phase-N/) — for flows where appropriate
+  ↓
+🔴 GATE 1 — User approves: PDD + UI mocks
+  ↓
+[4] Architect updates api/openapi.yaml + files docs/wiki/api-changes/phase-N.md
+  ↓
+🔴 GATE 2 — User approves: OpenAPI spec changes
+  ↓
+[5] PM writes detailed stories (informed by all approved artifacts)
+[6] Dev Manager breaks into engineering tasks (NOT before Gate 2)
+[7] Backend + Frontend implement
+[8] QA validates
+  ↓
+Phase end → TPM marks done, files next Phase Kickoff Brief
+```
+
+User approval syntax:
+- `GATE-1-PHASE-N: approved` (or `PDD-PHASE-N:` / `MOCKS-PHASE-N:` separately)
+- `OPENAPI-PHASE-N: approved`
+- Either: `... needs changes — {description}` to request edits
+
+Canonical protocol: [`dev-agent-team/shared/phase-deliverables-protocol.md`](../dev-agent-team/shared/phase-deliverables-protocol.md)
+
 ## Project-Specific Agent Rules
 
 (Add agent-specific behaviors that apply only to this project. The feedback-protocol.md in dev-agent-team handles permanent changes — this section is for project-only rules.)

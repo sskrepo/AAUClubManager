@@ -9,6 +9,11 @@
 - [personas](personas.md) — Head Coach, Assistant Coach, Parent, Player + authority matrix
 - [backlog-future](backlog-future.md) — Finder modules and Tournament Director persona (deferred)
 
+### Planning documents
+- [phases-comparison](../../pmo/phases-comparison.md) — phase-by-phase breakdown of MVP Options A/B/C for DECISION-001 (cross-ref: architecture-options.md). ★ agent-pace re-baseline at top.
+- [phase-briefs/](../../pmo/phase-briefs/) — Phase Kickoff Briefs (TPM-owned, one per phase, lists external dependencies user must handle)
+  - [PHASE-0-kickoff.md](../../pmo/phase-briefs/PHASE-0-kickoff.md) — Foundation phase, awaiting user external setup
+
 ### Modules (one page per functional area)
 - [module-tryouts](module-tryouts.md) — Phase 1 — tryouts & onboarding
 - [module-teams](module-teams.md) — Phase 1 — team formation, rosters
@@ -24,9 +29,14 @@
 ### Market research
 - [market-research/](market-research/) — competitor scans, positioning, sentiment (PM-owned, refresh quarterly)
 
+### Per-phase deliverables (Gate 1 + Gate 2)
+- [pdd/](pdd/) — Product Definition Documents (PM-owned, Gate 1)
+- [ux/mocks/](ux/mocks/) — UI mocks per phase (UX-owned, Gate 1)
+- [api-changes/](api-changes/) — Per-phase OpenAPI spec change summaries (Architect-owned, Gate 2)
+
 ## Compiled by Architect
-(empty — Architect activates after MVP scope is decided)
-- (future) [architecture](architecture.md)
+- [architecture-options](architecture-options.md) — technical analysis of DECISION-001 options A/B/C (effort, integrations, risk, reusability). ★ agent-pace re-baseline at top.
+- (future — after DECISION-001 decided) [architecture](architecture.md)
 - (future) [data-model](data-model.md)
 - (future) [api-design](api-design.md)
 - (future) [adr/](adr/)
