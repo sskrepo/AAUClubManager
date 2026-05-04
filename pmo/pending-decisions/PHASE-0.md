@@ -10,7 +10,7 @@ tags: [pending, user, phase:0]
 # Phase 0 — Pending User Items
 
 **Phase status:** 🟡 In execution. Gate 1 + Gate 2 approved. DECISION-002 closed. Implementation underway.
-**Open count:** 🚨 2 blocking · 🟡 3 mid-phase · 📝 3 open product questions · ✅ 7 done
+**Open count:** 🚨 1 blocking · 🟡 3 mid-phase · 📝 3 open product questions · ✅ 8 done
 **What's gated:** Notification delivery test, deploy. (Auth thread now unblocked — Clerk keys delivered.)
 
 Canonical setup checklist with full how-to instructions: [PHASE-0-kickoff.md](../phase-briefs/PHASE-0-kickoff.md).
@@ -21,8 +21,7 @@ Canonical setup checklist with full how-to instructions: [PHASE-0-kickoff.md](..
 
 | # | Item | Why it matters | Where to get it | Env vars / inputs |
 |---|------|----------------|-----------------|-------------------|
-| 1 | **360dialog account + API key** | WhatsApp delivery; long-pole external dep. Meta Business verification 1–7 days. **Start ASAP.** | [hub.360dialog.com](https://hub.360dialog.com) → register → Meta Business verify → API key | `DIALOG360_API_KEY`, `DIALOG360_WHATSAPP_FROM` (E.164 format), WhatsApp Business display name |
-| 2 | **Resend account + verified sender domain** | Email delivery test. DNS verification a few hours. | [resend.com](https://resend.com) → add domain → set DNS records | `RESEND_API_KEY`, `RESEND_FROM_EMAIL` |
+| 1 | **360dialog account + API key** | WhatsApp delivery; long-pole external dep. Meta Business verification 1–7 days. **In progress** (signup hung on "building your hub" — being investigated). | [hub.360dialog.com](https://hub.360dialog.com) → register → Meta Business verify → API key | `DIALOG360_API_KEY`, `DIALOG360_WHATSAPP_FROM` (E.164 format), WhatsApp Business display name |
 
 ---
 
@@ -74,6 +73,7 @@ These will surface in their respective phase files when those phases activate.
 | 2026-05-03 | **GitHub repo URL** | https://github.com/sskrepo/AAUClubManager — both branches pushed |
 | 2026-05-03 | **Clerk account + API keys** | Test keys delivered; stashed in `.env.local` (gitignored). Unblocks TASK-006, 008, 009, 010 — entire auth thread. |
 | 2026-05-03 | **Dev/UAT domain + email forwarding** | `myhoopclub.com` registered; Cloudflare Email Routing forwards `admin@myhoopclub.com` → personal Gmail. Confirmed working. **Prod brand domain still open** — Phase 1 exit task to revisit (HoopCourt and RosterWise still in running per PM research). |
+| 2026-05-03 | **Resend API key** | API key delivered; stashed in `.env.local`. **Sub-step still pending:** verify `myhoopclub.com` in Resend dashboard (DNS records: SPF, DKIM, DMARC) before `RESEND_FROM_EMAIL` can be set. ~1 hour for DNS propagation. |
 
 ---
 
