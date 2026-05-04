@@ -25,29 +25,31 @@ These cannot be done by agents. **Start as soon as possible** — long-lead item
 
 ### 🚨 Critical path — start within 24 hours
 
-#### 1. Twilio WhatsApp Business API access ⚠️ LONGEST LEAD TIME
+#### 1. 360dialog account + WhatsApp Business API setup
 
-- [ ] **What:** Get your Twilio account approved to send WhatsApp messages from a business sender
-- **Why:** Phase 3 (Practice Communications) depends on WhatsApp delivery. Approval can take 1-3 weeks. **If you don't start this now, you'll be blocked at Phase 3.**
-- **Lead time:** **1-3 weeks** (Twilio + Meta business verification)
-- **Your time investment:** ~2 hours initial setup + occasional checks during approval
+- [ ] **What:** Create a 360dialog account, complete Meta Business verification, and obtain a WhatsApp Business API key
+- **Why:** Phase 3 (Practice Communications) depends on WhatsApp delivery. Phase 1 selection notifications also use WhatsApp. **If you don't start this now, you'll be blocked.** 360dialog is used from MVP — Twilio is not in this stack.
+- **Lead time:** **1–7 days** (360dialog account creation is same-day; Meta Business verification typically 1–5 business days, faster than Twilio's typical 1–3 weeks). This is one reason 360dialog was chosen over Twilio — faster onboarding.
+- **Note on lead time:** The 1–7 day figure is based on 360dialog's documentation and general BSP experience. Actual Meta verification timing can vary. If your business is not yet verified with Meta, budget the full 7 days. Flag to the team if it takes longer — Clerk and Resend setup may now be the longest poles instead of WhatsApp.
+- **Your time investment:** ~1–2 hours initial setup + occasional checks during approval
 - **How (step-by-step):**
-  1. Go to https://www.twilio.com/try-twilio and create an account (or sign in)
-  2. Verify your phone number and email
-  3. Add a payment method (required for WhatsApp; you'll be billed per message)
-  4. In console: **Messaging** → **Senders** → **WhatsApp Senders** → **Create new sender**
-  5. You'll need a **Facebook Business Manager** account: https://business.facebook.com/. Create one if you don't have one. Link your business.
-  6. Submit business verification (Meta reviews this — takes 1-2 weeks typically)
-  7. Once approved, register a WhatsApp sender (your business phone number or a new one)
-  8. Submit message templates for approval (e.g., "Hi {{1}}, your child {{2}} has been selected for {{3}}.")
-- **Where:** https://console.twilio.com/
-- **Done when:** You can send a test WhatsApp message from the Twilio Console to your own phone using an approved template
+  1. Go to https://www.360dialog.com and create an account
+  2. Choose the **WhatsApp Business API** plan (not the WATI-branded product)
+  3. You'll need a **Meta Business Manager** account: https://business.facebook.com/. Create one if you don't have one, and verify your business with Meta (legal name, address, phone number)
+  4. In the 360dialog dashboard: connect your Meta Business Manager account
+  5. Add a WhatsApp Business phone number (can be a new number or one you migrate from another BSP — you cannot use a number already registered on personal WhatsApp without migrating it)
+  6. Complete Meta's phone number verification (OTP to the registered number)
+  7. Submit WhatsApp message templates for approval (e.g., "Hi {{1}}, your child {{2}} has been selected for {{3}}. Reply YES to confirm."). Templates must be approved by Meta before use. Submit during Phase 0 — they may take 1–3 days to review.
+  8. Note your API key from the 360dialog dashboard
+- **Where:** https://hub.360dialog.com (360dialog client hub after account creation)
+- **Done when:** You can make a test API call to the 360dialog REST endpoint and receive a WhatsApp message on your own phone. At least one message template is approved.
 - **Deliver to agents:** Set these in `.env`:
-  - `TWILIO_ACCOUNT_SID=AC...`
-  - `TWILIO_AUTH_TOKEN=...`
-  - `TWILIO_WHATSAPP_FROM=whatsapp:+1...` (the approved sender)
+  - `DIALOG360_API_KEY=...` (your 360dialog API key)
+  - `DIALOG360_WHATSAPP_FROM=+1...` (the registered WhatsApp sender phone number, E.164 format)
 
-> 🔧 **Workaround if approval drags:** Twilio offers a **WhatsApp Sandbox** for testing — usable in minutes, no business verification, but only sends to numbers that join via a code. Use this for Phase 1-2 dev/test; switch to approved business sender by Phase 3.
+> **No sandbox equivalent:** Unlike Twilio, 360dialog does not offer a pre-approval sandbox. Development and testing against the real 360dialog API requires a registered (though not necessarily fully production-approved) account. For early Phase 0 dev work before your account is active, backend devs can stub the WhatsApp provider with a no-op implementation that logs to console — the `IWhatsAppProvider` abstraction makes this straightforward.
+
+> **Template approval timing:** Submit message templates as soon as your 360dialog account is active — don't wait until Phase 3. Template approval is separate from account verification and can take 1–3 days per template. Phase 3 will need at minimum: practice schedule change, absence confirmation, payment reminder.
 
 #### 2. Clerk account + organization setup
 
@@ -189,13 +191,13 @@ While you handle the above, the team will:
 
 | Work | Owner | Status |
 |------|-------|--------|
-| File ADRs for Clerk, Knex+Postgres, Resend+Twilio, BullMQ+Redis (formalize stack) | architect | 📝 ready to start |
+| File ADRs for Clerk, Knex+Postgres, Resend+360dialog, BullMQ+Redis (formalize stack) | architect | 📝 ready to start |
 | Scaffold `server/` (Express + TypeScript + Knex + middleware) | backend-dev | ⏸️ blocked on Clerk keys |
 | Scaffold `web/` (Next.js + Tailwind + shadcn/ui + Clerk provider) | frontend-dev | ⏸️ blocked on Clerk keys |
 | Seed `docs/wiki/ux/design-system.md` (color/spacing/components catalog) | ux-designer | 📝 ready to start |
 | Wire OpenAPI spec generation pipeline | architect + backend-dev | 📝 ready to start |
 | Set up Vitest + Playwright + CI (GitHub Actions) | dev-manager | ⏸️ blocked on GitHub repo |
-| Notification service abstraction (channel = parameter) | backend-dev | ⏸️ blocked on Resend + Twilio keys |
+| Notification service abstraction (channel = parameter) | backend-dev | ⏸️ blocked on Resend + 360dialog keys |
 | Conventions: coding, testing, database, git workflow | dev-manager | 📝 ready to start |
 
 **Agents start work that has no external blockers immediately.** As you deliver credentials/URLs, more work unblocks.
@@ -215,13 +217,13 @@ But carried over from project bootstrap:
 
 ## 📋 Phase 0 exit criteria
 
-- [ ] All 🚨 critical-path external dependencies completed (Twilio WhatsApp approved or sandboxed, Clerk + Resend keys delivered)
+- [ ] All 🚨 critical-path external dependencies completed (360dialog account active + API key delivered, Clerk + Resend keys delivered)
 - [ ] All 🟡 mid-phase external dependencies completed (Postgres, Redis, hosting, GitHub repo)
-- [ ] ADR-001 through ADR-004 filed and accepted (Clerk, Knex+Postgres, Resend+Twilio, BullMQ+Redis)
+- [ ] ADR-001 through ADR-004 filed and accepted (Clerk, Knex+Postgres, Resend+360dialog, BullMQ+Redis)
 - [ ] `server/` scaffold deployed and responding to a `GET /api/health`
 - [ ] `web/` scaffold deployed with Clerk login working (sign in with email or Google → see authenticated home)
 - [ ] OpenAPI codegen pipeline working (`npm run api:generate` produces SDK)
-- [ ] Notification service can send a test email via Resend AND a test WhatsApp message via Twilio
+- [ ] Notification service can send a test email via Resend AND a test WhatsApp message via 360dialog
 - [ ] BullMQ worker processes a hello-world job
 - [ ] CI runs on every push (lint + test + build)
 - [ ] Design system seeded
@@ -235,7 +237,7 @@ Items you should also start preparing during Phase 0 because Phase 1 needs them 
 
 - **Test users** — recruit 1-2 friendly AAU coaches + 2-3 parents willing to test the registration flow at the end of Phase 1 (~3-4 weeks out at agent pace). Real-user feedback in Phase 1 is the difference between shipping a working product and a broken one.
 - **Sample data** — pull together a list of 20-30 realistic player names, ages, positions for seeding the dev DB (or agents can synthesize; real data is better)
-- **WhatsApp template approval** — if you got Twilio approved early, start submitting message templates Phase 3 will need (selection notification, schedule change, payment reminder)
+- **WhatsApp template approval** — as soon as your 360dialog account is active, submit message templates Phase 3 will need: selection notification, schedule change, payment reminder. Don't wait — templates can take 1–3 days each to be reviewed by Meta.
 
 ---
 
@@ -243,7 +245,7 @@ Items you should also start preparing during Phase 0 because Phase 1 needs them 
 
 DECISION-002 (decided 2026-05-03) produced three follow-up items that are NOT Phase 0 concerns but are tracked here for continuity. Full details in [pmo/dashboard.md — Future-phase commitments](../dashboard.md#future-phase-commitments):
 
-- **WhatsApp provider swap (Twilio to 360dialog)** — before Phase 3 production go-live. Low switching cost (~2-3 days) but user needs a 360dialog account set up.
+- **WhatsApp provider** — 360dialog from MVP (decided 2026-05-03). No planned swap. 360dialog account setup is in the Phase 0 critical-path external dependencies above.
 - **OCI Object Storage credentials + Architect SDK validation** — Phase 1 prerequisite. OCI was not in the original Architect analysis (which covered R2 vs S3); Architect will validate Node.js SDK choice and S3-compatibility surface during Phase 1 prep.
 - **Observability stack decision** — deferred to Phase 1 exit. Architect will file a new decision at that point.
 

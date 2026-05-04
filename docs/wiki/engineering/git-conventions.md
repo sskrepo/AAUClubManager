@@ -75,9 +75,9 @@ Returns 401 RFC 7807 on invalid/missing token.
 
 feat(notification): add channel-agnostic NotificationService
 
-Wraps Resend (email) and Twilio (WhatsApp) behind a shared IWhatsAppProvider
-interface. Swapping providers (Twilio → 360dialog, per DECISION-002) requires
-only a new provider file with no changes to the service or job handlers.
+Wraps Resend (email) and 360dialog (WhatsApp) behind a shared IWhatsAppProvider
+interface. Provider swaps require only a new provider file with no changes to
+the service or job handlers.
 
 fix(health): return degraded when Redis unreachable
 

@@ -15,7 +15,7 @@ status: current
 
 ## Current Phase Kickoff
 
-[PHASE-0-kickoff.md](phase-briefs/PHASE-0-kickoff.md) — continue the critical-path external setup items (Twilio WhatsApp approval is the long pole, ~1-3 weeks lead time)
+[PHASE-0-kickoff.md](phase-briefs/PHASE-0-kickoff.md) — continue the critical-path external setup items (360dialog account setup is now the WhatsApp long pole — Architect is updating this brief)
 
 [PHASE-1-kickoff.md (skeleton)](phase-briefs/PHASE-1-kickoff.md) — pre-known Phase 1 prerequisites filed; will be expanded when Phase 0 exits
 
@@ -51,7 +51,7 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 5. **Hosting platform** — Vercel (web) + Railway or Render (server) vs. a unified platform? Determines CI/CD and env var strategy. See PHASE-0-kickoff.md item 7.
 
 **Phase 3 risk**
-6. **WhatsApp sender strategy** — Pursue Twilio WhatsApp Business approval now (1-3 wk lead), or stay on Twilio sandbox through Phase 2 and switch for Phase 3? Either is valid; decision determines how test scripts are configured. Recommend starting approval now to avoid Phase 3 delay.
+6. **WhatsApp sender strategy** — RESOLVED (2026-05-03, DECISION-002-B amendment): 360dialog adopted from MVP. No Twilio. Set up 360dialog account, obtain API key, configure WhatsApp Business display name and phone number. Architect is updating PHASE-0-kickoff.md with step-by-step instructions.
 
 ---
 
@@ -63,7 +63,7 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 | OpenAPI baseline (Gate 2) | architect | DONE — approved 2026-05-03 | api/openapi.yaml + api-changes/phase-0.md + ADR-005 |
 | ADR-001 Auth (Clerk) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-001-auth-clerk.md |
 | ADR-002 DB (Knex+Postgres) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-002-database-knex-postgres.md |
-| ADR-003 Notifications (Resend+Twilio) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-003-notifications-resend-twilio.md |
+| ADR-003 Notifications (Resend+360dialog) | architect | BEING REVISED 2026-05-03 | Architect renaming/updating per DECISION-002-B amendment |
 | ADR-004 Background jobs (BullMQ+Redis) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-004-background-jobs-bullmq-redis.md |
 | Engineering task breakdown (PHASE-0-tasks.md) | dev-manager | DONE 2026-05-03 | 20 tasks filed; pmo/phase-briefs/PHASE-0-tasks.md |
 | Engineering conventions docs | dev-manager | DONE 2026-05-03 | docs/wiki/engineering/ — 4 convention docs seeded |
@@ -71,7 +71,7 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 | `web/` scaffold (Next.js+Tailwind+shadcn) | frontend-dev | ready to start — TASK-007 | No blockers; Clerk wiring (TASK-008) follows Clerk keys |
 | OpenAPI codegen pipeline scripts | backend-dev | ready to start — TASK-002, TASK-003 | No blockers |
 | BullMQ hello-world job | backend-dev | ready to start — TASK-014 | Local Docker Redis sufficient |
-| Notification service abstraction | backend-dev | ready to start — TASK-011 | Abstraction has no blockers; test delivery (TASK-013) needs provider creds |
+| Notification service abstraction (360dialog) | backend-dev | ready to start — TASK-011 | Abstraction has no blockers; test delivery (TASK-013) needs 360dialog + Resend creds |
 | Auth middleware (server) | backend-dev | blocked — TASK-006 | Needs CLERK_SECRET_KEY from user |
 | Clerk provider + sign-in (web) | frontend-dev | blocked — TASK-008 | Needs CLERK_PUBLISHABLE_KEY from user |
 | CI (GitHub Actions) | backend-dev | blocked — TASK-017 | Needs GitHub repo URL from user |
@@ -103,7 +103,7 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 | Item | Blocked by | Action needed |
 |------|-----------|---------------|
 | Auth scaffolding (server + web) | Clerk publishable + secret keys | User completes #2 in PHASE-0-kickoff.md |
-| Notification service test | Resend + Twilio credentials | User completes #1 + #3 in PHASE-0-kickoff.md |
+| Notification service test | Resend + 360dialog credentials | User completes kickoff items — Architect updating PHASE-0-kickoff.md |
 | GitHub Actions CI | GitHub repo URL | User completes #8 in PHASE-0-kickoff.md |
 | Production deploy | Postgres + Redis hosting + hosting platform | User completes #5, #6, #7 in PHASE-0-kickoff.md |
 
@@ -121,14 +121,16 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 
 Decisions made now but executed in a later phase. Tracked here so nothing falls through the cracks.
 
+Note: WhatsApp provider swap removed from future commitments — 360dialog adopted from MVP per same-day decision (2026-05-03). No swap needed; abstraction writes to 360dialog from Phase 0.
+
 | Item | When | Action required |
 |---|---|---|
-| WhatsApp provider swap: Twilio to 360dialog | Before Phase 3 production go-live | Architect designs the swap; notification abstraction makes it ~2-3 days backend work. User needs to set up 360dialog account before Phase 3 provisioning. |
 | OCI Object Storage setup | Phase 1 prerequisite | User delivers: OCI tenancy OCID, compartment OCID, bucket name, API key/credentials. Architect validates Node.js SDK approach (official `oci-sdk` vs S3-compatible AWS SDK pointed at OCI endpoint) and S3-compatibility surface during Phase 1 prep. Tracked in PHASE-1-kickoff.md. |
 | Revisit observability stack | Phase 1 exit | Architect to file DECISION-NNN at Phase 1 exit comparing Sentry + Axiom/BetterStack vs Datadog vs self-hosted Loki/Grafana. |
 
 ## Recent decisions
 
+- **DECISION-002-B amended (2026-05-03)** — Use 360dialog from MVP; drop Twilio entirely. No future swap needed. 360dialog account (API key, WhatsApp Business display name, phone number) is now a Phase 0 external dependency. Architect updating ADR-003, cost-analysis, PHASE-0-kickoff, PHASE-0-tasks.
 - **GATE-2-PHASE-0 approved (2026-05-03)** — OpenAPI baseline locked (api/openapi.yaml), api-changes/phase-0.md and ADR-005 accepted as canonical. Phase 0 implementation fully unblocked.
 - **DECISION-002 (decided 2026-05-03)** — Keep Clerk; swap WhatsApp to 360dialog before Phase 3 production; OCI Object Storage for files (Architect to validate SDK/S3-compat in Phase 1 prep); defer observability decision to Phase 1 exit.
 - **GATE-1-PHASE-0 approved (2026-05-03)** — PDD, mocks stub, and design system seed locked.

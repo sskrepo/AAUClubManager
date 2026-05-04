@@ -88,7 +88,7 @@ AAUClubManager/
 - **Backend:** Node.js + TypeScript + Express + Knex (RDBMS-agnostic)
 - **Frontend:** Next.js 15 + TypeScript + Tailwind + shadcn/ui + TanStack Query
 - **Auth:** Clerk
-- **Notifications:** Resend (email) + Twilio (WhatsApp) — both day-1
+- **Notifications:** Resend (email) + 360dialog (WhatsApp) — both day-1
 - **DB:** PostgreSQL (swappable via Knex)
 - **Background jobs:** BullMQ + Redis
 - **API:** OpenAPI 3.0 spec → generated TypeScript SDK
@@ -116,7 +116,7 @@ Every phase follows this gated sequence:
 Phase start
   ↓
 [1] TPM files Phase Kickoff Brief (pmo/phase-briefs/PHASE-N-kickoff.md)
-    → lists external dependencies user must handle (Twilio, Clerk, etc.)
+    → lists external dependencies user must handle (360dialog, Clerk, etc.)
   ↓
 [2] PM writes PDD (docs/wiki/pdd/PDD-PHASE-N.md) — covers all user flows
 [3] UX generates UI mocks (docs/wiki/ux/mocks/phase-N/) — for flows where appropriate

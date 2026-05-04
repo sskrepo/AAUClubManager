@@ -34,7 +34,7 @@ Pricing as of early 2026. All figures are estimates; verify against current vend
 | Component | MVP | Early adopters | PMF | SaaS scale |
 |---|---|---|---|---|
 | Clerk (auth) | $0 | $0–$25 | $250–$500 | $2,000–$4,000 |
-| Twilio WhatsApp | $0 | ~$100–$200 | ~$1,000–$2,000 | ~$10,000–$20,000 |
+| 360dialog WhatsApp | ~$0–$10 | ~$50–$100 | ~$600–$1,200 | ~$5,000–$10,000 |
 | Resend (email) | $0 | $0–$20 | $89–$200 | $400–$900 |
 | PostgreSQL managed | $0–$25 | $25–$50 | $100–$300 | $500–$2,000 |
 | Redis managed | $0–$10 | $10–$25 | $50–$100 | $200–$500 |
@@ -42,7 +42,9 @@ Pricing as of early 2026. All figures are estimates; verify against current vend
 | Frontend hosting | $0 | $0–$20 | $20–$50 | $50–$200 |
 | File storage | $0 | $0–$5 | $10–$50 | $50–$500 |
 | Observability | $0 | $0–$20 | $30–$100 | $100–$500 |
-| **TOTAL (current stack)** | **~$0–$40** | **~$145–$365** | **~$1,600–$3,450** | **~$13,600–$29,600** |
+| **TOTAL (current stack)** | **~$0–$50** | **~$95–$270** | **~$1,200–$2,600** | **~$8,600–$19,600** |
+
+> **Revision note (2026-05-03):** WhatsApp row updated from Twilio to 360dialog per same-day user direction. Twilio dropped from stack; 360dialog used from MVP. Cost savings vs. original Twilio figures are realized at every tier from MVP onward — these are no longer "potential savings" but the actual current-stack figures.
 
 ### Cost-optimized alternative stack estimates
 
@@ -69,13 +71,15 @@ Pricing as of early 2026. All figures are estimates; verify against current vend
 
 **Call these out before reading the detail — they drive 85%+ of the bill.**
 
-### Lever 1: Twilio WhatsApp — $1,000–$20,000/mo at scale
+### Lever 1: WhatsApp provider — $600–$10,000/mo at scale (360dialog, from MVP)
 
-Twilio is the most expensive line item by far at PMF and SaaS tiers. At 210,000 WhatsApp messages/month (PMF), Twilio charges ~$0.005–$0.01/message for utility conversations, but the conversation-window model means many "conversations" cost $0.02–$0.07 each (the conversation fee) regardless of how many messages go into it. At 30,000+ conversations/month the bill becomes material.
+WhatsApp is the largest notification cost driver at PMF and SaaS tiers. At 210,000 WhatsApp messages/month (PMF), the conversation-window pricing model means many "conversations" cost $0.02–$0.07 each (the conversation fee) regardless of how many messages go into it. At 30,000+ conversations/month the bill becomes material.
+
+**Current stack uses 360dialog from MVP** (per 2026-05-03 user direction). This captures 40–50% savings vs. Twilio at every production tier. Savings are realized from the first production message — not deferred to Phase 3.
 
 360dialog is typically 30–50% cheaper than Twilio for the same Meta WhatsApp Business API volume. WATI sits between.
 
-**Switching cost:** High eng-time now (2–3 days to switch provider), low eng-time later if the notification abstraction is clean. The abstraction IS already planned (channel = parameter). Plan the switch around 20–30 clubs.
+**Switching cost if ever needed:** 2–3 days to swap the provider implementation (`Dialog360WhatsAppProvider` → any `IWhatsAppProvider` implementation). The notification abstraction makes this low-risk at any future point.
 
 ### Lever 2: Clerk — $250–$4,000+/mo at scale
 
@@ -143,11 +147,13 @@ Keep Clerk through MVP and early-adopter tiers — you get 10,000 MAU free and t
 
 ---
 
-## Decision 2: Notifications — Twilio WhatsApp + Resend Email
+## Decision 2: Notifications — 360dialog WhatsApp + Resend Email
 
-### Twilio WhatsApp
+> **Revision note (2026-05-03):** This section originally described Twilio WhatsApp as the current choice, with 360dialog as a planned Phase 3 swap. Same-day user direction eliminated Twilio from the stack; 360dialog is used from MVP. The cost figures and alternatives matrix below are updated accordingly. "Current choice" now means 360dialog.
 
-This is the most important cost decision in the stack. Twilio uses Meta's WhatsApp Business API pricing, which charges per conversation (a 24-hour window of messages to/from one user), not per message.
+### WhatsApp — 360dialog (current, from MVP)
+
+This is the most important cost decision in the stack. All WhatsApp BSPs use Meta's WhatsApp Business API pricing, which charges per conversation (a 24-hour window of messages to/from one user), not per message.
 
 **Conversation categories (Meta pricing, early 2026 approximate):**
 - Utility (order confirmations, schedule reminders): $0.02–$0.06/conversation (US)
@@ -156,18 +162,29 @@ This is the most important cost decision in the stack. Twilio uses Meta's WhatsA
 
 All of our sends (practice reminders, payment due, game-time callouts) are utility conversations.
 
-**Additional Twilio markup:** Twilio charges above Meta's base rate. Markup varies 5–20% depending on plan.
+**BSP markup:** 360dialog charges above Meta's base rate, but at a lower markup than Twilio (typically 5–15% vs. Twilio's 5–20%). 360dialog also charges a small monthly platform fee ($5–$50 depending on plan) in addition to per-conversation fees.
 
 **Notification-to-conversation ratio:** In practice, a "conversation" window lasts 24 hours. If we send 3 messages to a parent in one day (practice reminder morning, update afternoon, confirmation evening), that's 1 conversation, not 3. Assume ~2.5 messages per conversation on average → conversation count = (messages × 0.4).
 
+**360dialog cost estimates (current stack):**
+
 | Tier | WhatsApp msgs/mo | Conversations | ~$/conversation | Monthly cost |
 |---|---|---|---|---|
-| MVP | 2,100 | ~840 | $0.04 | ~$34 |
-| Early adopters | 21,000 | ~8,400 | $0.04 | ~$336 |
-| PMF | 210,000 | ~84,000 | $0.04 | ~$3,360 |
-| SaaS scale | 2,100,000 | ~840,000 | $0.035 (volume) | ~$29,400 |
+| MVP | 2,100 | ~840 | $0.02–$0.03 | ~$0–$25 |
+| Early adopters | 21,000 | ~8,400 | $0.02–$0.03 | ~$50–$100 |
+| PMF | 210,000 | ~84,000 | $0.02–$0.025 | ~$600–$1,200 |
+| SaaS scale | 2,100,000 | ~840,000 | $0.017–$0.020 (volume) | ~$5,000–$10,000 |
 
-These numbers are sobering. Twilio WhatsApp is the biggest single cost driver at every tier beyond early adopters.
+**Twilio comparison (rejected — included for reference):**
+
+| Tier | Monthly cost (Twilio) | Monthly cost (360dialog) | Savings |
+|---|---|---|---|
+| MVP | ~$34 | ~$0–$25 | ~$10–$34 |
+| Early adopters | ~$336 | ~$50–$100 | ~$236–$286 |
+| PMF | ~$3,360 | ~$600–$1,200 | ~$1,680–$2,760 |
+| SaaS scale | ~$29,400 | ~$5,000–$10,000 | ~$15,000–$24,000 |
+
+WhatsApp is the biggest single cost driver at every tier beyond early adopters. Using 360dialog from MVP captures these savings immediately.
 
 ### Resend Email
 
@@ -186,8 +203,8 @@ Email is not the problem. Resend's pricing is reasonable, deliverability is exce
 
 | Provider | Pricing model | Est. cost at PMF (84K conversations) | Notes |
 |---|---|---|---|
-| **Twilio (current)** | Per-conversation + markup | ~$3,360/mo | Best docs; most expensive |
-| **360dialog** | Monthly platform fee ($5–50) + lower per-conversation | ~$1,680–$2,100/mo | ~40–50% cheaper than Twilio; self-service Meta BSP |
+| **360dialog (current)** | Monthly platform fee ($5–50) + lower per-conversation | ~$600–$1,200/mo | ~40–50% cheaper than Twilio; self-service Meta BSP; used from MVP |
+| **Twilio (rejected)** | Per-conversation + markup | ~$3,360/mo | Best docs; most expensive; eliminated from stack |
 | **WATI** | Per-message + platform fee | ~$2,500/mo | Mid-tier; good UI for templates |
 | **Vonage** | Per-conversation | ~$2,800/mo | Similar to Twilio |
 | **MessageBird (Bird)** | Per-conversation | ~$2,500–$3,000/mo | Merged with SparkPost; some pricing instability |
@@ -209,7 +226,7 @@ AWS SES is 10× cheaper than Resend at PMF scale but requires more operational s
 
 ### Recommendation
 
-Switch WhatsApp provider from Twilio to 360dialog around 20–30 clubs (early-adopter tier). The savings are meaningful ($1,500–$1,700/month at PMF) and the switch is low-effort given the notification abstraction. Keep Twilio's sandbox for Phase 0-2 development; at Phase 3 activation, provision 360dialog for production.
+360dialog is used from MVP (per 2026-05-03 user direction). No provider migration is planned. Savings of $1,200–$2,700/month at PMF are captured from the first production message.
 
 Keep Resend through PMF. Evaluate SES at 100K+ emails/month.
 
@@ -464,7 +481,7 @@ Zero. This is a build-time tool with no runtime or SaaS cost. No cost optimizati
 
 ### "Plan switch around early-adopter tier (~10–30 clubs)"
 
-4. **WhatsApp provider** — Switch from Twilio to 360dialog. Savings: ~$1,500–$1,700/month at PMF. The notification abstraction makes this a 2–3 day backend change. Keep Twilio sandbox for development; provision 360dialog for Phase 3 production.
+4. **WhatsApp provider** — 360dialog from MVP (already decided, 2026-05-03). No switch required. Savings vs. Twilio: ~$1,200–$2,700/month at PMF, realized from first production message.
 
 5. **Backend + DB hosting** — Migrate from Railway/Render to Hetzner + Coolify. Combine with DB migration off Neon free tier to Hetzner self-managed Postgres (or stay Neon for branching, move only if cost exceeds $100/mo). Total hosting savings at PMF: ~$100–$200/mo.
 
@@ -485,8 +502,7 @@ These are the calls that only you can make. See `pmo/decisions/DECISION-002-cost
 **Decision A — Auth provider by Phase 1 start**
 Switch to Auth.js (zero cost at scale, 2–3 weeks eng-time now) or keep Clerk (free through 10K MAU, $5K+/mo at SaaS scale, zero eng-time now)?
 
-**Decision B — WhatsApp provider for Phase 3 production**
-Switch to 360dialog (2–3 days eng-time, ~40–50% cheaper at scale) or keep Twilio (better docs/support, premium pricing)?
+**Decision B — WhatsApp provider** — DECIDED (2026-05-03). 360dialog from MVP. Twilio not used. No further action required.
 
 **Decision C — File storage provider for Phase 1**
 Cloudflare R2 (zero egress, S3-compatible) or AWS S3 (more familiar, 3–5× more expensive at scale due to egress)? Recommend R2, but user should confirm.
@@ -502,7 +518,7 @@ Directness requested:
 
 1. **Clerk at SaaS scale is expensive** (~$5K–$7K/mo at 310K MAU). It is not wrong for MVP. It is wrong if you expect to be at SaaS scale within 2 years and don't want to pay that bill. The window to switch cheaply is before Phase 1, not after.
 
-2. **Twilio WhatsApp is the biggest cost driver** at every tier beyond early adopters. The notification abstraction (channel = parameter) was designed correctly — it makes switching providers a 2–3 day change. Use that investment. Plan the switch to 360dialog before Phase 3 production activation.
+2. **WhatsApp is the biggest cost driver** at every tier beyond early adopters. 360dialog is used from MVP (decided 2026-05-03), capturing 40–50% savings vs. Twilio at every production tier. The notification abstraction (`IWhatsAppProvider`) is in place — if 360dialog ever disappoints, swapping the provider costs 2–3 days backend work.
 
 3. **File storage is not yet decided** — this is a gap. It should be on the Phase 1 external dependencies roster. R2 is the right default; the absence of a decision risks defaulting to S3 by inertia.
 

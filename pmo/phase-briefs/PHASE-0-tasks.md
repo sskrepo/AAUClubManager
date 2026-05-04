@@ -20,7 +20,7 @@ tags: [phase:0, engineering, tasks]
 
 2. **Credential-gated work:**
    - Clerk keys (`CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`) unlock: TASK-008 (auth middleware), TASK-009 (web Clerk provider + sign-in pages), TASK-010 (auth smoke test).
-   - Resend + Twilio keys + Redis URL (production) unlock: TASK-015, TASK-016 (notification test scripts against real providers).
+   - Resend + 360dialog keys + Redis URL (production) unlock: TASK-013 (notification test scripts against real providers).
    - GitHub repo URL unlocks: TASK-020 (CI push + branch protection).
 
 3. **Recommended Backend order:** TASK-001 → TASK-002 → TASK-003 → TASK-005 → TASK-006 → TASK-007 (parallel: TASK-008 when Clerk keys land) → TASK-013 → TASK-014 → TASK-015 → TASK-016.
@@ -36,9 +36,9 @@ tags: [phase:0, engineering, tasks]
 > Owner: Architect (not Backend/Frontend dev). Included here for completeness and sequencing visibility.
 
 ### TASK-001 [architect]
-**File ADR-001 (Clerk), ADR-002 (Knex+Postgres), ADR-003 (Resend+Twilio), ADR-004 (BullMQ+Redis)**
+**File ADR-001 (Clerk), ADR-002 (Knex+Postgres), ADR-003 (Resend+360dialog), ADR-004 (BullMQ+Redis)**
 
-- Acceptance: All four files exist at `docs/wiki/adr/ADR-00N-*.md` with `status: accepted`. Content matches stack decisions in `CLAUDE.md` and DECISION-002.
+- Acceptance: All four files exist at `docs/wiki/adr/ADR-00N-*.md` with `status: accepted`. Content matches stack decisions in `CLAUDE.md` and DECISION-002 (as revised 2026-05-03 — 360dialog from MVP, Twilio eliminated).
 - Dependencies: None — Gate 1 passed.
 - Credential blockers: None.
 - Effort: S (each ADR is 1-2 pages of rationale; stack is already decided).
@@ -187,16 +187,18 @@ Note: TASK-004 depends on TASK-005. Sequence: TASK-005 → TASK-004.
 ### TASK-011 [backend]
 **Notification service abstraction: channel-agnostic interface**
 
+> **Decision note (2026-05-03):** This task was originally written with `TwilioWhatsAppProvider` as the MVP WhatsApp implementation. Same-day user direction changed the WhatsApp provider to 360dialog from MVP, eliminating Twilio from the stack entirely. The abstraction design (`IWhatsAppProvider` interface) is unchanged and remains correct — only the default implementation class and env var names are updated. See ADR-003-notifications-resend-360dialog and DECISION-002-B (revised).
+
 - What: Create `server/src/services/notification/` with:
   - `types.ts` — TypeScript interface `NotificationPayload { channel: 'email' | 'whatsapp'; to: string; subject?: string; body: string; }`.
   - `notification.service.ts` — `NotificationService` class with `send(payload: NotificationPayload): Promise<void>`. Internally switches on `payload.channel` to the correct provider implementation.
   - `providers/email.provider.ts` — wraps Resend SDK. Install `resend` package. Reads `RESEND_API_KEY`, `RESEND_FROM_EMAIL` from env. Implements `sendEmail(to, subject, body)`.
-  - `providers/whatsapp.provider.ts` — wraps Twilio SDK. Install `twilio` package. Reads `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_WHATSAPP_FROM` from env. Implements `sendWhatsApp(to, body)`.
-  - CRITICAL (DECISION-002-B): The `NotificationService.send()` method must depend on the provider interface, not on Twilio directly. When we swap Twilio for 360dialog before Phase 3, the change is entirely in `providers/whatsapp.provider.ts` — no changes to `notification.service.ts`, no changes to any BullMQ job handlers, no changes to any calling code. Enforce this by having `notification.service.ts` depend on a `IWhatsAppProvider` interface, not the concrete Twilio class.
-  - Missing credential handling: if `RESEND_API_KEY` is absent when the email provider is instantiated, throw a descriptive `ConfigurationError` at startup (not at send time). Same for Twilio credentials.
-- Acceptance: `NotificationService` class is instantiatable and passes unit tests with provider stubs. TypeScript interface `IWhatsAppProvider` exists and `WhatsAppProvider` (Twilio) implements it. Swapping to a `360DialogWhatsAppProvider` requires only creating a new file implementing `IWhatsAppProvider` and updating the DI injection point.
+  - `providers/whatsapp.provider.ts` — implements `IWhatsAppProvider` using the 360dialog REST API directly (no official Node SDK; use `node-fetch` or the built-in `fetch`). Class name: `Dialog360WhatsAppProvider`. Reads `DIALOG360_API_KEY`, `DIALOG360_WHATSAPP_FROM` from env. The 360dialog send message endpoint is `POST https://waba.360dialog.io/v1/messages` with `Authorization: {DIALOG360_API_KEY}` header. Implements `sendWhatsApp(to, body)`.
+  - CRITICAL (DECISION-002-B, revised): The `NotificationService.send()` method must depend on the `IWhatsAppProvider` interface, not on `Dialog360WhatsAppProvider` directly. If 360dialog ever needs to be replaced, the change is entirely in `providers/whatsapp.provider.ts` — no changes to `notification.service.ts`, no changes to any BullMQ job handlers, no changes to any calling code. The abstraction is unchanged from the original design; only the implementation class changes.
+  - Missing credential handling: if `RESEND_API_KEY` is absent when the email provider is instantiated, throw a descriptive `ConfigurationError` at startup (not at send time). Same for `DIALOG360_API_KEY`.
+- Acceptance: `NotificationService` class is instantiatable and passes unit tests with provider stubs. TypeScript interface `IWhatsAppProvider` exists and `Dialog360WhatsAppProvider` implements it. Swapping to any future WhatsApp provider requires only creating a new file implementing `IWhatsAppProvider` and updating the DI injection point — no other changes.
 - Dependencies: TASK-005 (server scaffold must exist).
-- Credential blockers: None for the abstraction itself. Test scripts (TASK-015, TASK-016) need real keys.
+- Credential blockers: None for the abstraction itself. Test scripts (TASK-013) need real keys.
 - Effort: M.
 
 ### TASK-012 [backend]
@@ -214,14 +216,16 @@ Note: TASK-004 depends on TASK-005. Sequence: TASK-005 → TASK-004.
 ### TASK-013 [backend]
 **Dev scripts: `notify:test:email` and `notify:test:whatsapp`**
 
+> **Decision note (2026-05-03):** WhatsApp provider is 360dialog (not Twilio). Env vars and API call target updated accordingly.
+
 - What: Two scripts in `server/scripts/` (run with `tsx`):
   - `notify-test-email.ts` — instantiates a BullMQ `Queue` on `send-notification`, enqueues `{ channel: 'email', to: process.env.TEST_EMAIL, subject: 'AAUClubManager Phase 0 Test', body: 'Notification service works.' }`, logs the job ID, exits.
-  - `notify-test-whatsapp.ts` — same pattern with `{ channel: 'whatsapp', to: process.env.TEST_WHATSAPP_NUMBER, body: 'AAUClubManager Phase 0 Test - WhatsApp works.' }`.
+  - `notify-test-whatsapp.ts` — same pattern with `{ channel: 'whatsapp', to: process.env.TEST_WHATSAPP_NUMBER, body: 'AAUClubManager Phase 0 Test - WhatsApp works.' }`. The worker calls `Dialog360WhatsAppProvider` which POSTs to the 360dialog REST API.
   - Add `notify:test:email` and `notify:test:whatsapp` npm scripts in `server/package.json`.
   - Add `TEST_EMAIL` and `TEST_WHATSAPP_NUMBER` to `.env.example`.
-- Acceptance: Running `npm run notify:test:email` enqueues a job (confirmed by logged job ID). When the worker is running and Resend credentials are present, the email arrives in the developer's inbox within 30 seconds. WhatsApp message arrives when Twilio credentials are present. When credentials are absent: job is enqueued but worker marks it `failed` with a readable Pino error log — no crash, no unhandled exception.
+- Acceptance: Running `npm run notify:test:email` enqueues a job (confirmed by logged job ID). When the worker is running and Resend credentials are present, the email arrives in the developer's inbox within 30 seconds. WhatsApp message arrives when 360dialog credentials are present and the recipient's phone has WhatsApp. When credentials are absent: job is enqueued but worker marks it `failed` with a readable Pino error log — no crash, no unhandled exception.
 - Dependencies: TASK-012.
-- Credential blockers: For the script itself: none. For the actual delivery: `RESEND_API_KEY` + `RESEND_FROM_EMAIL` (email), `TWILIO_ACCOUNT_SID` + `TWILIO_AUTH_TOKEN` + `TWILIO_WHATSAPP_FROM` (WhatsApp).
+- Credential blockers: For the script itself: none. For the actual delivery: `RESEND_API_KEY` + `RESEND_FROM_EMAIL` (email), `DIALOG360_API_KEY` + `DIALOG360_WHATSAPP_FROM` (WhatsApp).
 - Effort: S.
 
 ---
@@ -252,7 +256,7 @@ Note: TASK-004 depends on TASK-005. Sequence: TASK-005 → TASK-004.
   - `server/src/routes/health.test.ts`: GET /health returns 200 with correct shape when DB+Redis are healthy; returns 200 with `degraded` and subsystem detail when one check fails. Mock Knex and Redis pings.
   - `server/src/middleware/auth.test.ts`: valid token → `req.user` populated; missing token → 401 RFC 7807; expired/invalid token → 401.
   - `server/src/routes/me.test.ts`: with mocked valid `req.user` → returns 200 `{ data: AuthUser }`; no user → 401.
-  - `server/src/services/notification/notification.service.test.ts`: `send()` with `channel: 'email'` calls email provider; `channel: 'whatsapp'` calls whatsapp provider; missing provider credential throws `ConfigurationError` at instantiation.
+  - `server/src/services/notification/notification.service.test.ts`: `send()` with `channel: 'email'` calls email provider; `channel: 'whatsapp'` calls `IWhatsAppProvider` (stub — do not depend on `Dialog360WhatsAppProvider` directly in tests); missing provider credential throws `ConfigurationError` at instantiation.
 - Acceptance: `npm run test` in `server/` runs all suites and passes. Coverage report includes the above modules. No Vitest `any` suppressions.
 - Dependencies: TASK-006, TASK-011.
 - Credential blockers: None — all external dependencies mocked.
@@ -376,7 +380,7 @@ TASK-020 (conventions)         — no deps (DONE)
 |---|---|
 | `CLERK_SECRET_KEY` + `CLERK_PUBLISHABLE_KEY` | TASK-006, TASK-008, TASK-009, TASK-010 |
 | `RESEND_API_KEY` + `RESEND_FROM_EMAIL` | TASK-013 (email test delivery) |
-| `TWILIO_ACCOUNT_SID` + `TWILIO_AUTH_TOKEN` + `TWILIO_WHATSAPP_FROM` | TASK-013 (WhatsApp test delivery) |
+| `DIALOG360_API_KEY` + `DIALOG360_WHATSAPP_FROM` | TASK-013 (WhatsApp test delivery) |
 | GitHub repo URL | TASK-017 (CI push + branch protection) |
 | `REDIS_URL` (production) | TASK-013, TASK-014 (local Docker Redis works for dev) |
 | `DATABASE_URL` (production) | TASK-005 health subsystem check (local Docker Postgres works for dev) |
@@ -385,7 +389,7 @@ TASK-020 (conventions)         — no deps (DONE)
 
 ## Phase 0 exit checklist (engineering view)
 
-- [ ] TASK-001: ADRs 001-004 filed
+- [ ] TASK-001: ADRs 001-004 filed (ADR-003 = Resend+360dialog)
 - [ ] TASK-002 + TASK-003: `npm run api:generate` completes, SDK committed
 - [ ] TASK-004: `express-openapi-validator` registered
 - [ ] TASK-005: `GET /health` returns `200` (local Docker)

@@ -46,7 +46,7 @@ Phase 0 does not have user flows. It has a set of agent deliverables that must b
 
 ### Deliverable 1: Architecture Decision Records (ADRs 001-004)
 
-**What:** Four ADRs formalizing stack decisions that were made during project setup (Clerk, Knex+Postgres, Resend+Twilio, BullMQ+Redis). These exist in `CLAUDE.md` as defaults; ADRs make them explicit with rationale and tradeoffs, creating a permanent record.
+**What:** Four ADRs formalizing stack decisions that were made during project setup (Clerk, Knex+Postgres, Resend+360dialog, BullMQ+Redis). These exist in `CLAUDE.md` as defaults; ADRs make them explicit with rationale and tradeoffs, creating a permanent record.
 
 **Owner:** Architect
 
@@ -56,7 +56,7 @@ Phase 0 does not have user flows. It has a set of agent deliverables that must b
 |-----|-------|----------|
 | ADR-001 | Auth provider | Clerk (multi-tenant org model, role claims) |
 | ADR-002 | DB engine + query builder | PostgreSQL + Knex (RDBMS-agnostic by design) |
-| ADR-003 | Notification channels | Resend (email) + Twilio (WhatsApp) |
+| ADR-003 | Notification channels | Resend (email) + 360dialog (WhatsApp) |
 | ADR-004 | Background jobs | BullMQ + Redis |
 
 **Done when:** All four ADRs filed, user has read and not objected. (No explicit approval gate — these are formalizations of already-made decisions. If the user wants to revisit a decision, file a new DECISION record.)
@@ -122,11 +122,11 @@ Phase 0 does not have user flows. It has a set of agent deliverables that must b
 
 ### Deliverable 4: Notification Service — Test Send Flow
 
-**What:** Proof that the notification service abstraction works end-to-end: a queued job sends a test email via Resend and a test WhatsApp message via Twilio.
+**What:** Proof that the notification service abstraction works end-to-end: a queued job sends a test email via Resend and a test WhatsApp message via 360dialog.
 
 **Trigger:** An agent (or developer) triggers the notification test job manually (via a test script or a dev-only API endpoint — not user-facing).
 
-**Preconditions:** `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_WHATSAPP_FROM`, and `REDIS_URL` are set in `.env`. Redis is running.
+**Preconditions:** `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `DIALOG360_API_KEY`, `DIALOG360_WHATSAPP_FROM`, and `REDIS_URL` are set in `.env`. Redis is running.
 
 **Happy path — email:**
 1. Developer triggers `npm run notify:test:email` (or equivalent dev script).
@@ -141,12 +141,12 @@ Phase 0 does not have user flows. It has a set of agent deliverables that must b
 1. Developer triggers `npm run notify:test:whatsapp` (or equivalent).
 2. Script enqueues a `send-notification` job with `channel: "whatsapp"`, `to: {developer's WhatsApp number}`.
 3. BullMQ worker calls notification service with `channel: "whatsapp"`.
-4. Notification service calls Twilio API.
+4. Notification service calls 360dialog API.
 5. Developer's WhatsApp receives the message.
 6. Job status marked `completed`.
 
 **Alternative paths:**
-- If Twilio WhatsApp Business approval is still pending: test runs against Twilio sandbox (requires developer's number to have joined the sandbox). Sandbox is acceptable for Phase 0 exit; business-sender approval must be complete before Phase 3 start.
+- If 360dialog account isn't fully active yet: backend devs use a no-op stub `IWhatsAppProvider` that logs to console (360dialog has no sandbox equivalent unlike Twilio). Real WhatsApp delivery requires an active 360dialog account; full Meta Business verification + at least one approved template must be complete before Phase 3 start.
 - If a channel credential is missing: worker catches the error, marks job `failed`, logs the error with Pino. No crash.
 - If Redis is unreachable: job enqueue fails immediately with a clear error message.
 
@@ -260,7 +260,7 @@ Phase 0 does not have user flows. It has a set of agent deliverables that must b
 All of the following must be true before Phase 0 is closed and Phase 1 begins:
 
 **External setup (user-owned):**
-- [ ] All 🚨 critical-path items in PHASE-0-kickoff.md completed (Clerk keys, Resend verified domain, Twilio account set up with sandbox or approved sender)
+- [ ] All 🚨 critical-path items in PHASE-0-kickoff.md completed (Clerk keys, Resend verified domain, 360dialog account active with API key)
 - [ ] All 🟡 mid-phase items completed (Postgres + Redis hosted, GitHub repo created, hosting platform selected)
 
 **Agent deliverables:**
@@ -290,7 +290,7 @@ These need answers before or during Phase 0. They do not block PDD approval but 
 
 4. **Hosting platform choice** — Have you decided between Vercel (web) + Railway/Render (server) vs. a unified platform? (PHASE-0-kickoff.md item 7.) This determines how agents configure the deployment pipeline and environment variable strategy.
 
-5. **WhatsApp sender strategy** — Are you pursuing Twilio WhatsApp Business approval immediately, or starting with the Twilio sandbox for Phase 0-2 and switching to production for Phase 3? Either is fine; we need to know so the notification service test scripts target the right endpoint.
+5. **WhatsApp sender strategy** — RESOLVED (2026-05-03): 360dialog adopted from MVP per DECISION-002-B amendment. Twilio not used. Required deliverables: 360dialog account, API key, WhatsApp Business display name, verified phone number, and at least one approved Meta template before Phase 3.
 
 ---
 

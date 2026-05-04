@@ -26,7 +26,7 @@ Phase 0 delivers foundation infrastructure only. The explicit deliverables are:
 - ADRs 001-004 (Auth, DB, Notifications, Background jobs)
 - `server/` scaffold (Express + TypeScript + Knex + auth middleware + queue worker)
 - `web/` scaffold (Next.js 15 + Tailwind + shadcn/ui + Clerk provider + OpenAPI SDK wiring)
-- Notification service abstraction (Resend + Twilio)
+- Notification service abstraction (Resend + 360dialog)
 - Initial `api/openapi.yaml` with `/health` endpoint
 - CI pipeline (GitHub Actions)
 - Engineering conventions docs

@@ -44,7 +44,7 @@
 - (future) [api-design](api-design.md)
 - [adr/ADR-001-auth-clerk](adr/ADR-001-auth-clerk.md) — status: accepted (decided 2026-05-03)
 - [adr/ADR-002-database-knex-postgres](adr/ADR-002-database-knex-postgres.md) — status: accepted (decided 2026-05-03)
-- [adr/ADR-003-notifications-resend-twilio](adr/ADR-003-notifications-resend-twilio.md) — status: accepted (decided 2026-05-03)
+- [adr/ADR-003-notifications-resend-360dialog](adr/ADR-003-notifications-resend-360dialog.md) — status: accepted (decided 2026-05-03; revised same day: 360dialog from MVP, Twilio eliminated)
 - [adr/ADR-004-background-jobs-bullmq-redis](adr/ADR-004-background-jobs-bullmq-redis.md) — status: accepted (decided 2026-05-03)
 - [adr/ADR-005-api-design-conventions](adr/ADR-005-api-design-conventions.md) — status: accepted (Gate 2 approved 2026-05-03)
 - (future) [integrations/](integrations/)

@@ -26,7 +26,7 @@ This project uses the [Dev Agent Team](../dev-agent-team/) — a reusable team o
 - **API:** OpenAPI 3.0 spec → generated TypeScript SDK (UI is one client of many)
 - **DB:** PostgreSQL (swappable via Knex)
 - **Auth:** Clerk
-- **Notifications:** Email + WhatsApp from day 1 (Resend + Twilio)
+- **Notifications:** Email + WhatsApp from day 1 (Resend + 360dialog)
 - **Background jobs:** BullMQ + Redis
 - **Testing:** Vitest, Supertest, Playwright
 

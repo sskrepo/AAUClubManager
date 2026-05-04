@@ -20,11 +20,13 @@ User chose the following on 2026-05-03:
 | Item | Choice | Rationale |
 |---|---|---|
 | A — Auth provider | Keep Clerk | Eng-time to swap not worth it pre-PMF; revisit at SaaS scale (trigger: 8K MAU). |
-| B — WhatsApp provider | Swap to 360dialog before Phase 3 production | ~40-50% savings on the biggest cost line item; notification abstraction makes this ~2-3 days backend work; low switching risk. |
+| B — WhatsApp provider | Use 360dialog from MVP (revised same-day per user — eliminates Twilio entirely) | ~40-50% savings realized at every tier from MVP onward; avoids planned mid-build provider migration; notification abstraction (`IWhatsAppProvider`) unchanged — only implementation class changes. |
 | C — File storage | OCI Object Storage | User's existing OCI tenancy. NOTE: this was not in the original analysis matrix (Architect analyzed R2 vs S3). OCI requires a short technical validation by Architect during Phase 1 prep — Node.js SDK choice (official `oci-sdk` vs S3-compatible AWS SDK pointed at OCI endpoint) and S3-compatibility surface gotchas. Tracked in `pmo/dashboard.md` Future-phase commitments and `pmo/phase-briefs/PHASE-1-kickoff.md`. |
 | D — Observability | Defer to Phase 1 exit | DECISION-NNN to be filed by Architect at Phase 1 exit comparing Sentry + Axiom/BetterStack vs Datadog vs self-hosted Loki/Grafana. |
 
 Follow-up tracking: see [pmo/dashboard.md — Future-phase commitments](../dashboard.md#future-phase-commitments) and [PHASE-1-kickoff.md](../phase-briefs/PHASE-1-kickoff.md).
+
+**Decision B — revision note (2026-05-03, same day):** Initial decision was to use Twilio for Phase 0–2 development and Phase 1–2 production, then swap to 360dialog before Phase 3. User overrode this same day: use 360dialog from MVP, eliminating Twilio from the stack entirely. No code had been written against the initial decision. The `IWhatsAppProvider` interface design is unchanged; only the default implementation (`Dialog360WhatsAppProvider` instead of `TwilioWhatsAppProvider`) is affected. The "WhatsApp provider swap" item is removed from future-phase commitments — there is no longer a planned migration.
 
 ---
 
@@ -69,36 +71,33 @@ A cost-at-scale analysis of the current tech stack (`docs/wiki/cost-analysis.md`
 
 ---
 
-## Decision B — WhatsApp Provider: Keep Twilio or Switch to 360dialog at Phase 3?
+## Decision B — WhatsApp Provider: 360dialog from MVP (decided)
 
-**What is at stake:** Twilio WhatsApp is the largest cost driver. At PMF (100 clubs, ~84,000 conversations/month), Twilio costs ~$3,360/mo vs. 360dialog ~$1,680–$2,100/mo. Savings: ~$1,200–$1,700/month at PMF.
+**What was at stake:** Twilio WhatsApp is the largest cost driver. At PMF (100 clubs, ~84,000 conversations/month), Twilio costs ~$3,360/mo vs. 360dialog ~$1,680–$2,100/mo. Savings: ~$1,200–$1,700/month at PMF.
 
-**The window:** Phase 3 is when WhatsApp production messages start. The notification abstraction (channel = parameter) makes switching providers a 2–3 day backend change — low switching cost. This decision should be made before Phase 3 provisioning begins.
+**Decision (same-day revision, 2026-05-03):** Use 360dialog from MVP. Twilio is not used in this project. See revision note above.
 
-### Option B1 — Keep Twilio
+### Option B1 — Twilio WhatsApp (rejected)
 
 - **Cost:** ~$336/mo at early adopters, ~$3,360/mo at PMF, ~$29,400/mo at SaaS scale
-- **Eng-time:** $0 (already in the plan)
-- **Pro:** Best documentation, best support, easiest sandbox-to-production transition, most integrations
-- **Con:** Premium pricing; ~40% more expensive than 360dialog
-- **When this is right:** If eng-team bandwidth is the constraint and you want zero provider friction
+- **Eng-time:** $0 (mature SDK)
+- **Pro:** Best documentation, immediate sandbox access (no Meta approval needed for dev/test)
+- **Con:** Premium pricing; ~40% more expensive than 360dialog at every production tier; choosing Twilio for MVP would require a planned migration to 360dialog later, adding mid-build risk
+- **Status:** Rejected by user in favor of B2
 
-### Option B2 — Switch to 360dialog at Phase 3 production activation
+### Option B2 — 360dialog from MVP (chosen)
 
 - **Cost:** ~$1,680–$2,100/mo at PMF, ~$14,000–$18,000/mo at SaaS scale
-- **Eng-time:** 2–3 days (update notification service WhatsApp client implementation; no API contract change)
-- **Pro:** 40–50% savings on the biggest cost line item; same Meta WhatsApp Business API features
-- **Con:** Less documentation than Twilio; smaller support organization; requires new Meta BSP account setup
-- **When this is right:** If you expect to reach 30+ clubs within 6 months of Phase 3 shipping
+- **Eng-time:** Initial: 1–2 days to implement `Dialog360WhatsAppProvider` (REST API, no official Node SDK). Ongoing: same as any provider.
+- **Pro:** 40–50% savings realized at every tier from MVP onward; no planned provider migration; same underlying Meta WhatsApp Business API
+- **Con:** Less documentation than Twilio; smaller support organization; Meta Business verification still required (lead time 1–7 days typical with 360dialog, vs. 1–3 weeks for Twilio)
+- **Status:** Chosen
 
-### Option B3 — Use Twilio sandbox for Phase 0-2 development, decide before Phase 3
+### Option B3 — Use Twilio sandbox for Phase 0-2 development, decide before Phase 3 (superseded)
 
-- **Cost:** $0 during development (sandbox is free)
-- **Eng-time:** $0 now
-- **Pro:** Defer the production provider decision until Phase 3 is planned
-- **Con:** Not a real decision — you still have to choose before Phase 3
+- Not applicable — decision was made to use 360dialog from MVP.
 
-**Architect recommendation:** B2. The notification abstraction makes this nearly risk-free. The savings are $1,200–$1,700/month at PMF — meaningful revenue retained. 360dialog is a legitimate BSP used by many SaaS teams.
+**Architect recommendation at initial filing:** B2 (switch to 360dialog at Phase 3). User directed same-day revision to B2 from MVP. Agreed.
 
 ---
 

@@ -17,7 +17,7 @@ Several core workflows cannot run synchronously in a request handler:
 
 - **Notification dispatch** (Phase 1+): Selection result emails/WhatsApp,
   practice schedule change alerts, payment due reminders. Network calls to
-  Resend/Twilio must not block the HTTP response.
+  Resend/360dialog must not block the HTTP response.
 - **Scheduled reminders** (Phase 5): Payment dunning jobs run on a cron
   schedule — evaluate overdue installments, enqueue per-parent reminder jobs.
   These fire independently of any HTTP request.
@@ -31,7 +31,7 @@ Requirements for the job system:
 - Delayed jobs (send practice reminder 2h before start time)
 - Repeatable/cron jobs (payment dunning daily at 08:00)
 - Priority queues (payment receipt > general reminder)
-- Retry with exponential backoff (Resend/Twilio transient failures)
+- Retry with exponential backoff (Resend/360dialog transient failures)
 - Dead-letter queue (inspect failed jobs without losing them)
 - TypeScript-native API
 
@@ -79,7 +79,7 @@ accumulation are part of the Phase 1 observability setup.
   Upstash's serverless billing handles cheaply. At PMF, ~300K notifications/month
   through BullMQ generates ~2–3M Redis commands — ~$4–$6 on Upstash. Negligible.
 - **Separation from the request handler is non-negotiable.** Inline async calls
-  to Resend/Twilio in a request handler mean: no retry on provider failure,
+  to Resend/360dialog in a request handler mean: no retry on provider failure,
   request timeout risk, no backpressure. BullMQ solves all three.
 
 ## Consequences

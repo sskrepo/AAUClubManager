@@ -34,7 +34,7 @@ Tests must ship in the same commit as the code they test. Code without tests is 
 
 ### Unit tests (Vitest — both server and web)
 
-Test business logic in isolation. Mock all I/O (DB, Redis, HTTP, Clerk, Resend, Twilio).
+Test business logic in isolation. Mock all I/O (DB, Redis, HTTP, Clerk, Resend, 360dialog).
 
 **Server — test these:**
 - Service layer logic (e.g., `NotificationService.send()` calls the right provider; provider errors are caught and wrapped)
@@ -141,7 +141,7 @@ export default defineConfig({
 
 ## Mocking rules
 
-- **External services** (Resend, Twilio, Clerk) are always mocked in unit tests. Never make real network calls in unit tests.
+- **External services** (Resend, 360dialog, Clerk) are always mocked in unit tests. Never make real network calls in unit tests.
 - **Knex / DB** is mocked in unit tests; real in integration tests. Use Vitest's `vi.mock()` at the module boundary.
 - **BullMQ queues** are mocked in unit tests for notification service tests. The worker tests use a real in-memory Redis (via `ioredis-mock`) or a Docker Redis in CI.
 - **Clerk JWT** verification (`clerkClient.verifyToken`) is mocked in unit tests by returning a fixed payload or throwing an error. Integration tests mock it at the middleware level (inject a pre-validated `req.user`).

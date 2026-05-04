@@ -20,16 +20,18 @@ Both approval gates for Phase 0 have passed:
 - **Gate 1:** APPROVED 2026-05-03 — PDD + mocks stub + design system seed locked.
 - **Gate 2:** APPROVED 2026-05-03 — `api/openapi.yaml` baseline locked, `api-changes/phase-0.md` and ADR-005 accepted as canonical.
 
-Phase 0 implementation is fully unblocked. All agent work is now in flight or waiting only on user-supplied credentials (Clerk keys, Resend/Twilio keys, GitHub repo URL).
+Phase 0 implementation is fully unblocked. All agent work is now in flight or waiting only on user-supplied credentials (Clerk keys, Resend keys, 360dialog API key, GitHub repo URL).
+
+Same-day amendment (2026-05-03): DECISION-002-B revised — 360dialog adopted from MVP, Twilio dropped entirely. No future provider swap planned. Architect is updating ADR-003, cost-analysis, PHASE-0-kickoff, and PHASE-0-tasks.
 
 Six open product questions (brand color, logo, app name, domain, hosting platform, WhatsApp sender strategy) remain unanswered. They are non-blocking and parked in the dashboard under "Open product questions." Answer when convenient — needed before Phase 1 mocks are finalized.
 
 Active implementation work:
 - **Architect:** completing ADRs 001-004.
 - **Dev Manager:** writing engineering conventions docs, planning CI (blocked only on GitHub repo URL).
-- **Backend Dev:** server scaffold (Express + TypeScript + Knex), OpenAPI codegen pipeline, notification service abstraction (credentials-blocked).
+- **Backend Dev:** server scaffold (Express + TypeScript + Knex), OpenAPI codegen pipeline, notification service abstraction targeting 360dialog (credentials-blocked).
 - **Frontend Dev:** web scaffold (Next.js 15 + Tailwind + shadcn/ui), codegen consumption.
-- **User side:** continuing external-setup items in [`pmo/phase-briefs/PHASE-0-kickoff.md`](../../pmo/phase-briefs/PHASE-0-kickoff.md). Twilio WhatsApp Business approval is the longest pole (1-3 wks).
+- **User side:** continuing external-setup items in [`pmo/phase-briefs/PHASE-0-kickoff.md`](../../pmo/phase-briefs/PHASE-0-kickoff.md). 360dialog account setup is now the WhatsApp long pole (Architect updating kickoff brief with instructions).
 
 ## Active stories
 
@@ -41,10 +43,11 @@ No open decisions. Gate 2 approved 2026-05-03.
 
 **Open product questions (answer asynchronously — non-blocking):** Brand color, logo, app name, domain, hosting platform, WhatsApp sender strategy. Tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Open product questions." Needed before Phase 1 mocks, not before Phase 0 exits.
 
-Note: DECISION-002 is now closed. Future-phase commitments from that decision (360dialog swap, OCI storage, observability revisit) are tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Future-phase commitments."
+Note: DECISION-002 is now closed, with a same-day amendment (DECISION-002-B, 2026-05-03) adopting 360dialog from MVP. The WhatsApp provider swap is no longer a future-phase commitment — 360dialog is the MVP provider. Remaining future-phase commitments (2 items: OCI storage, observability revisit) are tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Future-phase commitments."
 
 ## Recent decisions
 
+- **DECISION-002-B amended (2026-05-03)** — Use 360dialog from MVP; Twilio dropped entirely. No provider swap needed later. 360dialog is a Phase 0 external dependency (account, API key, WhatsApp Business display name, phone number). Architect updating ADR-003 and kickoff brief.
 - **GATE-2-PHASE-0 approved (2026-05-03)** — api/openapi.yaml baseline locked; api-changes/phase-0.md and ADR-005 accepted as canonical. Phase 0 implementation fully unblocked.
 - **DECISION-002 (decided 2026-05-03)** — Keep Clerk; swap WhatsApp to 360dialog before Phase 3 production; OCI Object Storage for files (curveball — not in original analysis, Architect validates SDK/S3-compat in Phase 1 prep); defer observability decision to Phase 1 exit. Future-phase commitments tracked in dashboard.
 - **GATE-1-PHASE-0 approved (2026-05-03)** — PDD + mocks stub + design system seed locked.
@@ -59,7 +62,7 @@ Note: DECISION-002 is now closed. Future-phase commitments from that decision (3
 4. Frontend Dev: scaffold `web/` (Next.js 15 + Tailwind + shadcn/ui), wire up generated SDK.
 5. CI: GitHub Actions — blocked only on user supplying GitHub repo URL (#8 in PHASE-0-kickoff.md).
 6. UX: finalize design system colors once brand color question answered.
-7. User: continue Phase 0 Kickoff Brief items (especially #1 Twilio — 1-3 wk lead); provide GitHub repo URL to unblock CI.
+7. User: continue Phase 0 Kickoff Brief items (360dialog account setup is now the WhatsApp item — Architect updating kickoff brief with new steps); provide GitHub repo URL to unblock CI.
 
 **Phase 0 exit (1-2 wks):**
 - All critical-path + mid-phase kickoff items completed by user.
@@ -67,7 +70,7 @@ Note: DECISION-002 is now closed. Future-phase commitments from that decision (3
 - `server/` and `web/` scaffolds deployed.
 - Auth login works (Clerk integrated).
 - BullMQ test job runs.
-- Test email + WhatsApp send successful.
+- Test email (Resend) + WhatsApp send (360dialog) successful.
 - CI passing on first commit.
 
 **Phase 1 entry (after Phase 0 exits):**

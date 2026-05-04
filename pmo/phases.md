@@ -33,12 +33,12 @@ Agent-pace timeline (realistic): **6-12 weeks** total from Phase 0 start. See [`
 **Goal:** Working dev environment + tech stack ratified + queue/notification infra in place. Nothing user-visible ships.
 
 **External setup the user must complete (parallel with agent work):**
-See [`pmo/phase-briefs/PHASE-0-kickoff.md`](phase-briefs/PHASE-0-kickoff.md). Twilio WhatsApp Business approval (1-3 wks lead) is the longest pole.
+See [`pmo/phase-briefs/PHASE-0-kickoff.md`](phase-briefs/PHASE-0-kickoff.md). 360dialog account + Meta Business verification (1-7 days lead) is one of the external dependencies; Clerk and Resend are typically faster.
 
 **Agent deliverables:**
 - ADR-001: Auth provider (Clerk) — formal record
 - ADR-002: DB engine + query builder (PostgreSQL + Knex)
-- ADR-003: Notification channels (Resend + Twilio)
+- ADR-003: Notification channels (Resend + 360dialog)
 - ADR-004: Background jobs (BullMQ + Redis)
 - `server/` scaffold: Express + TypeScript + Knex + Pino + auth middleware + queue worker
 - `web/` scaffold: Next.js 15 + Tailwind + shadcn/ui + Clerk provider + OpenAPI SDK wiring
@@ -55,7 +55,7 @@ See [`pmo/phase-briefs/PHASE-0-kickoff.md`](phase-briefs/PHASE-0-kickoff.md). Tw
 - ADRs 001-004 filed and accepted
 - `server/` and `web/` scaffolds deployed; auth login works end-to-end
 - BullMQ worker processes hello-world job
-- Test email sends via Resend; test WhatsApp message sends via Twilio (sandbox or prod)
+- Test email sends via Resend; test WhatsApp message sends via 360dialog
 - Initial commit to GitHub with passing CI
 
 **Note on Phase 0 gate workflow:** Phase 0 PDD covers infrastructure deliverables (no user flows); UX files an explicit no-mocks stub confirming nothing to mock. Gate 1 still applies — user must approve PDD + mocks stub before Architect finalizes the Phase 0 OpenAPI spec (health endpoint only) for Gate 2. Gate workflow is universal from Phase 0 onward per v0.1.3 protocol.
@@ -103,7 +103,7 @@ See [`pmo/phase-briefs/PHASE-0-kickoff.md`](phase-briefs/PHASE-0-kickoff.md). Tw
 **Module:**
 - [Practice Communications](../docs/wiki/module-practice-communications.md)
 
-**External dependency:** Twilio WhatsApp Business approval MUST be complete by Phase 3 start. (Started in Phase 0 to allow lead time.)
+**External dependency:** 360dialog account + Meta Business verification + at least one approved WhatsApp message template MUST be complete by Phase 3 start. (Started in Phase 0 to allow lead time.)
 
 **Exit criteria:**
 - Parent absence reporting works
