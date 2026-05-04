@@ -42,7 +42,11 @@
 - (future — after DECISION-001 decided) [architecture](architecture.md)
 - (future) [data-model](data-model.md)
 - (future) [api-design](api-design.md)
-- [adr/ADR-005-api-design-conventions](adr/ADR-005-api-design-conventions.md) — status: proposed (Gate 2 pending)
+- [adr/ADR-001-auth-clerk](adr/ADR-001-auth-clerk.md) — status: accepted (decided 2026-05-03)
+- [adr/ADR-002-database-knex-postgres](adr/ADR-002-database-knex-postgres.md) — status: accepted (decided 2026-05-03)
+- [adr/ADR-003-notifications-resend-twilio](adr/ADR-003-notifications-resend-twilio.md) — status: accepted (decided 2026-05-03)
+- [adr/ADR-004-background-jobs-bullmq-redis](adr/ADR-004-background-jobs-bullmq-redis.md) — status: accepted (decided 2026-05-03)
+- [adr/ADR-005-api-design-conventions](adr/ADR-005-api-design-conventions.md) — status: accepted (Gate 2 approved 2026-05-03)
 - (future) [integrations/](integrations/)
 
 ### Source of truth

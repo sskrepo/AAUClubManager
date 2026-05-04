@@ -1,7 +1,8 @@
 ---
 title: ADR-005 — API Design Conventions
-status: proposed
+status: accepted
 created: 2026-05-03
+decided: 2026-05-03
 owner: architect
 deciders: architect (proposed), user (approves at Gate 2)
 supersedes: ~

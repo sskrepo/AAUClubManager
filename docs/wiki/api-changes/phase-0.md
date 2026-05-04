@@ -1,17 +1,18 @@
 ---
 title: OpenAPI Changes — Phase 0 — Foundation Baseline
 phase: 0
-status: in-review
+status: approved
 filed: 2026-05-03
+approved: 2026-05-03
 owner: architect
 deciders: user
-gate: 2-pending
+gate: 2-approved
 tags: [api, phase-0]
 ---
 
 # OpenAPI Changes — Phase 0 — Foundation Baseline
 
-> Gate 2 — awaiting user approval. Reply `OPENAPI-PHASE-0: approved` to unblock engineering.
+> Gate 2 — APPROVED 2026-05-03. Phase 0 implementation is unblocked.
 > Full spec: [`api/openapi.yaml`](../../api/openapi.yaml)
 
 ---

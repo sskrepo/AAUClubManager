@@ -10,7 +10,7 @@ status: current
 
 # AAUClubManager — Dashboard
 
-**Current phase:** Phase 0 — Foundation — GATE 2 IN PROGRESS (Architect drafting OpenAPI baseline)
+**Current phase:** Phase 0 — Foundation — IN EXECUTION (Gate 2 approved 2026-05-03)
 **Updated:** 2026-05-03 by tpm
 
 ## Current Phase Kickoff
@@ -29,13 +29,11 @@ status: current
 - [ux/mocks/phase-0/index.md](../docs/wiki/ux/mocks/phase-0/index.md) — status: approved
 - [ux/design-system.md](../docs/wiki/ux/design-system.md) — status: approved
 
-### Gate 2 — OpenAPI Spec (active — drafting)
+### Gate 2 — OpenAPI Spec — APPROVED 2026-05-03
 
-Architect is now unblocked to draft the Phase 0 OpenAPI spec (health endpoint) and file `docs/wiki/api-changes/phase-0.md`. This goes to Gate 2 approval before Dev Manager, Backend, and Frontend can pick up any implementation work.
-
-Approval syntax (when Architect files):
-- `GATE-2-PHASE-0: approved` — approves spec and proceeds to implementation
-- `OPENAPI-PHASE-0: needs changes — {description}` — request changes
+- [api-changes/phase-0.md](../docs/wiki/api-changes/phase-0.md) — status: approved
+- [ADR-005-api-design-conventions.md](../docs/wiki/adr/ADR-005-api-design-conventions.md) — status: accepted
+- [api/openapi.yaml](../api/openapi.yaml) — baseline locked
 
 ---
 
@@ -62,17 +60,21 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 | Activity | Owner | Status | Notes |
 |---|---|---|---|
 | External setup checklist | **user** | in progress | See PHASE-0-kickoff.md (10 items) |
-| OpenAPI baseline (Gate 2) | architect | drafted, awaiting Gate 2 | api/openapi.yaml + api-changes/phase-0.md + ADR-005 filed |
-| ADR-001 Auth (Clerk) | architect | in progress | Unblocked by Gate 1 |
-| ADR-002 DB (Knex+Postgres) | architect | in progress | Unblocked by Gate 1 |
-| ADR-003 Notifications (Resend+Twilio) | architect | in progress | Unblocked by Gate 1 |
-| ADR-004 Background jobs (BullMQ+Redis) | architect | in progress | Unblocked by Gate 1 |
-| `server/` scaffold (Express+TS+Knex) | backend-dev | blocked on Gate 2 | Auth wiring follows Clerk keys |
-| `web/` scaffold (Next.js+Tailwind+shadcn) | frontend-dev | blocked on Gate 2 | Auth wiring follows Clerk keys |
-| OpenAPI codegen pipeline | architect + backend-dev | blocked on Gate 2 | |
-| CI (GitHub Actions) | dev-manager | blocked on Gate 2 + GitHub repo | User must provide repo URL |
-| Notification service abstraction | backend-dev | blocked on Gate 2 + credentials | |
-| Engineering conventions docs | dev-manager | blocked on Gate 2 | |
+| OpenAPI baseline (Gate 2) | architect | DONE — approved 2026-05-03 | api/openapi.yaml + api-changes/phase-0.md + ADR-005 |
+| ADR-001 Auth (Clerk) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-001-auth-clerk.md |
+| ADR-002 DB (Knex+Postgres) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-002-database-knex-postgres.md |
+| ADR-003 Notifications (Resend+Twilio) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-003-notifications-resend-twilio.md |
+| ADR-004 Background jobs (BullMQ+Redis) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-004-background-jobs-bullmq-redis.md |
+| Engineering task breakdown (PHASE-0-tasks.md) | dev-manager | DONE 2026-05-03 | 20 tasks filed; pmo/phase-briefs/PHASE-0-tasks.md |
+| Engineering conventions docs | dev-manager | DONE 2026-05-03 | docs/wiki/engineering/ — 4 convention docs seeded |
+| `server/` scaffold (Express+TS+Knex) | backend-dev | ready to start — TASK-005 | No blockers; auth wiring (TASK-006) follows Clerk keys |
+| `web/` scaffold (Next.js+Tailwind+shadcn) | frontend-dev | ready to start — TASK-007 | No blockers; Clerk wiring (TASK-008) follows Clerk keys |
+| OpenAPI codegen pipeline scripts | backend-dev | ready to start — TASK-002, TASK-003 | No blockers |
+| BullMQ hello-world job | backend-dev | ready to start — TASK-014 | Local Docker Redis sufficient |
+| Notification service abstraction | backend-dev | ready to start — TASK-011 | Abstraction has no blockers; test delivery (TASK-013) needs provider creds |
+| Auth middleware (server) | backend-dev | blocked — TASK-006 | Needs CLERK_SECRET_KEY from user |
+| Clerk provider + sign-in (web) | frontend-dev | blocked — TASK-008 | Needs CLERK_PUBLISHABLE_KEY from user |
+| CI (GitHub Actions) | backend-dev | blocked — TASK-017 | Needs GitHub repo URL from user |
 
 ## In-flight handoffs
 
@@ -100,7 +102,6 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 
 | Item | Blocked by | Action needed |
 |------|-----------|---------------|
-| All agent implementation work (server, web, CI) | Gate 2 | Await Architect's OpenAPI spec + your approval |
 | Auth scaffolding (server + web) | Clerk publishable + secret keys | User completes #2 in PHASE-0-kickoff.md |
 | Notification service test | Resend + Twilio credentials | User completes #1 + #3 in PHASE-0-kickoff.md |
 | GitHub Actions CI | GitHub repo URL | User completes #8 in PHASE-0-kickoff.md |
@@ -114,7 +115,7 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 
 ## Decisions awaiting your review
 
-(none — DECISION-002 closed 2026-05-03. Gate 2 — OPENAPI-PHASE-0 — is the next approval pending.)
+(none — Gate 2 approved 2026-05-03. No open decisions. Answer open product questions above when convenient.)
 
 ## Future-phase commitments
 
@@ -128,8 +129,9 @@ Decisions made now but executed in a later phase. Tracked here so nothing falls 
 
 ## Recent decisions
 
+- **GATE-2-PHASE-0 approved (2026-05-03)** — OpenAPI baseline locked (api/openapi.yaml), api-changes/phase-0.md and ADR-005 accepted as canonical. Phase 0 implementation fully unblocked.
 - **DECISION-002 (decided 2026-05-03)** — Keep Clerk; swap WhatsApp to 360dialog before Phase 3 production; OCI Object Storage for files (Architect to validate SDK/S3-compat in Phase 1 prep); defer observability decision to Phase 1 exit.
-- **GATE-1-PHASE-0 approved (2026-05-03)** — PDD, mocks stub, and design system seed locked. Gate 2 now active.
+- **GATE-1-PHASE-0 approved (2026-05-03)** — PDD, mocks stub, and design system seed locked.
 - **DECISION-001 (decided 2026-05-03)** — MVP scope: **Option B — Full Season Operations** (Phases 1-5: Tryouts, Teams, Practice Scheduling, Gym, Jersey, Practice Comms, Tournaments, Payments). Agent-pace ETA: 6-12 weeks. AI features deferred to Phase 6 / v1.5+.
 
 ---
