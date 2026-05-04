@@ -174,3 +174,19 @@ a future channel is additive, not structural.
   avoid any planned mid-build migration. The architectural abstraction
   (`IWhatsAppProvider`) is unchanged — only the default implementation changes
   from `TwilioWhatsAppProvider` to `Dialog360WhatsAppProvider`.
+- **2026-05-04 (factual correction):** An earlier note in this ADR and in
+  PHASE-0-kickoff.md / PDD-PHASE-0 stated "360dialog has no sandbox equivalent
+  unlike Twilio" as part of the Twilio-vs-360dialog tradeoff analysis. This was
+  **incorrect** — 360dialog provides a sandbox tier
+  ([docs](https://docs.360dialog.com/docs/get-started/sandbox)). Sandbox is
+  enabled by sending `START` via WhatsApp to `+551146733492`. Limits: 200 msg
+  cap, can only message your own WhatsApp number, 3 predefined templates only,
+  no media. Sufficient for Phase 0 dev/test. The `Dialog360WhatsAppProvider`
+  must be **base-URL-driven** (`DIALOG360_BASE_URL` env var) so dev hits sandbox
+  (`https://waba-sandbox.360dialog.io/v1`) and prod hits production
+  (`https://waba-v2.360dialog.io/v2`) with no code change. This correction
+  doesn't change the underlying decision (360dialog from MVP), but it
+  invalidates one of the consequences listed above (the "no sandbox" friction
+  was overstated). Production tier with full Meta Business verification is now
+  positioned as a **Phase 3 prerequisite** (when production WhatsApp launches),
+  not a Phase 0 blocker.

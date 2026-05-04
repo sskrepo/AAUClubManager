@@ -47,7 +47,11 @@ These cannot be done by agents. **Start as soon as possible** — long-lead item
   - `DIALOG360_API_KEY=...` (your 360dialog API key)
   - `DIALOG360_WHATSAPP_FROM=+1...` (the registered WhatsApp sender phone number, E.164 format)
 
-> **No sandbox equivalent:** Unlike Twilio, 360dialog does not offer a pre-approval sandbox. Development and testing against the real 360dialog API requires a registered (though not necessarily fully production-approved) account. For early Phase 0 dev work before your account is active, backend devs can stub the WhatsApp provider with a no-op implementation that logs to console — the `IWhatsAppProvider` abstraction makes this straightforward.
+> **Correction (2026-05-04):** An earlier version of this brief said "no sandbox equivalent" — that was incorrect. 360dialog **does** offer a sandbox tier ([docs](https://docs.360dialog.com/docs/get-started/sandbox)).
+>
+> **Sandbox:** Send `START` (uppercase) via WhatsApp to `+551146733492` to receive a sandbox API key. Base URL: `https://waba-sandbox.360dialog.io/v1`. Auth header: `D360-API-KEY`. Free. Limits: 200-message cap, can only message your own WhatsApp number, 3 predefined templates only (no custom), no media support. **Sufficient for Phase 0 dev/test.** The `IWhatsAppProvider` abstraction is base-URL-driven so the same code targets sandbox in dev and production at Phase 3 production go-live — env vars (`DIALOG360_API_KEY`, `DIALOG360_BASE_URL`) flip per environment.
+>
+> Production tier (Meta Business verification + custom templates) is **not required for Phase 0**. It becomes a Phase 3 prerequisite. Start the production hub setup now since Meta verification has 1–7 day lead time, but Phase 0 implementation does not block on it.
 
 > **Template approval timing:** Submit message templates as soon as your 360dialog account is active — don't wait until Phase 3. Template approval is separate from account verification and can take 1–3 days per template. Phase 3 will need at minimum: practice schedule change, absence confirmation, payment reminder.
 

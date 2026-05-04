@@ -15,7 +15,7 @@ status: current
 
 ## 👤 What's waiting on you
 
-**Single user-facing view:** [`pmo/pending-decisions/PHASE-0.md`](pending-decisions/PHASE-0.md) — 1 blocking (360dialog in-progress) · 3 mid-phase · 3 open product questions · 8 done.
+**Single user-facing view:** [`pmo/pending-decisions/PHASE-0.md`](pending-decisions/PHASE-0.md) — **0 blocking** · 3 mid-phase · 3 open product questions · 9 done. **Wave 2 fully unblocked.**
 
 All-phases index: [`pmo/pending-decisions/index.md`](pending-decisions/index.md)
 
@@ -108,6 +108,7 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 - **Clerk test API keys delivered (2026-05-03)** — stashed in `.env.local`; unblocks TASK-006, 008, 009, 010
 - **Dev/UAT domain `myhoopclub.com` + email forwarding (2026-05-03)** — Cloudflare Registrar + Email Routing; prod brand domain remains a Phase 1 exit task
 - **Resend API key delivered (2026-05-03)** — stashed in `.env.local`; sub-step pending: verify `myhoopclub.com` in Resend dashboard (DNS records) before `RESEND_FROM_EMAIL` can be set
+- **360dialog sandbox API key delivered (2026-05-04)** — sandbox tier sufficient for Phase 0; `DIALOG360_API_KEY` + `DIALOG360_BASE_URL=https://waba-sandbox.360dialog.io/v1` stashed in `.env.local`. Production tier (Meta Business verification) is now a Phase 3 prerequisite, not Phase 0.
 
 ## Blocked
 

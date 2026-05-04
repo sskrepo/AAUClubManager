@@ -10,8 +10,9 @@ tags: [pending, user, phase:0]
 # Phase 0 — Pending User Items
 
 **Phase status:** 🟡 In execution. Gate 1 + Gate 2 approved. DECISION-002 closed. Implementation underway.
-**Open count:** 🚨 1 blocking · 🟡 3 mid-phase · 📝 3 open product questions · ✅ 8 done
-**What's gated:** Notification delivery test, deploy. (Auth thread now unblocked — Clerk keys delivered.)
+**Open count:** 🚨 0 blocking · 🟡 3 mid-phase · 📝 3 open product questions · ✅ 9 done
+**All Phase 0 blockers cleared.** Wave 2 (Backend + Frontend scaffolding) fully unblocked.
+**What's gated:** Nothing critical. Mid-phase items (Postgres/Redis/hosting) only block production deploy, not implementation.
 
 Canonical setup checklist with full how-to instructions: [PHASE-0-kickoff.md](../phase-briefs/PHASE-0-kickoff.md).
 
@@ -19,9 +20,7 @@ Canonical setup checklist with full how-to instructions: [PHASE-0-kickoff.md](..
 
 ## 🚨 Blocking — deliver to unblock active work
 
-| # | Item | Why it matters | Where to get it | Env vars / inputs |
-|---|------|----------------|-----------------|-------------------|
-| 1 | **360dialog account + API key** | WhatsApp delivery; long-pole external dep. Meta Business verification 1–7 days. **In progress** (signup hung on "building your hub" — being investigated). | [hub.360dialog.com](https://hub.360dialog.com) → register → Meta Business verify → API key | `DIALOG360_API_KEY`, `DIALOG360_WHATSAPP_FROM` (E.164 format), WhatsApp Business display name |
+(All cleared as of 2026-05-04. See ✅ Done section.)
 
 ---
 
@@ -74,6 +73,7 @@ These will surface in their respective phase files when those phases activate.
 | 2026-05-03 | **Clerk account + API keys** | Test keys delivered; stashed in `.env.local` (gitignored). Unblocks TASK-006, 008, 009, 010 — entire auth thread. |
 | 2026-05-03 | **Dev/UAT domain + email forwarding** | `myhoopclub.com` registered; Cloudflare Email Routing forwards `admin@myhoopclub.com` → personal Gmail. Confirmed working. **Prod brand domain still open** — Phase 1 exit task to revisit (HoopCourt and RosterWise still in running per PM research). |
 | 2026-05-03 | **Resend API key** | API key delivered; stashed in `.env.local`. **Sub-step still pending:** verify `myhoopclub.com` in Resend dashboard (DNS records: SPF, DKIM, DMARC) before `RESEND_FROM_EMAIL` can be set. ~1 hour for DNS propagation. |
+| 2026-05-04 | **360dialog sandbox API key** | Sandbox tier sufficient for Phase 0 dev/test. `DIALOG360_API_KEY` + `DIALOG360_BASE_URL=https://waba-sandbox.360dialog.io/v1` stashed in `.env.local`. Limits: 200 msg cap, can only message your own WhatsApp number, 3 predefined templates. **Production tier (Meta Business verification + custom templates) is now a Phase 3 prerequisite, not Phase 0.** See PHASE-3.md. |
 
 ---
 

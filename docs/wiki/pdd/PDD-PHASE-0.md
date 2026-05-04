@@ -146,7 +146,7 @@ Phase 0 does not have user flows. It has a set of agent deliverables that must b
 6. Job status marked `completed`.
 
 **Alternative paths:**
-- If 360dialog account isn't fully active yet: backend devs use a no-op stub `IWhatsAppProvider` that logs to console (360dialog has no sandbox equivalent unlike Twilio). Real WhatsApp delivery requires an active 360dialog account; full Meta Business verification + at least one approved template must be complete before Phase 3 start.
+- If production 360dialog account isn't fully active yet: use the **360dialog sandbox tier** (free, send `START` to `+551146733492` to receive a sandbox API key). Sandbox base URL: `https://waba-sandbox.360dialog.io/v1`. Sandbox limits: 200 msg cap, can only message your own WhatsApp number, 3 predefined templates only. The `IWhatsAppProvider` abstraction is base-URL-driven so dev hits sandbox and prod hits production with no code change. Full Meta Business verification + at least one approved template must be complete before Phase 3 production go-live.
 - If a channel credential is missing: worker catches the error, marks job `failed`, logs the error with Pino. No crash.
 - If Redis is unreachable: job enqueue fails immediately with a clear error message.
 

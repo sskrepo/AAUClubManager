@@ -41,9 +41,9 @@ Active implementation work:
 
 No open decisions. Gate 2 approved 2026-05-03.
 
-**Clerk test API keys delivered 2026-05-03** — stashed in `.env.local` (gitignored). Unblocks the entire auth thread: TASK-006 (server middleware), TASK-008 (web Clerk provider), TASK-009 (client.ts wrapper), TASK-010 (e2e auth smoke). Wave 2 implementation can now wire auth end-to-end.
+**🎉 Phase 0 has zero blockers as of 2026-05-04.** Wave 2 (Backend + Frontend scaffolding) is fully unblocked. All credentials delivered: Clerk (auth), Resend (email API key — domain verification still pending as a sub-step), 360dialog **sandbox tier** (sufficient for Phase 0 — production tier moved to Phase 3 prereq after the architect's "no sandbox equivalent" claim was corrected via [360dialog sandbox docs](https://docs.360dialog.com/docs/get-started/sandbox)).
 
-**Still owed by user (per [pending-decisions/PHASE-0.md](../../pmo/pending-decisions/PHASE-0.md)):** 360dialog account (long pole) + Resend account/domain + 4 mid-phase items (Postgres/Redis/hosting/domain).
+**Still owed by user, but non-blocking:** Resend domain verification (DNS records, ~1 hour), 3 mid-phase items (Postgres/Redis/hosting — local Docker fine for dev).
 
 **Open product questions (answer asynchronously — non-blocking):** Brand color, logo, app name, domain, hosting platform, WhatsApp sender strategy. Tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Open product questions." Needed before Phase 1 mocks, not before Phase 0 exits.
 

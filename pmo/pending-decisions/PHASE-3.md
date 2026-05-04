@@ -20,8 +20,8 @@ This phase is the largest external-dependency surface in the project. Pre-knowns
 
 | # | Item | Why it matters | When to start |
 |---|------|----------------|----------------|
-| 1 | **Meta WhatsApp message template approvals** (multiple) | All production WhatsApp sends require pre-approved templates. Approval is per-template, 1–3 days each, but parallelizable. **Submit all expected templates simultaneously.** | Phase 1 (so they're approved by Phase 3) |
-| 2 | **Full Meta Business verification on 360dialog** (if not already complete in Phase 0) | Sandbox/development is OK in Phase 0–2; production sends require full verification. | Phase 1–2 |
+| 1 | **360dialog production tier** — Meta Business verification + custom templates | Phase 0 used the sandbox tier (sufficient for dev/test). Production sends require full Meta Business verification (1–7 days) + at least one approved template (1–3 days each, parallelizable). | Phase 1–2 (so it's ready by Phase 3 launch) |
+| 2 | **Meta WhatsApp message template approvals** (multiple) | All production WhatsApp sends require pre-approved templates. Submit in parallel — sequential submission compounds delay. | Phase 1 |
 | 3 | **Observability stack decision** (carryover from DECISION-002-D) | Phase 3 introduces high notification volume; observability must be in place before this phase ships. | Phase 1 exit (per DECISION-002-D) |
 
 ### Suggested template list to pre-submit (subject to confirmation by Architect / PM)
