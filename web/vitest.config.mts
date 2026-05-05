@@ -7,10 +7,15 @@ const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
-  // Disable PostCSS/CSS processing in tests — @tailwindcss/oxide (Tailwind v4
-  // Rust binding) is not needed by jsdom and causes "Cannot find native binding"
-  // on CI runners when loaded via postcss.config.mjs.
-  css: false,
+  css: {
+    // Override postcss config so Vite does not auto-discover postcss.config.mjs.
+    // @tailwindcss/postcss requires the @tailwindcss/oxide native binding which
+    // is not needed for unit tests (jsdom) and fails on CI runners that installed
+    // via a macOS-generated lockfile lacking the linux-x64-gnu platform package.
+    postcss: {
+      plugins: [],
+    },
+  },
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
