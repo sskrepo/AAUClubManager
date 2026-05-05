@@ -11,21 +11,23 @@ Quick counts. Click into a phase file for details.
 
 | Phase | Status | 🚨 Blocking | 🟡 Mid-phase | 📝 Open Qs | ✅ Done | Link |
 |-------|--------|-------------|--------------|-----------|---------|------|
-| **0 — Foundation** | 🟡 Active | 0 | 4 | 3 | 9 | [PHASE-0.md](PHASE-0.md) |
-| **1 — Core** | 🔮 Preview | 0 | 0 | 0 | 0 | [PHASE-1.md](PHASE-1.md) |
+| **0 — Foundation** | 🟢 Done (closed 2026-05-04) | 0 | 0 | 0 | 9 | [PHASE-0.md](PHASE-0.md) |
+| **1 — Core** | 🟡 Active | 2 | 5 | 3 | 0 | [PHASE-1.md](PHASE-1.md) |
 | **2 — Operations** | 🔮 Placeholder | — | — | — | — | [PHASE-2.md](PHASE-2.md) |
 | **3 — Communications** | 🔮 Preview | 0 | 0 | 0 | 0 | [PHASE-3.md](PHASE-3.md) |
 | **4 — Tournaments** | 🔮 Placeholder | — | — | — | — | [PHASE-4.md](PHASE-4.md) |
 | **5 — Payments** | 🔮 Placeholder | — | — | — | — | [PHASE-5.md](PHASE-5.md) |
 
-## Phase 0 exit imminent — one agent fix remaining
+## Phase 1 active — Gate 1 pending
 
-As of 2026-05-04, no 🚨 blocking items remain. Wave 2 (Backend + Frontend scaffolding) fully shipped. data-model.md filed by Architect (TASK-019 done).
+Phase 0 closed 2026-05-04. All 11 exit criteria met. Phase 1 is now active.
 
-Mid-phase items open (4): Postgres host · Redis host · hosting platform · Resend FROM domain DNS verification — local Docker is sufficient for dev; these only gate production deploy.
+**2 blocking items you own right now:**
+1. **OCI Object Storage credentials** — Architect needs these to validate the Node.js SDK approach (Phase 1 prep). Block on file-upload service design.
+2. **Brand identity answers** (color, logo, app name, app header) — UX needs these to finalize Phase 1 mocks before Gate 1.
 
-Open product questions (3, non-blocking): brand color · logo+name · app header naming.
+**Gate 1 status:** Waiting for PM to file PDD-PHASE-1.md and UX to file mocks. Both are unblocked except brand identity (item #2). Gate 1 approval needed from you once filed.
 
-**Agent-owned blocker to Phase 0 exit:** CI web job failing (PostCSS native binding — Tailwind v4 + npm ci bug). Frontend Dev must fix before Phase 0 closes. See dashboard Risks section.
+**5 mid-phase items:** Resend DNS, Postgres, Redis, hosting platform, Clerk webhook secret — all needed before Phase 1 deploy but not today.
 
-See [PHASE-0.md](PHASE-0.md) for details.
+See [PHASE-1.md](PHASE-1.md) for full details with how-to instructions.

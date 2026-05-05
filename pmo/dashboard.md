@@ -10,190 +10,180 @@ status: current
 
 # AAUClubManager — Dashboard
 
-**Current phase:** Phase 0 — Foundation — ALL EXIT CRITERIA MET — awaiting user declaration to close
-**Updated:** 2026-05-04 by tpm (CI green confirmed)
+**Current phase:** Phase 1 — Core (Tryouts + Teams) — Gate 1 in progress
+**Updated:** 2026-05-04 by tpm (Phase 0 close ceremony complete)
 
-## Phase 0 Exit Readiness
+---
 
-**Score: 11 of 11 criteria met (100%)** — Phase 0 is ready to close. Awaiting user nod.
+## Current Phase Kickoff
 
-| # | Exit criterion | Status | Notes |
-|---|---------------|--------|-------|
-| 1 | All critical-path kickoff items completed (Clerk, Resend, 360dialog) | DONE | All credentials delivered and stashed in .env.local |
-| 2 | All mid-phase kickoff items completed (Postgres+Redis hosted, hosting platform, GitHub repo) | PARTIAL | GitHub repo created. Postgres/Redis hosting + hosting platform still open — local Docker only. Non-blocking for agent work; blocks production deploy only. Accepted as partial — production deploy is a Phase 1 task. |
-| 3 | ADRs 001-004 filed, status `accepted` | DONE | ADR-001 through ADR-004 filed 2026-05-03 |
-| 4 | `GET /api/health` returns 200 with auth check (unauthenticated = 401) | DONE | Implemented + unit-tested (27/27 tests); manual Docker smoke deferred — acceptable |
-| 5 | Web app auth scaffold: unauthenticated browser to Clerk sign-in to authenticated shell | DONE | Implemented; FE tests 14/14 passing; build passing. Manual end-to-end walkthrough optional (Docker stack) — deferred to Phase 1 entry. |
-| 6 | `npm run api:generate` runs without error, produces non-empty `web/src/api/generated/` | DONE | TASK-002 + TASK-003 shipped; SDK committed |
-| 7 | `npm run notify:test:email` delivers email to developer inbox | DONE (impl) | Service + worker + script implemented; live delivery deferred (needs RESEND_FROM_EMAIL DNS + Docker Redis). Implementation complete = criterion met. |
-| 8 | `npm run notify:test:whatsapp` delivers WhatsApp message (sandbox OK) | DONE (impl) | 360dialog sandbox key delivered; abstraction implemented; live delivery deferred (needs Docker Redis). Implementation complete = criterion met. |
-| 9 | `npm run queue:test` — hello-world job completes and is logged | DONE (impl) | Implemented; live test deferred (needs Docker Redis). Implementation complete = criterion met. |
-| 10 | CI passes (lint + typecheck + Vitest + build) on GitHub Actions | DONE | CI run 25353265537 (commit 948277e): all three jobs GREEN — API, Server, Web. Frontend Dev fixed PostCSS native binding: root lockfile patched with linux oxide entries + vitest postcss disable. |
-| 11 | `docs/wiki/data-model.md` exists with base entities (Club, User, ClubMembership, Season) | DONE | Filed by Architect 2026-05-04 |
-
-**Bonus criteria (not in PDD exit checklist but completed):**
-- `docs/wiki/ux/design-system.md` — DONE (filed and approved)
-- All four engineering convention docs under `docs/wiki/engineering/` — DONE
-
-**Outstanding items by bucket:**
-- Agent-actionable: none — all agent-owned blockers resolved
-- User-actionable (optional for exit): Manual smoke test (Docker stack — auth, health, queue, notify); Resend DNS verification (RESEND_FROM_EMAIL sub-step)
-- User-actionable (blocks prod deploy only): Postgres + Redis hosting + hosting platform selection
-
-**Verdict: Phase 0 is READY TO CLOSE.** All 11 exit criteria met. CI green (run 25353265537). Awaiting user declaration: "Phase 0: close".
+[PHASE-1-kickoff.md](phase-briefs/PHASE-1-kickoff.md) — **full brief** filed 2026-05-04. Two critical-path items require user action today (OCI credentials + brand identity). Five mid-phase items needed before first cloud deploy.
 
 ---
 
 ## What's waiting on you
 
-**Single user-facing view:** [`pmo/pending-decisions/PHASE-0.md`](pending-decisions/PHASE-0.md) — **0 blocking** · 4 mid-phase · 3 open product questions · 9 done. **Wave 2 fully shipped.**
+**Single user-facing view:** [`pmo/pending-decisions/PHASE-1.md`](pending-decisions/PHASE-1.md) — **2 blocking** · 5 mid-phase · 3 open product questions · 0 done
 
 All-phases index: [`pmo/pending-decisions/index.md`](pending-decisions/index.md)
 
-## Current Phase Kickoff
+### Blocking right now
 
-[PHASE-0-kickoff.md](phase-briefs/PHASE-0-kickoff.md) — continue the critical-path external setup items (360dialog account setup is now the WhatsApp long pole — Architect is updating this brief)
-
-[PHASE-1-kickoff.md (skeleton)](phase-briefs/PHASE-1-kickoff.md) — pre-known Phase 1 prerequisites filed; will be expanded when Phase 0 exits
-
----
-
-## Approval gates — Phase 0
-
-### Gate 1 — PDD + UI Mocks — APPROVED 2026-05-03
-
-- [PDD-PHASE-0.md](../docs/wiki/pdd/PDD-PHASE-0.md) — status: approved
-- [ux/mocks/phase-0/index.md](../docs/wiki/ux/mocks/phase-0/index.md) — status: approved
-- [ux/design-system.md](../docs/wiki/ux/design-system.md) — status: approved
-
-### Gate 2 — OpenAPI Spec — APPROVED 2026-05-03
-
-- [api-changes/phase-0.md](../docs/wiki/api-changes/phase-0.md) — status: approved
-- [ADR-005-api-design-conventions.md](../docs/wiki/adr/ADR-005-api-design-conventions.md) — status: accepted
-- [api/openapi.yaml](../api/openapi.yaml) — baseline locked
+| # | Item | Unblocks |
+|---|------|---------|
+| 1 | **OCI Object Storage credentials** — tenancy OCID, user OCID, fingerprint, private key, region, bucket name, namespace | Architect SDK validation → file-upload service design → Phase 1 backend implementation |
+| 2 | **Brand identity** — primary color, logo, app name, app header convention | UX mocks → Gate 1 approval |
 
 ---
 
-## Open product questions (non-blocking — answer when ready)
+## Approval gates — Phase 1
 
-These do not block Phase 0 exit. Answer anytime; answers are needed before Phase 1 mocks are finalized.
+### Gate 1 — PDD + UI Mocks (pending PM + UX deliverables)
 
-**Brand identity**
-1. **Primary color** — Do you have a brand color? A hex code or direction ("navy", "orange") is enough. UX seeded "Club Blue" (`#3b82f6`) as placeholder — confirm or replace. Without confirmation, Phase 1 mocks will use the placeholder.
-2. **Logo / app name** — Do you have a logo (SVG preferred)? Is "AAUClubManager" the final brand name, or is there a shorter name (e.g., "ClubMgr", "Hoops HQ")? Placeholder acceptable for Phase 0; must be resolved before Phase 1 mocks.
-3. **App header display** — Should the app header show "AAU Club Manager" (generic) or the specific club name per tenant after login? Affects multi-tenant UI pattern from Phase 1 onward.
+- PDD-PHASE-1.md — in progress (PM)
+- UI mocks: phase-1/ — in progress (UX; pending brand identity answers from user)
+- Reply: `GATE-1-PHASE-1: approved` (or `PDD-PHASE-1:` / `MOCKS-PHASE-1:` separately)
 
-**Infrastructure**
-4. **Hosting platform** — Vercel (web) + Railway or Render (server) vs. a unified platform? Determines CI/CD and env var strategy. See PHASE-0-kickoff.md item 7.
+### Gate 2 — OpenAPI Spec (blocked on Gate 1)
 
-**Phase 3 risk**
-5. **WhatsApp sender strategy** — RESOLVED (2026-05-03, DECISION-002-B amendment): 360dialog adopted from MVP. No Twilio. Set up 360dialog account, obtain API key, configure WhatsApp Business display name and phone number. Architect updating PHASE-0-kickoff.md with step-by-step instructions.
+- Will surface here after Gate 1 passes
+- Architect updates `api/openapi.yaml` + files `api-changes/phase-1.md`
+- Reply: `OPENAPI-PHASE-1: approved`
 
 ---
 
-## In-flight work — Phase 0
+## In-flight work — Phase 1
 
 | Activity | Owner | Status | Notes |
-|---|---|---|---|
-| External setup checklist | **user** | in progress | See PHASE-0-kickoff.md (10 items); all critical-path items cleared |
-| OpenAPI baseline (Gate 2) | architect | DONE — approved 2026-05-03 | api/openapi.yaml + api-changes/phase-0.md + ADR-005 |
-| ADR-001 Auth (Clerk) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-001-auth-clerk.md |
-| ADR-002 DB (Knex+Postgres) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-002-database-knex-postgres.md |
-| ADR-003 Notifications (Resend+360dialog) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-003-notifications-resend-360dialog.md |
-| ADR-004 Background jobs (BullMQ+Redis) | architect | DONE 2026-05-03 | docs/wiki/adr/ADR-004-background-jobs-bullmq-redis.md |
-| Base data model (TASK-019) | architect | DONE 2026-05-04 | docs/wiki/data-model.md — Club, User, ClubMembership, Season |
-| Engineering task breakdown (PHASE-0-tasks.md) | dev-manager | DONE 2026-05-03 | 20 tasks filed; pmo/phase-briefs/PHASE-0-tasks.md |
-| Engineering conventions docs | dev-manager | DONE 2026-05-03 | docs/wiki/engineering/ — 4 convention docs seeded |
-| `server/` scaffold (TASK-005) | backend-dev | DONE 2026-05-04 | Express+TS+Knex+Pino; health + /api/v1/me; 27/27 unit tests passing |
-| OpenAPI codegen pipeline (TASK-002, 003) | backend-dev | DONE 2026-05-04 | api:validate/generate/check wired; SDK committed to web/src/api/generated/ |
-| BullMQ hello-world job (TASK-014) | backend-dev | DONE 2026-05-04 | hello-world worker + queue-test script shipped; live test needs Docker Redis |
-| Notification service + workers + scripts (TASK-011, 012, 013) | backend-dev | DONE 2026-05-04 | NotificationService + Dialog360 + Resend; workers + dev scripts shipped; live delivery needs creds + Docker Redis |
-| Auth middleware (TASK-006) | backend-dev | DONE 2026-05-04 | Clerk JWT via @clerk/backend; /api/v1/me; RFC 7807 errors |
-| `web/` scaffold (TASK-007, 008, 009, 010, 016, 018) | frontend-dev | DONE 2026-05-04 | Next.js 16 + Tailwind v4 + Clerk + TanStack Query; 14/14 tests passing; build passing |
-| Clerk provider + sign-in (TASK-008) | frontend-dev | DONE 2026-05-04 | ClerkProvider, proxy.ts, sign-in/sign-up pages, authenticated shell |
-| CI workflow (TASK-017) | backend-dev | FILED — first run FAILED 2026-05-04 | .github/workflows/ci.yml committed. API + Server jobs: PASS. Web job: FAIL — PostCSS native binding (Tailwind v4 + npm ci optional dep bug #4828). Frontend Dev must fix. See run 25352296712. |
+|----------|-------|--------|-------|
+| PDD-PHASE-1.md | pm | In progress | Covering: club creation, season setup, team creation, tryout creation, parent registration, evaluation, selection, parent acceptance |
+| UX mocks — phase 1 | ux-designer | In progress | Tryout registration, evaluation UI (mobile), selection drag-and-drop, team roster page; pending brand identity answers from user |
+| OCI SDK validation | architect | Blocked on user | Blocked on OCI credentials (item #1 above) |
+| Gate 1 approval | user | Pending | Waiting for PM + UX deliverables |
+| OpenAPI spec — Phase 1 | architect | Blocked on Gate 1 | — |
+| Gate 2 approval | user | Pending | Waiting for Architect spec |
+| Stories — Phase 1 | pm | Blocked on Gate 2 | — |
+| Engineering tasks | dev-manager | Blocked on Gate 2 | — |
+| Backend implementation | backend-dev | Blocked on Gate 2 | — |
+| Frontend implementation | frontend-dev | Blocked on Gate 2 | — |
+| QA validation | qa | Last in sequence | — |
+
+---
 
 ## In-flight handoffs
 
 (none)
 
+---
+
 ## Done
 
+- **Phase 0 closed 2026-05-04 (11/11 exit criteria met)** — retrospective at [`docs/wiki/phase-0-retrospective.md`](../docs/wiki/phase-0-retrospective.md)
+- Phase 0 exit readiness: 11/11 criteria met, CI green (run 25353265537)
+- GATE-1-PHASE-0 approved 2026-05-03
+- GATE-2-PHASE-0 approved 2026-05-03
+- dev-agent-team v0.1.1 through v0.1.5 promoted (5 protocol bumps in Phase 0)
 - Project bootstrapped (dev-agent-team v0.1.1)
 - Raw requirements ingested into wiki (10 module pages, personas, project overview)
 - Backlog (Finder modules, Tournament Director persona) captured in `docs/wiki/backlog-future.md`
 - Conversation logging hooks active (Google Drive)
 - Architect technical analysis for DECISION-001 complete (`docs/wiki/architecture-options.md`)
 - PM scope/value/risk analysis for DECISION-001 complete (`pmo/phases-comparison.md`)
-- Both companion docs re-baselined with agent-pace estimates
-- Phase 0 Kickoff Brief filed
-- dev-agent-team v0.1.2 — Phase Kickoff Brief protocol
-- dev-agent-team v0.1.3 — Phase Deliverables & Approval Gates protocol
+- Phase 0 Kickoff Brief filed (status: completed)
 - **DECISION-001 — Option B (Full Season Operations) chosen** (2026-05-03)
 - `pmo/phases.md` updated with locked-in Phase 0-5 plan
 - PDD-PHASE-0 filed and approved (Gate 1 passed 2026-05-03)
 - UX mocks stub + design system seed filed and approved (Gate 1 passed 2026-05-03)
-- **GATE-1-PHASE-0 approved by user (2026-05-03)**
-- **GATE-2-PHASE-0 approved by user (2026-05-03)**
-- **GitHub repo URL delivered (2026-05-03)** — https://github.com/sskrepo/AAUClubManager
-- **Clerk test API keys delivered (2026-05-03)** — stashed in `.env.local`; unblocks TASK-006, 008, 009, 010
-- **Dev/UAT domain `myhoopclub.com` + email forwarding (2026-05-03)** — Cloudflare Registrar + Email Routing; prod brand domain remains a Phase 1 exit task
-- **Resend API key delivered (2026-05-03)** — stashed in `.env.local`; sub-step pending: verify `myhoopclub.com` in Resend dashboard (DNS records) before `RESEND_FROM_EMAIL` can be set
-- **360dialog sandbox API key delivered (2026-05-04)** — sandbox tier sufficient for Phase 0; `DIALOG360_API_KEY` + `DIALOG360_BASE_URL=https://waba-sandbox.360dialog.io/v1` stashed in `.env.local`. Production tier (Meta Business verification) is now a Phase 3 prerequisite, not Phase 0.
-- **Wave 2 backend scaffold completed (2026-05-04)** — 28 src files; 27/27 unit tests passing; TASKs 002-006, 011-015, 017 delivered
-- **Wave 2 frontend scaffold completed (2026-05-04)** — 39 src files; 14/14 tests passing; TASKs 007-010, 016, 018 delivered
-- **dev-agent-team v0.1.5 (2026-05-04)** — autonomous-dev protocol promoted to canonical; agents no longer pause for file read/write permissions (only gates, DECISION-NNN, pending-decisions excepted)
+- ADRs 001-005 filed and accepted
+- `server/` scaffold: 27/27 unit tests passing
+- `web/` scaffold: 14/14 unit tests passing; build passing
+- OpenAPI codegen pipeline wired; SDK committed
+- Notification service + BullMQ workers shipped
+- CI green (run 25353265537, commit 948277e, all 3 jobs)
+- Base data model filed (`docs/wiki/data-model.md`)
+- Engineering conventions docs (4 docs under `docs/wiki/engineering/`)
+
+---
+
+## Approval gates — Phase 0 (completed)
+
+### Gate 1 — APPROVED 2026-05-03
+- [PDD-PHASE-0.md](../docs/wiki/pdd/PDD-PHASE-0.md) — status: approved
+- [ux/mocks/phase-0/index.md](../docs/wiki/ux/mocks/phase-0/index.md) — status: approved
+- [ux/design-system.md](../docs/wiki/ux/design-system.md) — status: approved
+
+### Gate 2 — APPROVED 2026-05-03
+- [api-changes/phase-0.md](../docs/wiki/api-changes/phase-0.md) — status: approved
+- [ADR-005-api-design-conventions.md](../docs/wiki/adr/ADR-005-api-design-conventions.md) — status: accepted
+- [api/openapi.yaml](../api/openapi.yaml) — baseline locked
+
+---
 
 ## Blocked
 
 | Item | Blocked by | Action needed |
 |------|-----------|---------------|
-| ~~CI green run (Phase 0 exit gate)~~ | ~~PostCSS native binding failure in GitHub Actions web job~~ | RESOLVED 2026-05-04 (commit 948277e, run 25353265537 — all 3 jobs green) |
-| Notification service live delivery | Resend FROM domain verification (DNS) + Docker Redis running | User: complete Resend DNS verification (#8 in PHASE-0.md); start Docker stack locally |
-| Production deploy | Postgres + Redis hosting + hosting platform decision | User completes mid-phase items #4, #5, #6 in PHASE-0-kickoff.md |
+| OCI SDK validation | OCI credentials (user) | User delivers OCI credentials — see PHASE-1-kickoff.md item #1 |
+| UX mocks (Gate 1) | Brand identity answers (user) | User answers brand identity questions — see PHASE-1-kickoff.md item #2 |
+| OpenAPI Phase 1 spec | Gate 1 | PM + UX file deliverables; user approves Gate 1 |
+| Phase 1 implementation | Gate 2 | Architect files spec; user approves Gate 2 |
+| Notification live delivery | Resend FROM domain DNS + Redis hosted | User: complete Resend DNS verification + provision Redis |
+| Production deploy | Postgres + Redis hosting + hosting platform | User completes mid-phase items 4-6 in PHASE-1.md |
+
+---
 
 ## Risks / contradictions (from lint)
 
-- ~~CI web failure (run 25352296712)~~ — RESOLVED 2026-05-04. Frontend Dev patched root lockfile with linux oxide entries and disabled vitest postcss processing. Run 25353265537 (commit 948277e): all three CI jobs green.
-- `pmo/phases.md` previously stated "No PDD/UI mocks/Gate workflow for Phase 0" — contradicted v0.1.3 protocol. Fixed in prior session.
-- `docs/wiki/ux/mocks/phase-0/index.md` (stub) quoted the now-corrected phases.md text. Stale quote, low-severity — approval passed.
-- Design system open questions (brand color, logo, app name) parked in "Open product questions" above — non-blocking.
+- No open risks as of Phase 0 close. Phase 0 lint clean.
+- **Watch:** Brand identity answers still open — if not received before UX begins mocks, Gate 1 may require a re-review cycle.
+- **Watch:** OCI is not yet validated by Architect. If S3-compatibility surface has gotchas (presigned URLs, CORS, multipart), file-upload service design may need revision — this is a known unknown, not a risk, as long as OCI credentials arrive in Phase 1 prep.
+
+---
 
 ## Decisions awaiting your review
 
-(none — Gate 2 approved 2026-05-03. No open decisions. Answer open product questions above when convenient.)
+(none — no open decisions. Next expected: Observability stack at Phase 1 exit per DECISION-002-D.)
+
+---
 
 ## Future-phase commitments
 
-Decisions made now but executed in a later phase. Tracked here so nothing falls through the cracks.
-
-Note: WhatsApp provider swap removed from future commitments — 360dialog adopted from MVP per same-day decision (2026-05-03). No swap needed; abstraction writes to 360dialog from Phase 0.
-
 | Item | When | Action required |
-|---|---|---|
-| OCI Object Storage setup | Phase 1 prerequisite | User delivers: OCI tenancy OCID, compartment OCID, bucket name, API key/credentials. Architect validates Node.js SDK approach (official `oci-sdk` vs S3-compatible AWS SDK pointed at OCI endpoint) and S3-compatibility surface during Phase 1 prep. Tracked in PHASE-1-kickoff.md. |
-| Revisit observability stack | Phase 1 exit | Architect to file DECISION-NNN at Phase 1 exit comparing Sentry + Axiom/BetterStack vs Datadog vs self-hosted Loki/Grafana. |
+|------|------|----------------|
+| Meta WhatsApp template approvals | Phase 3 prerequisite (start NOW during Phase 1) | User submits templates to 360dialog for Meta approval. Minimum: tryout_selection_result, practice_schedule_change, practice_reminder, attendance_poll, payment_reminder. 1-3 days per template; submit in parallel. See [PHASE-3.md](pending-decisions/PHASE-3.md). |
+| 360dialog production tier | Phase 3 prerequisite | Meta Business verification + custom WhatsApp templates approved. Sandbox sufficient through Phase 2. |
+| Observability stack decision | Phase 1 exit | Architect files DECISION-NNN at Phase 1 exit: Sentry+Axiom vs Datadog vs self-hosted Loki/Grafana. |
+| Production brand domain | Phase 1 exit task | Choose and register prod domain (HoopCourt, RosterWise, other candidates). `myhoopclub.com` is dev/UAT. |
+| COPPA / GDPR posture | Phase 2 (PM flags if needed) | Phase 1 collects minors' data. PM will flag before Phase 2 ships publicly. |
+
+---
 
 ## Recent decisions
 
-- **DECISION-002-B amended (2026-05-03)** — Use 360dialog from MVP; drop Twilio entirely. No future swap needed. 360dialog account (API key, WhatsApp Business display name, phone number) is now a Phase 0 external dependency. Architect updating ADR-003, cost-analysis, PHASE-0-kickoff, PHASE-0-tasks.
-- **GATE-2-PHASE-0 approved (2026-05-03)** — OpenAPI baseline locked (api/openapi.yaml), api-changes/phase-0.md and ADR-005 accepted as canonical. Phase 0 implementation fully unblocked.
-- **DECISION-002 (decided 2026-05-03)** — Keep Clerk; swap WhatsApp to 360dialog before Phase 3 production; OCI Object Storage for files (Architect to validate SDK/S3-compat in Phase 1 prep); defer observability decision to Phase 1 exit.
-- **GATE-1-PHASE-0 approved (2026-05-03)** — PDD, mocks stub, and design system seed locked.
-- **DECISION-001 (decided 2026-05-03)** — MVP scope: **Option B — Full Season Operations** (Phases 1-5: Tryouts, Teams, Practice Scheduling, Gym, Jersey, Practice Comms, Tournaments, Payments). Agent-pace ETA: 6-12 weeks. AI features deferred to Phase 6 / v1.5+.
+- **Phase 0 closed (2026-05-04)** — 11/11 exit criteria met. CI green (run 25353265537). Phase 1 active.
+- **Autonomous-dev protocol (2026-05-04)** — dev-agent-team v0.1.5. Agents no longer pause for file permissions; only pause for gates, DECISION-NNN, pending-decisions.
+- **DECISION-002-B amended (2026-05-03)** — 360dialog from MVP; Twilio eliminated.
+- **GATE-2-PHASE-0 approved (2026-05-03)** — api/openapi.yaml baseline locked.
+- **DECISION-002 (decided 2026-05-03)** — Keep Clerk; 360dialog from MVP; OCI Object Storage; defer observability to Phase 1 exit.
+- **GATE-1-PHASE-0 approved (2026-05-03)** — PDD, mocks stub, design system seed locked.
+- **DECISION-001 (decided 2026-05-03)** — MVP scope: Option B — Full Season Operations.
 
 ---
 
 ## How to read this
 
-- Open product questions → things only you can answer (non-blocking, async)
+- Blocking → things only you can do that are stopping agent work today
+- Approval gates → PDD/mocks/OpenAPI approvals required from you
 - In-flight → who's doing what right now
 - Handoffs → cross-agent transitions in progress
 - Blocked → stories waiting on something
-- Risks → TPM lint findings (stale wiki, code/spec drift, etc.)
+- Risks → TPM lint findings
 
 ## Quick links
+
 - [Phases](phases.md) — locked-in Phase 0-5 roadmap
 - [Wiki index](../docs/wiki/index.md)
 - [Current status (narrative)](../docs/wiki/current-status.md)
-- [Phase 0 Kickoff Brief](phase-briefs/PHASE-0-kickoff.md) — your external setup checklist
+- [Phase 1 Kickoff Brief](phase-briefs/PHASE-1-kickoff.md) — your external setup checklist
+- [Phase 0 Retrospective](../docs/wiki/phase-0-retrospective.md)
+- [Pending decisions — Phase 1](pending-decisions/PHASE-1.md)

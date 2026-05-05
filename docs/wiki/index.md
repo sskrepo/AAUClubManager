@@ -3,6 +3,7 @@
 ## Meta
 - [current-status](current-status.md) — where we are right now
 - [log](log.md) — chronological session log
+- [phase-0-retrospective](phase-0-retrospective.md) — Phase 0 closed 2026-05-04; what shipped, learned, and carried over
 
 ## Compiled by PM
 - [project-overview](project-overview.md) — vision, value loop, modules in/out of scope
@@ -12,7 +13,8 @@
 ### Planning documents
 - [phases-comparison](../../pmo/phases-comparison.md) — phase-by-phase breakdown of MVP Options A/B/C for DECISION-001 (cross-ref: architecture-options.md). ★ agent-pace re-baseline at top.
 - [phase-briefs/](../../pmo/phase-briefs/) — Phase Kickoff Briefs (TPM-owned, one per phase, lists external dependencies user must handle)
-  - [PHASE-0-kickoff.md](../../pmo/phase-briefs/PHASE-0-kickoff.md) — Foundation phase, awaiting user external setup
+  - [PHASE-0-kickoff.md](../../pmo/phase-briefs/PHASE-0-kickoff.md) — Foundation phase, status: completed (2026-05-04)
+  - [PHASE-1-kickoff.md](../../pmo/phase-briefs/PHASE-1-kickoff.md) — Core phase, status: awaiting-external-setup (active)
 
 ### Modules (one page per functional area)
 - [module-tryouts](module-tryouts.md) — Phase 1 — tryouts & onboarding
@@ -34,7 +36,7 @@
   - [PDD-PHASE-0](pdd/PDD-PHASE-0.md) — Foundation — status: approved (Gate 1 passed)
 - [ux/mocks/](ux/mocks/) — UI mocks per phase (UX-owned, Gate 1)
 - [api-changes/](api-changes/) — Per-phase OpenAPI spec change summaries (Architect-owned, Gate 2)
-  - [api-changes/phase-0](api-changes/phase-0.md) — Foundation baseline — status: in-review (Gate 2 pending)
+  - [api-changes/phase-0](api-changes/phase-0.md) — Foundation baseline — status: approved (Gate 2 passed 2026-05-03)
 
 ## Compiled by Architect
 - [architecture-options](architecture-options.md) — technical analysis of DECISION-001 options A/B/C (effort, integrations, risk, reusability). ★ agent-pace re-baseline at top.

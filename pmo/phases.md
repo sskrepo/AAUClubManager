@@ -1,7 +1,7 @@
 ---
 title: Phases
 source: DECISION-001 (Option B), pmo/phases-comparison.md, docs/wiki/architecture-options.md
-compiled_at: 2026-05-03T00:00:00Z
+compiled_at: 2026-05-04T00:00:00Z
 created: 2026-05-03
 owner: tpm
 tags: [meta, roadmap, decided]
@@ -18,8 +18,8 @@ Agent-pace timeline (realistic): **6-12 weeks** total from Phase 0 start. See [`
 
 | # | Name | Status | Scope | Agent-pace ETA | Stories |
 |---|------|--------|-------|---------------|---------|
-| 0 | Foundation | 🟡 active | Stack, scaffolding, auth, queue infra, design system, ADRs | 1-2 wks | n/a (no user flows) |
-| 1 | Core | ⏳ planned | Tryouts, Teams, Player profiles, Multi-tenant auth | 1-2 wks | TBD post-PDD |
+| 0 | Foundation | 🟢 done (closed 2026-05-04) | Stack, scaffolding, auth, queue infra, design system, ADRs | 1-2 wks | n/a (no user flows) |
+| 1 | Core | 🟡 active | Tryouts, Teams, Player profiles, Multi-tenant auth | 1-2 wks | TBD post-PDD |
 | 2 | Operations | ⏳ planned | Practice scheduling, Gym mgmt, Jersey mgmt | 1-2 wks | TBD post-PDD |
 | 3 | Communications | ⏳ planned | Practice comms, attendance, polls, WhatsApp+email | 1-2 wks | TBD post-PDD |
 | 4 | Tournaments | ⏳ planned | Local + travel tournaments, hotel coordination, jersey color | 1-2 wks | TBD post-PDD |

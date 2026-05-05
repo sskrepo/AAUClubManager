@@ -1,8 +1,9 @@
 ---
 title: PHASE 0 — Foundation — Kickoff Brief
 phase: 0
-status: awaiting-external-setup
+status: completed
 filed: 2026-05-03
+closed: 2026-05-04
 owner: tpm
 contributors: [architect, pm]
 tags: [phase:0, kickoff]

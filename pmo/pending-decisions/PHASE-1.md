@@ -1,57 +1,102 @@
 ---
-title: Phase 1 — Pending User Items (Preview)
+title: Phase 1 — Pending User Items
 phase: 1
 owner: tpm
-updated: 2026-05-03 by orchestrator
-status: preview
+updated: 2026-05-04 by tpm
+status: active
 tags: [pending, user, phase:1]
 ---
 
-# Phase 1 — Pending User Items (Preview)
+# Phase 1 — Pending User Items
 
-**Phase status:** 🔮 Preview. Activates after Phase 0 exits. Items below are pre-knowns surfaced ahead so you have lead time.
-**Open count:** TBD (full list populated when TPM files PHASE-1-kickoff.md at phase entry)
+**Phase status:** 🟡 Active. Phase 0 closed 2026-05-04. Gate 1 (PDD + mocks) awaiting PM + UX deliverables.
+**Open count:** 🚨 2 blocking · 🟡 5 mid-phase · 📝 3 open product questions · ✅ 0 done
 
-This file is a **preview**. The definitive set of Phase 1 pending items will be filed when Phase 0 closes and TPM expands [PHASE-1-kickoff.md](../phase-briefs/PHASE-1-kickoff.md).
-
----
-
-## 🔮 Pre-knowns — surface ahead of phase activation
-
-| # | Item | Why it matters | Source decision |
-|---|------|----------------|-----------------|
-| 1 | **OCI Object Storage credentials** | File storage for jersey photos, evaluation videos, payment receipts (Phase 1+ uploads). Architect validates Node.js SDK approach during Phase 1 prep. | DECISION-002-C (2026-05-03) |
-| 2 | **Brand color + logo + app name** (carryover from Phase 0 open Qs) | Phase 1 UX mocks need finalized brand identity — wireframes for tryout registration, evaluation, selection, roster screens. | Phase 0 open product questions #1-2 |
-| 3 | **App header display** (carryover) — generic vs per-tenant club name? | Phase 1 layout spec depends on this. | Phase 0 open product question #3 |
-
-### OCI specifics — what to deliver
-- Tenancy OCID (e.g., `ocid1.tenancy.oc1..aaaaaaaa...`)
-- Compartment OCID
-- Bucket name (recommend dedicated bucket per environment: `aauclubmanager-dev`, `aauclubmanager-prod`)
-- API signing key (private key file or PEM contents) + key fingerprint
-- User OCID
-- Region (e.g., `us-ashburn-1`, `us-phoenix-1`)
-
-These map to env vars: `OCI_TENANCY_OCID`, `OCI_USER_OCID`, `OCI_FINGERPRINT`, `OCI_PRIVATE_KEY` or path, `OCI_REGION`, `OCI_BUCKET_NAME`, `OCI_NAMESPACE`.
+Full setup instructions: [PHASE-1-kickoff.md](../phase-briefs/PHASE-1-kickoff.md)
 
 ---
 
-## What activates this phase
+## 🚨 Blocking — deliver to unblock active work
 
-1. Phase 0 exits (all exit criteria checked off)
-2. TPM files [PHASE-1-kickoff.md](../phase-briefs/PHASE-1-kickoff.md) (currently a skeleton)
-3. PM writes PDD-PHASE-1.md (Tryouts + Teams flows)
-4. UX produces mocks
-5. Gate 1 approval needed from you
-6. Architect updates OpenAPI spec
-7. Gate 2 approval needed from you
-8. Implementation begins
+These block Gate 1 (UX mocks) and/or Phase 1 implementation. Start within 24 hours.
 
-This file will be expanded with concrete pending items at step 2.
+| # | Item | Why it matters | How to deliver | Instructions |
+|---|------|----------------|---------------|-------------|
+| 1 | **OCI Object Storage credentials** | Architect needs these to validate the Node.js SDK approach (`oci-sdk` vs S3-compat AWS SDK) during Phase 1 prep. File storage ships in Phase 1 (jersey/player photos). Without validation, the Architect cannot finalize the integration ADR. | Set env vars in `.env.local` and notify in chat | Deliver: `OCI_TENANCY_OCID`, `OCI_USER_OCID`, `OCI_FINGERPRINT`, `OCI_PRIVATE_KEY` (or path to PEM), `OCI_REGION`, `OCI_BUCKET_NAME`, `OCI_NAMESPACE`. See [PHASE-1-kickoff.md](../phase-briefs/PHASE-1-kickoff.md) for step-by-step OCI account setup. |
+| 2 | **Brand identity answers** (color, logo, app name, app header) | UX needs these to finalize Phase 1 mocks at Gate 1. Without answers, mocks will use Club Blue `#3b82f6` placeholder and "AAUClubManager" wordmark — Gate 1 approval may be delayed if you want changes. | Reply in chat with choices | (a) Primary color — hex code or direction, e.g., "navy", "orange". Placeholder: `#3b82f6`. (b) Logo — SVG file if you have one; else confirm "wordmark only." (c) App name — final brand name or confirm "AAUClubManager." (d) App header — show generic "AAU Club Manager" or per-tenant club name after login? This affects multi-tenant layout from Phase 1 onward. |
+
+---
+
+## 🟡 Mid-phase — needed before Phase 1 exits, not urgent today
+
+| # | Item | Why it matters | Notes |
+|---|------|----------------|-------|
+| 3 | **Resend DNS verification** — `myhoopclub.com` | Carryover from Phase 0. SPF/DKIM/DMARC records for `myhoopclub.com` in Resend dashboard. Needed before `RESEND_FROM_EMAIL` can be set and email delivery works in staging. DNS propagation ~1 hour after adding records. | Resend dashboard → Domains → myhoopclub.com. Once verified, set `RESEND_FROM_EMAIL=noreply@myhoopclub.com` and notify the team. |
+| 4 | **Postgres hosting** → `DATABASE_URL` | Phase 1 deploy requires a real DB. Local Docker Postgres is fine during dev. Needed before first cloud deploy. | Recommend Neon (free tier + branching) or Railway. Deliver `DATABASE_URL=postgres://...` for dev/staging/prod separately. |
+| 5 | **Redis hosting** → `REDIS_URL` | BullMQ queues (notifications, reminders) need Redis. Local Docker Redis fine for dev. Needed before cloud deploy. | Recommend Upstash (pay-per-request, zero cost at low volume). Deliver `REDIS_URL=redis://...`. |
+| 6 | **Hosting platform decision** | Phase 1 deploys real user-visible features. CI/CD config depends on platform choice. | Option A: Vercel (web) + Railway or Render (server). Option B: unified platform. Choose and notify — agents configure deploy scripts accordingly. |
+| 7 | **Clerk webhook secret** | Data model (`docs/wiki/data-model.md`) relies on Clerk webhooks to sync User and Club records when a Clerk Organization is created or updated. Phase 1 implements this sync. | In Clerk dashboard → Webhooks → Add endpoint: `https://yourdomain.com/api/webhooks/clerk`. Subscribe to: `organization.created`, `organization.updated`, `user.created`, `user.updated`. Copy the signing secret. Deliver `CLERK_WEBHOOK_SECRET=whsec_...` in `.env.local`. |
+
+---
+
+## 📝 Open product questions — non-blocking, answer when ready
+
+These don't block immediate work but should be answered before Gate 1 UX review.
+
+| # | Question | Default if no answer |
+|---|----------|---------------------|
+| 1 | **Primary brand color** — hex code or direction | Club Blue `#3b82f6` (UX placeholder) |
+| 2 | **Logo + final app name** — SVG logo? Is "AAUClubManager" the final brand name? | "AAUClubManager" wordmark; no logo asset |
+| 3 | **App header display** — generic "AAU Club Manager" or per-tenant club name after login? | TBD; will affect Phase 1 layout spec — UX will flag at Gate 1 if still open |
+
+(These are also listed in 🚨 item #2 above because they gate UX mocks. Separated here for those who answer questions asynchronously vs. blocking items urgently.)
+
+---
+
+## 🔮 Future-phase pre-knowns — don't act yet, just heads-up
+
+| Phase | Item | When to start |
+|-------|------|--------------|
+| Phase 3 | **360dialog production tier** — Meta Business verification + custom template approvals | Start in Phase 1–2. Templates take 1–3 days each, run in parallel. See [PHASE-3.md](PHASE-3.md). |
+| Phase 3 | **WhatsApp template list finalization** (PM/Architect to confirm list) | Phase 1–2 design; submit templates as soon as list is confirmed |
+| Phase 1 exit | **Observability stack decision** — Architect files DECISION-NNN comparing Sentry+Axiom vs Datadog vs self-hosted Loki/Grafana | At Phase 1 exit per DECISION-002-D |
+
+---
+
+## ✅ Done
+
+| When | Item | Notes |
+|------|------|-------|
+| 2026-05-03 | **DECISION-001** — MVP scope: Option B (Full Season Operations) | Phases 1-5 locked |
+| 2026-05-03 | **DECISION-002** — all sub-decisions | Keep Clerk · 360dialog from MVP · OCI storage · Defer observability |
+| 2026-05-03 | **GATE-1-PHASE-0** — PDD + mocks stub + design system seed | Approved |
+| 2026-05-03 | **GATE-2-PHASE-0** — OpenAPI baseline + ADR-005 + api-changes | Approved |
+| 2026-05-03 | **GitHub repo** | https://github.com/sskrepo/AAUClubManager — both branches pushed |
+| 2026-05-03 | **Clerk account + API keys** | Test keys stashed in `.env.local`. Unblocked auth scaffold. |
+| 2026-05-03 | **Dev/UAT domain + email forwarding** | `myhoopclub.com` registered; Cloudflare Email Routing active. Prod brand domain still TBD (Phase 1 exit task). |
+| 2026-05-03 | **Resend API key** | API key stashed in `.env.local`. DNS verification sub-step still pending (moved to 🟡 above). |
+| 2026-05-04 | **360dialog sandbox API key** | Sandbox key stashed in `.env.local`. Production tier is Phase 3 prereq. |
+
+---
+
+## How to mark items done
+
+When you deliver one of these:
+
+**Option A — tell the active agent in chat:**
+> "OCI credentials delivered: TENANCY_OCID=ocid1..., ..."
+
+The agent will move the row from 🚨/🟡/📝 → ✅ Done with today's date, update [dashboard.md](../dashboard.md), and proceed with unblocked work.
+
+**Option B — edit this file directly:**
+- Cut the row from its current section
+- Paste into ✅ Done with today's date
+- Mention in next chat so TPM reconciles trackers
 
 ---
 
 **See also:**
-- [PHASE-1-kickoff.md](../phase-briefs/PHASE-1-kickoff.md) — current skeleton with pre-known prerequisites
-- [DECISION-002-cost-optimization-priorities.md](../decisions/DECISION-002-cost-optimization-priorities.md) — sub-decision C on file storage
-- [Phase 0 pending](PHASE-0.md) — current phase
+- [PHASE-1-kickoff.md](../phase-briefs/PHASE-1-kickoff.md) — full setup instructions with step-by-step how-tos
+- [Phase 0 retrospective](../../docs/wiki/phase-0-retrospective.md)
+- [dashboard.md](../dashboard.md) — live program view
+- [phases.md](../phases.md) — Phase 1 scope and exit criteria

@@ -12,64 +12,75 @@ status: current
 
 ## Where we are
 
-**Phase 0 — Foundation, ALL EXIT CRITERIA MET — ready to close on user nod.**
+**Phase 1 — Core (Tryouts + Teams) — just kicked off. Phase 0 closed 2026-05-04.**
 
-CI run 25353265537 (commit 948277e, 2026-05-04): all three jobs GREEN — API, Server, Web. Frontend Dev fixed the final agent-owned blocker: root lockfile patched with linux oxide entries + vitest postcss processing disabled. This was the last item between us and Phase 0 closure.
+Phase 0 closed cleanly: all 11 exit criteria met, CI green (run 25353265537, commit 948277e, all 3 jobs passing), both approval gates passed. 27/27 backend unit tests, 14/14 frontend unit tests. Full retrospective: [phase-0-retrospective.md](phase-0-retrospective.md).
 
-Both approval gates for Phase 0 have passed:
-- **Gate 1:** APPROVED 2026-05-03 — PDD + mocks stub + design system seed locked.
-- **Gate 2:** APPROVED 2026-05-03 — `api/openapi.yaml` baseline locked, `api-changes/phase-0.md` and ADR-005 accepted as canonical.
+Phase 1 is in the gate sequence. PM is writing PDD-PHASE-1.md. UX is writing mocks for tryout registration, evaluation, selection, and roster screens. No implementation work can start until Gate 1 (PDD + mocks) and Gate 2 (OpenAPI spec) are approved.
 
-All Phase 0 credentials were delivered: Clerk test keys, Resend API key, 360dialog sandbox API key, GitHub repo URL. All agent-owned tasks complete (27/27 backend unit tests, 14/14 FE tests, CI green). Mid-phase items (Postgres/Redis/hosting) remain open but only gate production deploy — not the Phase 0 close decision.
+## What's in flight
 
-## Phase 0 exit readiness: 11 of 11 criteria met
+| Activity | Owner | Status |
+|----------|-------|--------|
+| PDD-PHASE-1.md (Tryouts + Teams flows) | pm | In progress |
+| UX mocks — phase 1 | ux-designer | In progress (pending brand identity answers) |
+| OCI SDK validation | architect | Blocked on OCI credentials from user |
+| Gate 1 approval (PDD + mocks) | user | Pending PM + UX deliverables |
 
-No agent-owned blockers remain. User-side items for full production readiness (optional smoke test, Resend DNS, Postgres/Redis/hosting) carry forward to Phase 1 — they do not block the close declaration.
+## What's waiting on you
 
-See dashboard "Phase 0 Exit Readiness" table for the full criterion-by-criterion breakdown.
+**2 blocking items right now:**
 
-## Now in flight
+1. **OCI Object Storage credentials** — Architect cannot finalize the file-upload service design without validating the Node.js SDK approach. Deliver `OCI_TENANCY_OCID`, `OCI_USER_OCID`, `OCI_FINGERPRINT`, `OCI_PRIVATE_KEY_PATH`, `OCI_REGION`, `OCI_BUCKET_NAME`, `OCI_NAMESPACE`. See [PHASE-1-kickoff.md](../../pmo/phase-briefs/PHASE-1-kickoff.md) for step-by-step OCI account setup.
 
-- **User:** Declare Phase 0 closed ("Phase 0: close") to trigger retrospective and Phase 1 kickoff.
-- **User (optional, async):** Manual smoke test of auth flow + queue + notify against local Docker stack; Resend DNS verification (RESEND_FROM_EMAIL sub-step).
+2. **Brand identity answers** — UX needs: (a) primary color hex or direction, (b) logo SVG or "wordmark only," (c) final app name or "confirm AAUClubManager," (d) app header: generic "AAU Club Manager" or per-tenant club name after login? Placeholders will be used if no answer before Gate 1.
+
+**5 mid-phase items (needed before Phase 1 deploy, not today):** Resend DNS verification, Postgres hosting, Redis hosting, hosting platform choice, Clerk webhook secret.
+
+Full pending-decisions surface: [`pmo/pending-decisions/PHASE-1.md`](../../pmo/pending-decisions/PHASE-1.md)
 
 ## Awaiting user decision
 
-No open decisions. Gate 2 approved 2026-05-03. Autonomous-dev protocol active (v0.1.5) — agents no longer pause for file access permissions.
+- **Gate 1 approval** — once PM files PDD-PHASE-1.md and UX files mocks, your approval is needed before Architect updates the OpenAPI spec.
+- **Gate 2 approval** — once Architect files api-changes/phase-1.md, your approval gates implementation.
 
-Mid-phase items (Postgres/Redis/hosting) are open but non-blocking for Phase 0 close. Answer when convenient. Full details: [`pmo/pending-decisions/PHASE-0.md`](../../pmo/pending-decisions/PHASE-0.md).
-
-**Open product questions (answer asynchronously — non-blocking):** Brand color, logo, app name, app header display (per-tenant vs generic). Needed before Phase 1 UX mocks, not before Phase 0 exits.
+No decisions are currently open (all Phase 0 decisions closed). Next decision expected: Observability stack at Phase 1 exit (per DECISION-002-D).
 
 ## Recent decisions
 
+- **Phase 0 closed (2026-05-04)** — 11/11 exit criteria met. CI green. Retrospective filed.
 - **User directive (2026-05-04)** — Agents go fully autonomous during dev; no per-file permission requests. Only pause for: approval gates, DECISION-NNN filings, pending-decisions items. Promoted to dev-agent-team v0.1.5 (autonomous-dev-protocol.md).
-- **DECISION-002-B amended (2026-05-03)** — Use 360dialog from MVP; Twilio dropped entirely. No provider swap needed later. 360dialog is the Phase 0 external dependency.
-- **GATE-2-PHASE-0 approved (2026-05-03)** — api/openapi.yaml baseline locked; Phase 0 implementation fully unblocked.
-- **DECISION-002 (decided 2026-05-03)** — Keep Clerk; 360dialog from MVP; OCI Object Storage; defer observability to Phase 1 exit.
-- **GATE-1-PHASE-0 approved (2026-05-03)** — PDD + mocks stub + design system seed locked.
-- DECISION-001 (2026-05-03) — Option B (Full Season Operations) chosen.
+- **DECISION-002-B amended (2026-05-03)** — 360dialog from MVP; Twilio eliminated.
+- **DECISION-002 (2026-05-03)** — Keep Clerk; 360dialog from MVP; OCI Object Storage; defer observability to Phase 1 exit.
+- **DECISION-001 (2026-05-03)** — Option B (Full Season Operations) — Phases 1-5 MVP.
 
 ## Next milestones
 
-**Immediate (this or next session):**
-1. Frontend Dev: fix CI web job PostCSS issue — restores CI green. This closes the last agent-owned Phase 0 item.
+**Immediate (user — start today):**
+1. Deliver OCI Object Storage credentials (step-by-step: [PHASE-1-kickoff.md](../../pmo/phase-briefs/PHASE-1-kickoff.md))
+2. Answer brand identity questions (color, logo, app name, app header)
 
-**Phase 0 exit (imminent — pending CI fix):**
-- CI green on GitHub Actions (all three jobs: API, Server, Web)
-- All 11 PDD exit criteria met (currently 8 of 11; criteria 7-9 are partial and acceptable as "implemented, live test deferred")
-- TPM declares Phase 0 done; files phase-0-retrospective and PHASE-1-kickoff.md (full version)
-- User optionally runs smoke test (Docker stack) before or after Phase 1 begins
+**Gate 1 (PM + UX — in progress):**
+- PM: PDD-PHASE-1.md
+- UX: Phase 1 mocks (tryout registration, evaluation, selection, roster)
+- User: Gate 1 approval
 
-**Phase 1 entry (after Phase 0 exits):**
-- TPM files PHASE-1-kickoff.md (full version, expanding on the existing skeleton).
-- PM writes PDD-PHASE-1.md (Tryouts + Teams flows).
-- UX produces mocks for tryout registration, evaluation, selection, roster screens.
-- Gate 1 approval needed from user.
-- Architect updates OpenAPI for Phase 1 endpoints.
-- Gate 2 approval needed from user.
-- PM writes detailed stories. Dev Manager tasks. Backend + Frontend implement. QA validates.
+**Gate 2 (after Gate 1 approved):**
+- Architect: update `api/openapi.yaml` + file `api-changes/phase-1.md`
+- User: Gate 2 approval
+
+**Phase 1 implementation (after Gate 2 approved):**
+- PM writes detailed stories
+- Dev Manager tasks
+- Backend + Frontend implement
+- QA validates
+
+**Phase 1 forward-look:**
+- Submit Meta WhatsApp templates (Phase 3 prereq — long lead time, start now)
+- Observability stack decision at Phase 1 exit (Architect to file DECISION-NNN)
 
 ## Notes
-- Conversation logs are stored in `~/Google Drive/AI Projects/Claude/Conversations/AAUClubManager/` (gitignored, Drive-synced).
+
+- Conversation logs stored in `~/Google Drive/AI Projects/Claude/Conversations/AAUClubManager/` (gitignored, Drive-synced).
 - Agent prompts live in `dev-agent-team/agents/` — updates there propagate via `.claude/agents/` symlinks.
+- dev-agent-team is at v0.1.5. Next bump expected at Phase 1 exit or when a new pattern warrants promotion.
