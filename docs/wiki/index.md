@@ -40,7 +40,7 @@
 - [architecture-options](architecture-options.md) — technical analysis of DECISION-001 options A/B/C (effort, integrations, risk, reusability). ★ agent-pace re-baseline at top.
 - [cost-analysis](cost-analysis.md) — cost-at-scale analysis across 10 stack decisions at 4 scale tiers; top levers, alternatives, tradeoffs, horizon-based recommendations. Status: draft.
 - (future — after DECISION-001 decided) [architecture](architecture.md)
-- (future) [data-model](data-model.md)
+- [data-model](data-model.md) — base entities: Club, User, ClubMembership, Season (Phase 0)
 - (future) [api-design](api-design.md)
 - [adr/ADR-001-auth-clerk](adr/ADR-001-auth-clerk.md) — status: accepted (decided 2026-05-03)
 - [adr/ADR-002-database-knex-postgres](adr/ADR-002-database-knex-postgres.md) — status: accepted (decided 2026-05-03)

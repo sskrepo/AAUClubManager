@@ -2,17 +2,17 @@
 title: Phase 0 — Pending User Items
 phase: 0
 owner: tpm
-updated: 2026-05-03 by orchestrator
+updated: 2026-05-04 by tpm
 status: active
 tags: [pending, user, phase:0]
 ---
 
 # Phase 0 — Pending User Items
 
-**Phase status:** 🟡 In execution. Gate 1 + Gate 2 approved. DECISION-002 closed. Implementation underway.
-**Open count:** 🚨 0 blocking · 🟡 3 mid-phase · 📝 3 open product questions · ✅ 9 done
-**All Phase 0 blockers cleared.** Wave 2 (Backend + Frontend scaffolding) fully unblocked.
-**What's gated:** Nothing critical. Mid-phase items (Postgres/Redis/hosting) only block production deploy, not implementation.
+**Phase status:** 🟡 In execution. Gate 1 + Gate 2 approved. DECISION-002 closed. Wave 2 shipped. Phase 0 exit imminent.
+**Open count:** 🚨 0 blocking · 🟡 4 mid-phase · 📝 3 open product questions · ✅ 9 done
+**All Phase 0 blockers cleared.** Wave 2 (Backend + Frontend scaffolding) fully shipped.
+**What's gated:** Nothing critical for implementation. CI fix (agent-owned) + TASK-019 data-model.md (DONE per Architect) are the last agent items before Phase 0 can close. Mid-phase items (Postgres/Redis/hosting) only block production deploy.
 
 Canonical setup checklist with full how-to instructions: [PHASE-0-kickoff.md](../phase-briefs/PHASE-0-kickoff.md).
 

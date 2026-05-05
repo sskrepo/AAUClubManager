@@ -1,7 +1,7 @@
 ---
 title: Current Status
 source: derived from pmo/dashboard.md
-compiled_at: 2026-05-03T00:00:00Z
+compiled_at: 2026-05-04T00:00:00Z
 created: 2026-05-03
 owner: tpm
 tags: [meta]
@@ -12,80 +12,67 @@ status: current
 
 ## Where we are
 
-**Phase 0 — Foundation, IMPLEMENTATION UNDERWAY.**
+**Phase 0 — Foundation, IMPLEMENTATION COMPLETE — exit imminent.**
 
-DECISION-001 is **closed**: user chose **Option B — Full Season Operations**. MVP is locked as Phases 1-5: Tryouts, Teams, Practice Scheduling, Gym, Jersey, Practice Comms, Tournaments, Payments. Realistic agent-pace timeline is 6-12 weeks.
+Wave 2 shipped on 2026-05-04. Both server/ and web/ scaffolds are committed and pushed. All 27 backend unit tests pass. All 14 frontend tests pass. The CI workflow is filed and ran its first execution — API and Server jobs passed. The web job failed on a PostCSS native binding issue (Tailwind v4 + npm ci optional dependency bug) that Frontend Dev must fix before Phase 0 can officially close.
+
+TASK-019 (data-model.md — Architect) is done per the Architect agent filing in parallel this session.
 
 Both approval gates for Phase 0 have passed:
 - **Gate 1:** APPROVED 2026-05-03 — PDD + mocks stub + design system seed locked.
 - **Gate 2:** APPROVED 2026-05-03 — `api/openapi.yaml` baseline locked, `api-changes/phase-0.md` and ADR-005 accepted as canonical.
 
-Phase 0 implementation is fully unblocked. All agent work is now in flight or waiting only on user-supplied credentials (Clerk keys, Resend keys, 360dialog API key, GitHub repo URL).
+All Phase 0 credentials were delivered: Clerk test keys, Resend API key, 360dialog sandbox API key, GitHub repo URL. No blockers remain on the user side for agent work. Mid-phase items (Postgres/Redis/hosting) are still open but only gate production deploy — not implementation.
 
-Same-day amendment (2026-05-03): DECISION-002-B revised — 360dialog adopted from MVP, Twilio dropped entirely. No future provider swap planned. Architect is updating ADR-003, cost-analysis, PHASE-0-kickoff, and PHASE-0-tasks.
+## Phase 0 exit readiness: 8 of 11 criteria met
 
-Six open product questions (brand color, logo, app name, domain, hosting platform, WhatsApp sender strategy) remain unanswered. They are non-blocking and parked in the dashboard under "Open product questions." Answer when convenient — needed before Phase 1 mocks are finalized.
+The one agent-owned blocker: CI web job failing (PostCSS/Tailwind v4 native binding under npm ci). Frontend Dev fixes this next session.
 
-Active implementation work:
-- **Architect:** completing ADRs 001-004.
-- **Dev Manager:** writing engineering conventions docs, planning CI (blocked only on GitHub repo URL).
-- **Backend Dev:** server scaffold (Express + TypeScript + Knex), OpenAPI codegen pipeline, notification service abstraction targeting 360dialog (credentials-blocked).
-- **Frontend Dev:** web scaffold (Next.js 15 + Tailwind + shadcn/ui), codegen consumption.
-- **User side:** continuing external-setup items in [`pmo/phase-briefs/PHASE-0-kickoff.md`](../../pmo/phase-briefs/PHASE-0-kickoff.md). 360dialog account setup is now the WhatsApp long pole (Architect updating kickoff brief with instructions).
+User-side items for full exit: optional manual smoke test (Docker stack), Resend DNS verification (RESEND_FROM_EMAIL). Both are non-blocking for the Phase 0 close decision — the user can run smoke tests concurrently or defer to Phase 1 entry.
 
-## Active stories
+See dashboard "Phase 0 Exit Readiness" table for the full criterion-by-criterion breakdown.
 
-(none yet — Phase 0 has no user-flow stories. PM will write Phase 1 stories after Phase 1 PDD passes Gate 1 + Gate 2.)
+## Now in flight
+
+- **Frontend Dev:** Fix CI web job (PostCSS native binding — Tailwind v4 + npm ci bug). This is the last agent-owned Phase 0 item.
+- **User (optional):** Manual smoke test of auth flow + queue + notify against local Docker stack; Resend DNS verification.
 
 ## Awaiting user decision
 
-No open decisions. Gate 2 approved 2026-05-03.
+No open decisions. Gate 2 approved 2026-05-03. Autonomous-dev protocol active (v0.1.5) — agents no longer pause for file access permissions.
 
-**🎉 Phase 0 has zero blockers as of 2026-05-04.** Wave 2 (Backend + Frontend scaffolding) is fully unblocked. All credentials delivered: Clerk (auth), Resend (email API key — domain verification still pending as a sub-step), 360dialog **sandbox tier** (sufficient for Phase 0 — production tier moved to Phase 3 prereq after the architect's "no sandbox equivalent" claim was corrected via [360dialog sandbox docs](https://docs.360dialog.com/docs/get-started/sandbox)).
+Mid-phase items (Postgres/Redis/hosting) are open but non-blocking for Phase 0 close. Answer when convenient. Full details: [`pmo/pending-decisions/PHASE-0.md`](../../pmo/pending-decisions/PHASE-0.md).
 
-**Still owed by user, but non-blocking:** Resend domain verification (DNS records, ~1 hour), 3 mid-phase items (Postgres/Redis/hosting — local Docker fine for dev).
-
-**Open product questions (answer asynchronously — non-blocking):** Brand color, logo, app name, domain, hosting platform, WhatsApp sender strategy. Tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Open product questions." Needed before Phase 1 mocks, not before Phase 0 exits.
-
-Note: DECISION-002 is now closed, with a same-day amendment (DECISION-002-B, 2026-05-03) adopting 360dialog from MVP. The WhatsApp provider swap is no longer a future-phase commitment — 360dialog is the MVP provider. Remaining future-phase commitments (2 items: OCI storage, observability revisit) are tracked in [pmo/dashboard.md](../../pmo/dashboard.md) under "Future-phase commitments."
+**Open product questions (answer asynchronously — non-blocking):** Brand color, logo, app name, app header display (per-tenant vs generic). Needed before Phase 1 UX mocks, not before Phase 0 exits.
 
 ## Recent decisions
 
-- **DECISION-002-B amended (2026-05-03)** — Use 360dialog from MVP; Twilio dropped entirely. No provider swap needed later. 360dialog is a Phase 0 external dependency (account, API key, WhatsApp Business display name, phone number). Architect updating ADR-003 and kickoff brief.
-- **GATE-2-PHASE-0 approved (2026-05-03)** — api/openapi.yaml baseline locked; api-changes/phase-0.md and ADR-005 accepted as canonical. Phase 0 implementation fully unblocked.
-- **DECISION-002 (decided 2026-05-03)** — Keep Clerk; swap WhatsApp to 360dialog before Phase 3 production; OCI Object Storage for files (curveball — not in original analysis, Architect validates SDK/S3-compat in Phase 1 prep); defer observability decision to Phase 1 exit. Future-phase commitments tracked in dashboard.
+- **User directive (2026-05-04)** — Agents go fully autonomous during dev; no per-file permission requests. Only pause for: approval gates, DECISION-NNN filings, pending-decisions items. Promoted to dev-agent-team v0.1.5 (autonomous-dev-protocol.md).
+- **DECISION-002-B amended (2026-05-03)** — Use 360dialog from MVP; Twilio dropped entirely. No provider swap needed later. 360dialog is the Phase 0 external dependency.
+- **GATE-2-PHASE-0 approved (2026-05-03)** — api/openapi.yaml baseline locked; Phase 0 implementation fully unblocked.
+- **DECISION-002 (decided 2026-05-03)** — Keep Clerk; 360dialog from MVP; OCI Object Storage; defer observability to Phase 1 exit.
 - **GATE-1-PHASE-0 approved (2026-05-03)** — PDD + mocks stub + design system seed locked.
-- DECISION-001 (2026-05-03) — Option B chosen.
+- DECISION-001 (2026-05-03) — Option B (Full Season Operations) chosen.
 
 ## Next milestones
 
-**Now in flight (Gate 2 approved — all unblocked):**
-1. Architect: complete ADR-001 through ADR-004.
-2. Dev Manager: write engineering conventions docs.
-3. Backend Dev: scaffold `server/` (Express + TypeScript + Knex), set up codegen pipeline, notification service abstraction.
-4. Frontend Dev: scaffold `web/` (Next.js 15 + Tailwind + shadcn/ui), wire up generated SDK.
-5. CI: GitHub Actions — blocked only on user supplying GitHub repo URL (#8 in PHASE-0-kickoff.md).
-6. UX: finalize design system colors once brand color question answered.
-7. User: continue Phase 0 Kickoff Brief items (360dialog account setup is now the WhatsApp item — Architect updating kickoff brief with new steps); provide GitHub repo URL to unblock CI.
+**Immediate (this or next session):**
+1. Frontend Dev: fix CI web job PostCSS issue — restores CI green. This closes the last agent-owned Phase 0 item.
 
-**Phase 0 exit (1-2 wks):**
-- All critical-path + mid-phase kickoff items completed by user.
-- ADRs filed.
-- `server/` and `web/` scaffolds deployed.
-- Auth login works (Clerk integrated).
-- BullMQ test job runs.
-- Test email (Resend) + WhatsApp send (360dialog) successful.
-- CI passing on first commit.
+**Phase 0 exit (imminent — pending CI fix):**
+- CI green on GitHub Actions (all three jobs: API, Server, Web)
+- All 11 PDD exit criteria met (currently 8 of 11; criteria 7-9 are partial and acceptable as "implemented, live test deferred")
+- TPM declares Phase 0 done; files phase-0-retrospective and PHASE-1-kickoff.md (full version)
+- User optionally runs smoke test (Docker stack) before or after Phase 1 begins
 
 **Phase 1 entry (after Phase 0 exits):**
-- TPM files PHASE-1-kickoff.md.
+- TPM files PHASE-1-kickoff.md (full version, expanding on the existing skeleton).
 - PM writes PDD-PHASE-1.md (Tryouts + Teams flows).
 - UX produces mocks for tryout registration, evaluation, selection, roster screens.
 - Gate 1 approval needed from user.
-- Architect updates OpenAPI for Phase 1.
+- Architect updates OpenAPI for Phase 1 endpoints.
 - Gate 2 approval needed from user.
-- PM writes detailed stories.
-- Dev Manager → Backend + Frontend implement → QA validates.
+- PM writes detailed stories. Dev Manager tasks. Backend + Frontend implement. QA validates.
 
 ## Notes
 - Conversation logs are stored in `~/Google Drive/AI Projects/Claude/Conversations/AAUClubManager/` (gitignored, Drive-synced).
