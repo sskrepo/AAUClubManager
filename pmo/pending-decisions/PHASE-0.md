@@ -28,9 +28,10 @@ Canonical setup checklist with full how-to instructions: [PHASE-0-kickoff.md](..
 
 | # | Item | Why it matters | Notes |
 |---|------|----------------|-------|
-| 4 | **Postgres hosting** | Production DB for `server/`. Local Docker Postgres fine until Phase 0 deploy. | Recommend: Neon, Supabase, RDS, Railway, Render, or self-hosted Hetzner. See [cost-analysis.md](../../docs/wiki/cost-analysis.md) Decision 3. |
-| 5 | **Redis hosting** | BullMQ + cache. Local Docker Redis fine for dev. | Recommend: Upstash (serverless billing) for MVP. See [ADR-004](../../docs/wiki/adr/ADR-004-background-jobs-bullmq-redis.md). |
+| 4 | **Postgres hosting** → `DATABASE_URL` env var | Production DB for `server/`. Local Docker Postgres fine until Phase 0 deploy. Needed before first cloud deploy. | Recommend: Neon, Supabase, RDS, Railway, Render, or self-hosted Hetzner. See [cost-analysis.md](../../docs/wiki/cost-analysis.md) Decision 3. |
+| 5 | **Redis hosting** → `REDIS_URL` env var | BullMQ + cache. Local Docker Redis fine for dev. Needed before first cloud deploy. | Recommend: Upstash (serverless billing) for MVP. See [ADR-004](../../docs/wiki/adr/ADR-004-background-jobs-bullmq-redis.md). |
 | 6 | **Hosting platform decision** | Where `server/` and `web/` deploy. | Recommend: Vercel (web) + Railway/Render (server) for MVP. Open product question #5 below. |
+| 8 | **`RESEND_FROM_EMAIL` domain verification** | DNS records (SPF, DKIM, DMARC) for `myhoopclub.com` in Resend dashboard — needed before email sends will deliver. Takes ~1 hour for DNS propagation after adding records. | Check Resend dashboard → Domains → myhoopclub.com. Once DNS propagates, set `RESEND_FROM_EMAIL=noreply@myhoopclub.com` in server env. |
 | ~~7~~ | ~~Domain name~~ | ~~Resolved 2026-05-03 (dev/UAT only)~~ | Moved to ✅ Done. **Prod brand domain still TBD** — Phase 1 exit task. |
 
 ---

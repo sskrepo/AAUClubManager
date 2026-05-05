@@ -10,10 +10,15 @@ build/
 coverage/
 *.log
 
-# Env
+# Env — never commit secrets
 .env
 .env.local
 .env.*.local
+server/.env
+server/.env.local
+web/.env
+web/.env.local
+web/.env.*.local
 
 # OS
 .DS_Store

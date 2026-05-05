@@ -1,0 +1,28 @@
+{
+  "name": "aauclubmanager",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AAUClubManager monorepo root",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "api:validate": "swagger-cli validate api/openapi.yaml",
+    "api:generate": "openapi --input api/openapi.yaml --output web/src/api/generated --client fetch",
+    "api:check": "openapi --input api/openapi.yaml --output /tmp/api-check --client fetch && diff -r /tmp/api-check web/src/api/generated || (echo 'SDK out of date. Run: npm run api:generate && git add web/src/api/generated' && exit 1)",
+    "dev:server": "npm run dev --workspace=server",
+    "dev:web": "npm run dev --workspace=web",
+    "test:server": "npm run test --workspace=server",
+    "test:web": "npm run test --workspace=web",
+    "build:server": "npm run build --workspace=server",
+    "build:web": "npm run build --workspace=web"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-cli": "^4.0.4",
+    "openapi-typescript-codegen": "^0.29.0"
+  }
+}

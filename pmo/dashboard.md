@@ -74,12 +74,12 @@ These do not block Gate 2 or Architect's OpenAPI work. Answer anytime during Pha
 | Engineering task breakdown (PHASE-0-tasks.md) | dev-manager | DONE 2026-05-03 | 20 tasks filed; pmo/phase-briefs/PHASE-0-tasks.md |
 | Engineering conventions docs | dev-manager | DONE 2026-05-03 | docs/wiki/engineering/ — 4 convention docs seeded |
 | `server/` scaffold (Express+TS+Knex) | backend-dev | ready to start — TASK-005 | No blockers; auth wiring (TASK-006) follows Clerk keys |
-| `web/` scaffold (Next.js+Tailwind+shadcn) | frontend-dev | ready to start — TASK-007 | No blockers; Clerk wiring (TASK-008) follows Clerk keys |
+| `web/` scaffold (Next.js+Tailwind+shadcn) | frontend-dev | DONE 2026-05-04 — TASK-007, 008, 009, 010, 016, 018 | web/ built, all tests passing (14/14), build passing |
 | OpenAPI codegen pipeline scripts | backend-dev | ready to start — TASK-002, TASK-003 | No blockers |
 | BullMQ hello-world job | backend-dev | ready to start — TASK-014 | Local Docker Redis sufficient |
 | Notification service abstraction (360dialog) | backend-dev | ready to start — TASK-011 | Abstraction has no blockers; test delivery (TASK-013) needs 360dialog + Resend creds |
 | Auth middleware (server) | backend-dev | ready to start — TASK-006 | Clerk keys delivered 2026-05-03; stashed in `.env.local` |
-| Clerk provider + sign-in (web) | frontend-dev | ready to start — TASK-008 | Clerk keys delivered 2026-05-03; stashed in `.env.local` |
+| Clerk provider + sign-in (web) | frontend-dev | DONE 2026-05-04 | ClerkProvider, proxy.ts, sign-in/sign-up pages, authenticated shell |
 | CI (GitHub Actions) | backend-dev | ready to start — TASK-017 | GitHub repo URL delivered 2026-05-03 |
 
 ## In-flight handoffs

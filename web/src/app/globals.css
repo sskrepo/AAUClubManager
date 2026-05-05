@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+/*
+ * AAUClubManager Design System Tokens
+ * Tailwind v4 uses CSS @theme for token configuration (no tailwind.config.ts).
+ *
+ * Brand color: Club Blue (#3b82f6) — PLACEHOLDER
+ * TODO: Swap the primary palette when user confirms final brand color (pending-decisions PHASE-0 item #1).
+ * To update: change the --color-primary-* values below and rebuild.
+ *
+ * Typography: Inter (body/headings) + JetBrains Mono (monospace)
+ * Color contrast targets: WCAG 2.1 AA minimum
+ */
+
+@theme inline {
+  /* ── Primary — Club Blue (placeholder, swap when brand color confirmed) ── */
+  --color-primary-50:  #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-900: #1e3a8a;
+
+  /* ── Secondary — Court Orange ── */
+  --color-secondary-400: #fb923c;
+  --color-secondary-500: #f97316;
+  --color-secondary-600: #ea580c;
+
+  /* ── Semantic ── */
+  --color-success-100: #dcfce7;
+  --color-success-500: #22c55e;
+  --color-warning-100: #fef9c3;
+  --color-warning-500: #eab308;
+  --color-error-100:   #fee2e2;
+  --color-error-500:   #ef4444;
+  --color-info-100:    #cffafe;
+  --color-info-500:    #06b6d4;
+
+  /* ── Neutrals (Tailwind slate scale) ── */
+  --color-neutral-0:   #ffffff;
+  --color-neutral-50:  #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-600: #475569;
+  --color-neutral-800: #1e293b;
+  --color-neutral-950: #0f172a;
+
+  /* ── shadcn/ui CSS variable bridge ── */
+  /* These map to the shadcn convention so components pick up brand colors. */
+  --color-background:       var(--background);
+  --color-foreground:       var(--foreground);
+  --color-card:             var(--card);
+  --color-card-foreground:  var(--card-foreground);
+  --color-primary:          var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary:        var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:            var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent:           var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive:      var(--destructive);
+  --color-border:           var(--border);
+  --color-input:            var(--input);
+  --color-ring:             var(--ring);
+
+  /* ── Font families ── */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+
+  /* ── Border radius ── */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ── shadcn/ui CSS variables (light mode) ── */
+:root {
+  --radius: 0.625rem;
+
+  /* Background & foreground */
+  --background: #ffffff;
+  --foreground: #1e293b; /* neutral-800 */
+
+  /* Card */
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+
+  /* Popover */
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
+
+  /* Primary — maps to Club Blue */
+  --primary: #3b82f6;        /* primary-500 */
+  --primary-foreground: #ffffff;
+
+  /* Secondary — subtle slate */
+  --secondary: #f1f5f9;      /* neutral-100 */
+  --secondary-foreground: #1e293b;
+
+  /* Muted */
+  --muted: #f8fafc;          /* neutral-50 */
+  --muted-foreground: #475569; /* neutral-600 */
+
+  /* Accent */
+  --accent: #eff6ff;         /* primary-50 */
+  --accent-foreground: #1d4ed8; /* primary-700 */
+
+  /* Destructive */
+  --destructive: #ef4444;    /* error-500 */
+
+  /* Borders & inputs */
+  --border: #e2e8f0;         /* neutral-200 */
+  --input:  #e2e8f0;
+  --ring:   #3b82f6;         /* primary-500 — focus ring */
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Base ── */
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* ── Focus ring — WCAG 2.1 AA (3:1 UI components) ── */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}

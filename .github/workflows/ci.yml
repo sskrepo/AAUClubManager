@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  # ── API contract validation ────────────────────────────────────────────────
+  api-check:
+    name: API — Validate + SDK check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Validate OpenAPI spec
+        run: npm run api:validate
+
+      - name: Check SDK is up to date
+        run: npm run api:check
+
+  # ── Backend ────────────────────────────────────────────────────────────────
+  server:
+    name: Server — typecheck + lint + test + build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        working-directory: server
+        run: npm run typecheck
+
+      - name: Test (unit)
+        working-directory: server
+        run: npm run test
+
+      - name: Build
+        working-directory: server
+        run: npm run build
+
+  # ── Frontend ───────────────────────────────────────────────────────────────
+  web:
+    name: Web — typecheck + lint + test + build
+    runs-on: ubuntu-latest
+    # Web scaffold may not exist yet (Frontend Dev runs in parallel).
+    # Skip gracefully if web/package.json doesn't exist.
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check if web/ is scaffolded
+        id: web-exists
+        run: |
+          if [ -f "web/package.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "web/ not scaffolded yet — skipping web CI"
+          fi
+
+      - name: Setup Node.js
+        if: steps.web-exists.outputs.exists == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        if: steps.web-exists.outputs.exists == 'true'
+        run: npm ci
+
+      - name: Typecheck
+        if: steps.web-exists.outputs.exists == 'true'
+        working-directory: web
+        run: npm run typecheck
+
+      - name: Test
+        if: steps.web-exists.outputs.exists == 'true'
+        working-directory: web
+        run: npm run test
+
+      - name: Build
+        if: steps.web-exists.outputs.exists == 'true'
+        working-directory: web
+        run: npm run build
