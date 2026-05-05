@@ -34,6 +34,7 @@
 ### Per-phase deliverables (Gate 1 + Gate 2)
 - [pdd/](pdd/) — Product Definition Documents (PM-owned, Gate 1)
   - [PDD-PHASE-0](pdd/PDD-PHASE-0.md) — Foundation — status: approved (Gate 1 passed)
+  - [PDD-PHASE-1](pdd/PDD-PHASE-1.md) — Core (Tryouts + Teams) — status: in-review (Gate 1 pending)
 - [ux/mocks/](ux/mocks/) — UI mocks per phase (UX-owned, Gate 1)
 - [api-changes/](api-changes/) — Per-phase OpenAPI spec change summaries (Architect-owned, Gate 2)
   - [api-changes/phase-0](api-changes/phase-0.md) — Foundation baseline — status: approved (Gate 2 passed 2026-05-03)
@@ -56,9 +57,21 @@
 
 ## Compiled by UX
 - [ux/design-system](ux/design-system.md) — v0.1 Phase 0 seed: palette, typography, spacing, shadcn/ui components catalog, accessibility baseline
-- [ux/mocks/phase-0/index](ux/mocks/phase-0/index.md) — Phase 0 mocks stub (no flow mocks — foundation phase; Gate 1 pending)
+- [ux/mocks/phase-0/index](ux/mocks/phase-0/index.md) — Phase 0 mocks stub (no flow mocks — foundation phase; Gate 1 approved 2026-05-03)
+- [ux/mocks/phase-1/index](ux/mocks/phase-1/index.md) — Phase 1 mocks index (12 wireframe specs; Gate 1 pending)
+  - [01-club-creation](ux/mocks/phase-1/01-club-creation.md) — first-run wizard (3 steps): club details, first season, done
+  - [02-season-setup](ux/mocks/phase-1/02-season-setup.md) — season list, create/edit dialog, season detail
+  - [03-coach-invitation](ux/mocks/phase-1/03-coach-invitation.md) — director invites coach; coach post-accept welcome screen
+  - [04-tryout-creation](ux/mocks/phase-1/04-tryout-creation.md) — tryout form, list, detail management view
+  - [05-public-tryout-page](ux/mocks/phase-1/05-public-tryout-page.md) — unauthenticated public landing; mobile-first
+  - [06-parent-registration](ux/mocks/phase-1/06-parent-registration.md) — 4-step form: Clerk sign-up → parent profile → player(s) → confirmation
+  - [07-coach-evaluation-mobile](ux/mocks/phase-1/07-coach-evaluation-mobile.md) — **MOBILE-FIRST** evaluation UI; stepper scoring, player list
+  - [08-selection-workflow](ux/mocks/phase-1/08-selection-workflow.md) — kanban drag-and-drop selection board; score breakdown; send notifications
+  - [09-team-roster](ux/mocks/phase-1/09-team-roster.md) — roster list (coach + parent views), player edit slide-over, coaches tab
+  - [10-selection-notification-email](ux/mocks/phase-1/10-selection-notification-email.md) — Resend email template (selected / not-selected / waitlist)
+  - [11-selection-notification-whatsapp](ux/mocks/phase-1/11-selection-notification-whatsapp.md) — 360dialog WhatsApp templates with Meta `{{N}}` parameters
+  - [12-parent-roster-acceptance](ux/mocks/phase-1/12-parent-roster-acceptance.md) — accept/decline page (token-gated, mobile-first)
 - (future) [ux/information-architecture](ux/information-architecture.md)
-- (future) [ux/mocks/phase-1/](ux/mocks/phase-1/) — Phase 1 flow mocks (tryout registration, evaluation, selection, roster screens)
 - (future) [ux/flows/](ux/flows/)
 - (future) [ux/screens/](ux/screens/)
 - (future) [ux/components/](ux/components/)

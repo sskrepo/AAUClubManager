@@ -38,10 +38,10 @@ All-phases index: [`pmo/pending-decisions/index.md`](pending-decisions/index.md)
 
 ## Approval gates — Phase 1
 
-### Gate 1 — PDD + UI Mocks (pending PM + UX deliverables)
+### Gate 1 — PDD + UI Mocks (both filed — awaiting user approval)
 
-- PDD-PHASE-1.md — in progress (PM)
-- UI mocks: phase-1/ — in progress (UX; pending brand identity answers from user)
+- PDD-PHASE-1.md — **filed** (PM, 2026-05-04): 16 flows, 6 open questions
+- UI mocks: phase-1/ — **filed** (UX, 2026-05-04): 12 wireframe specs; brand placeholders flagged
 - Reply: `GATE-1-PHASE-1: approved` (or `PDD-PHASE-1:` / `MOCKS-PHASE-1:` separately)
 
 ### Gate 2 — OpenAPI Spec (blocked on Gate 1)
@@ -56,8 +56,8 @@ All-phases index: [`pmo/pending-decisions/index.md`](pending-decisions/index.md)
 
 | Activity | Owner | Status | Notes |
 |----------|-------|--------|-------|
-| PDD-PHASE-1.md | pm | In progress | Covering: club creation, season setup, team creation, tryout creation, parent registration, evaluation, selection, parent acceptance |
-| UX mocks — phase 1 | ux-designer | In progress | Tryout registration, evaluation UI (mobile), selection drag-and-drop, team roster page; pending brand identity answers from user |
+| PDD-PHASE-1.md | pm | **Done — Gate 1 pending** | 16 user flows filed. Cross-references all 12 UX mocks. PM recommendations baked in. 6 open questions for user. |
+| UX mocks — phase 1 | ux-designer | **Done — Gate 1 pending** | 12 wireframe specs filed: club creation, season setup, coach invite, tryout creation, public tryout page, parent registration, mobile evaluation, selection board, team roster, email + WhatsApp templates, parent acceptance. Brand placeholders flagged. Gate 1 awaiting PM PDD + user approval. |
 | OCI SDK validation | architect | Blocked on user | Blocked on OCI credentials (item #1 above) |
 | Gate 1 approval | user | Pending | Waiting for PM + UX deliverables |
 | OpenAPI spec — Phase 1 | architect | Blocked on Gate 1 | — |
