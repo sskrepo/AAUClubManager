@@ -85,12 +85,11 @@ jobs:
 
       - name: Install dependencies
         if: steps.web-exists.outputs.exists == 'true'
-        # Use web/package-lock.json (not root) — root lockfile lacks linux oxide entries.
-        # --include=optional forces @tailwindcss/oxide-linux-x64-gnu to install:
-        # it is marked optional in the lockfile and npm ci skips it by default on
-        # some Linux runners (npm bug #4828). Tailwind v4 requires this Rust binding.
+        # npm ci skips @tailwindcss/oxide-linux-x64-gnu (marked optional, npm bug #4828).
+        # npm install respects the lockfile for versions but correctly installs the
+        # platform-appropriate oxide binary on the current runner OS.
         working-directory: web
-        run: npm ci --include=optional
+        run: npm install
 
       - name: Typecheck
         if: steps.web-exists.outputs.exists == 'true'
