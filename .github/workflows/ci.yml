@@ -85,6 +85,11 @@ jobs:
 
       - name: Install dependencies
         if: steps.web-exists.outputs.exists == 'true'
+        # Use web/package-lock.json (not root) — root lockfile was generated on macOS
+        # and lacks the @tailwindcss/oxide linux-x64-gnu platform binding entry.
+        # web/ has a standalone lockfile with all platform bindings; npm ci here
+        # is lockfile-strict and installs the correct linux oxide binary on CI runners.
+        working-directory: web
         run: npm ci
 
       - name: Typecheck
